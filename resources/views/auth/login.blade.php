@@ -42,16 +42,16 @@
                 <!-- Main Message -->
                 <div class="space-y-6">
                     <h1 class="text-5xl font-bold leading-tight">
-                        Redefining professional<br>workflows.
+                        Mendukung Generasi<br>Emas Indonesia.
                     </h1>
                     <p class="text-xl text-blue-100 max-w-md">
-                        Experience the next generation of industrial management and data-centric decision making.
+                        Kelola program Makan Bergizi Gratis dengan presisi data dan monitoring nutrisi secara real-time.
                     </p>
                 </div>
 
                 <!-- Footer -->
                 <div class="flex gap-6 text-sm text-blue-100">
-                    <span>© 2024 MBG Systems International</span>
+                    <span>© 2024 MBG System - Makan Bergizi Gratis</span>
                     <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
                 </div>
             </div>
@@ -74,8 +74,8 @@
 
                 <!-- Form Header -->
                 <div class="mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
-                    <p class="text-gray-600">Please enter your details to sign in.</p>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Masuk ke Dashboard</h2>
+                    <p class="text-gray-600">Masuk dengan akun Anda untuk mengelola monitoring gizi.</p>
                 </div>
 
                 <!-- Error Messages -->
