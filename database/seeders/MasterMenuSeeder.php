@@ -2,106 +2,132 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use App\Models\Menu;
-use App\Models\MenuItem;
-use App\Models\RawMaterial;
+use Illuminate\Database\Seeder;
 
 class MasterMenuSeeder extends Seeder
 {
-    public function run()
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
     {
-        $csvFile = public_path('Menu Halal.csv');
-        if (!file_exists($csvFile)) {
-            $this->command->error("File public/Menu Halal.csv not found.");
-            return;
-        }
-
-        $file = fopen($csvFile, 'r');
-        
-        $currentMenu1 = null; 
-        $currentMenu2 = null; 
-
-        while (($row = fgetcsv($file, 1000, ';')) !== false) {
-            // Trim all values empty
-            $row = array_map(function($value) {
-                return trim($value) === '' ? null : trim($value);
-            }, $row);
-
-            // Left Side: Name(0), Ingredient(1), ID(2)
-            $this->processColumn($row, 0, 1, 2, $currentMenu1);
-
-            // Right Side: Name(5), Ingredient(6), ID(7)
-            if (count($row) > 5) {
-                $this->processColumn($row, 5, 6, 7, $currentMenu2);
-            }
-        }
-
-        fclose($file);
-    }
-
-    private function processColumn($row, $nameIndex, $ingredientIndex, $idIndex, &$currentMenu)
-    {
-        $menuName = $row[$nameIndex] ?? null;
-        $ingredientName = $row[$ingredientIndex] ?? null;
-        $code = $row[$idIndex] ?? null;
-
-        // Start New Menu
-        if ($menuName) {
-            $currentMenu = Menu::firstOrCreate(
-                ['name' => $menuName],
-                ['type' => 'wet', 'is_active' => true, 'description' => 'Imported from Master Menu']
-            );
-            $this->command->info("Processing Menu: $menuName");
-        }
-
-        if ($currentMenu && $ingredientName) {
-            $ingredients = explode(',', $ingredientName);
+        $menus = [
+            // Carbs / Nasi (Dry)
+            ['name' => 'Nasi Hainan', 'type' => 'dry'],
+            ['name' => 'Nasi kebuli', 'type' => 'dry'],
+            ['name' => 'Nasi Daun Jeruk', 'type' => 'dry'],
+            ['name' => 'Nasi Kuning', 'type' => 'dry'],
+            ['name' => 'Nasi Pandan', 'type' => 'dry'],
+            ['name' => 'Nasi Goreng', 'type' => 'dry'],
             
-            foreach ($ingredients as $index => $ingName) {
-                $ingName = trim($ingName);
-                if (empty($ingName)) continue;
+            // Mie / Pasta (Dry)
+            ['name' => 'Mie Ayam', 'type' => 'dry'],
+            ['name' => 'Mie Sweet', 'type' => 'dry'],
+            ['name' => 'Macaroni Pasta', 'type' => 'dry'],
+            ['name' => 'Bakmie Jawa', 'type' => 'dry'],
+            
+            // Others (Dry)
+            ['name' => 'Burger', 'type' => 'dry'],
+            ['name' => 'Kentang Goreng', 'type' => 'dry'],
+            ['name' => 'Parsley Potatoes', 'type' => 'dry'],
+            ['name' => 'Jasuke', 'type' => 'dry'],
+            
+            // Proteins - Meats (Dry)
+            ['name' => 'Beef Teriyaki', 'type' => 'dry'],
+            ['name' => 'Ayam Teriyaki', 'type' => 'dry'],
+            ['name' => 'Ayam Koloke', 'type' => 'dry'],
+            ['name' => 'Ayam Kecap', 'type' => 'dry'],
+            ['name' => 'Ayam Goreng Mentega', 'type' => 'dry'],
+            ['name' => 'Ayam Suwir', 'type' => 'dry'],
+            ['name' => 'Oseng Bakso', 'type' => 'dry'],
+            ['name' => 'Chicken Katsu', 'type' => 'dry'],
+            ['name' => 'Ayam Kremes', 'type' => 'dry'],
+            ['name' => 'Ayam pop', 'type' => 'dry'],
+            ['name' => 'Ayam Crispy', 'type' => 'dry'],
+            ['name' => 'Ayam Patty', 'type' => 'dry'],
+            ['name' => 'Fire Chicken', 'type' => 'dry'],
+            ['name' => 'Sate Ayam', 'type' => 'dry'],
+            ['name' => 'Kaki Naga', 'type' => 'dry'],
+            ['name' => 'Ayam Rendang', 'type' => 'dry'],
+            ['name' => 'Ayam Bolognese', 'type' => 'dry'],
+            ['name' => 'Bakso Bolognese', 'type' => 'dry'],
+            ['name' => 'Chicken Steak', 'type' => 'dry'],
+            ['name' => 'Ayam Geprek', 'type' => 'dry'],
+            ['name' => 'Ayam Goreng', 'type' => 'dry'],
+            ['name' => 'Dimsum ayam', 'type' => 'dry'],
+            ['name' => 'Ayam Bakar', 'type' => 'dry'],
+            ['name' => 'Pangsit Ayam', 'type' => 'dry'],
+            ['name' => 'Abon Ayam', 'type' => 'dry'],
+            
+            // Proteins - Eggs (Dry)
+            ['name' => 'Telur Balado', 'type' => 'dry'],
+            ['name' => 'Telur Ceplok', 'type' => 'dry'],
+            ['name' => 'Nugget telur', 'type' => 'dry'],
+            ['name' => 'Fuyunghai', 'type' => 'dry'],
+            ['name' => 'Telur Dabu-dabu', 'type' => 'dry'],
+            ['name' => 'Telur Bacem', 'type' => 'dry'],
+            ['name' => 'Telur kecap', 'type' => 'dry'],
+            
+            // Proteins - Fish (Dry)
+            ['name' => 'Lele Krispy', 'type' => 'dry'],
+            
+            // Proteins - Vegan/Tofu/Tempe (Dry)
+            ['name' => 'Tahu Bacem', 'type' => 'dry'],
+            ['name' => 'Kubis Tahu', 'type' => 'dry'],
+            ['name' => 'Tahu Crispy', 'type' => 'dry'],
+            ['name' => 'Tempe Krispy', 'type' => 'dry'],
+            ['name' => 'Tahu Goreng', 'type' => 'dry'],
+            ['name' => 'Tempe Goreng', 'type' => 'dry'],
+            ['name' => 'Kering Tempe', 'type' => 'dry'],
+            ['name' => 'Tahu Orek', 'type' => 'dry'],
+            ['name' => 'Tempe Orek', 'type' => 'dry'],
+            ['name' => 'Stik Tempe', 'type' => 'dry'],
+            ['name' => 'Nugget Tahu', 'type' => 'dry'],
+            ['name' => 'Kripik Tempe', 'type' => 'dry'],
+            ['name' => 'Tahu Bulat', 'type' => 'dry'],
+            
+            // Soups / Wet Items
+            ['name' => 'Ayam Curry', 'type' => 'wet'],
+            ['name' => 'Soto Ayam', 'type' => 'wet'],
+            ['name' => 'Saus BBQ', 'type' => 'wet'],
+            ['name' => 'Sapo tahu', 'type' => 'wet'],
+            ['name' => 'Capjay', 'type' => 'wet'],
+            
+            // Vegetables (Wet)
+            ['name' => 'Mix vegetable', 'type' => 'wet'],
+            ['name' => 'Tumis Labu Siam', 'type' => 'wet'],
+            ['name' => 'Setup Sayur', 'type' => 'wet'],
+            ['name' => 'Tempe Kriwil', 'type' => 'wet'],
+            ['name' => 'Pakcoy Saus Tiram', 'type' => 'wet'],
+            ['name' => 'Tumis Buncis Broccoli', 'type' => 'wet'],
+            ['name' => 'Acar Wortel Timun', 'type' => 'wet'],
+            ['name' => 'Sambal Bawang', 'type' => 'wet'],
+            ['name' => 'Buncis bb Bawang putih', 'type' => 'wet'],
+            ['name' => 'Tumis Jamur Tiram Pakcoy', 'type' => 'wet'],
+            ['name' => 'Cah buncis Baby corn', 'type' => 'wet'],
+            ['name' => 'Bihun Goreng', 'type' => 'dry'], // Bihun usually dry
+            ['name' => 'Tumis Jamur Kuping Pakcoy', 'type' => 'wet'],
+            ['name' => 'Mix Vegetable', 'type' => 'wet'],
+            ['name' => 'Tumis Pakcoy', 'type' => 'wet'],
+            ['name' => 'Sayur Pecel', 'type' => 'wet'],
+            ['name' => 'Tumis Toge Wortel', 'type' => 'wet'],
+            ['name' => 'Tumis Besai', 'type' => 'wet'],
+            ['name' => 'Cah Kangkung Toge', 'type' => 'wet'],
+            ['name' => 'Setup Sayuran', 'type' => 'wet'],
+            ['name' => 'Tumis Buncis Brokoli', 'type' => 'wet'],
+        ];
 
-                // Code usually applies to the main/first ingredient if comma separated
-                $currentCode = ($index === 0) ? $code : null;
-
-                // Find Material
-                $material = null;
-                if ($currentCode) {
-                    $material = RawMaterial::where('code', $currentCode)->first();
-                }
-                if (!$material) {
-                    $material = RawMaterial::where('name', 'LIKE', $ingName)->first();
-                }
-
-                // Create if missing
-                if (!$material) {
-                    $material = RawMaterial::create([
-                        'name' => $ingName,
-                        'code' => $currentCode, // Can be null
-                        'unit' => 'unit',
-                        'price_per_unit' => 0,
-                        'is_active' => true,
-                        'category_id' => 1 // Default category if needed
-                    ]);
-                    $this->command->info("  + Created Material: $ingName (Code: " . ($currentCode ?? 'None') . ")");
-                } else {
-                    // Update code if missing
-                    if ($currentCode && !$material->code) {
-                        $material->update(['code' => $currentCode]);
-                    }
-                }
-
-                // Attach to Menu
-                MenuItem::firstOrCreate([
-                    'menu_id' => $currentMenu->id,
-                    'raw_material_id' => $material->id,
-                ], [
-                    'quantity_per_portion' => 1,
-                    'group_name' => 'Komposisi Utama'
-                ]);
-            }
+        foreach ($menus as $menuData) {
+            Menu::firstOrCreate(
+                ['name' => $menuData['name']],
+                [
+                    'type' => $menuData['type'],
+                    'category' => 'master',
+                    'is_active' => true,
+                    'description' => 'Master menu component.',
+                ]
+            );
         }
     }
 }

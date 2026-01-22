@@ -57,7 +57,9 @@ Route::middleware('auth')->group(function () {
     Route::post('menus/generate', [App\Http\Controllers\MenuGenerationController::class, 'store'])->name('menus.generate.store');
 
     // Menu Management with Automatic Nutritional Calculation
+    Route::get('menus/export-all-master', [MenuController::class, 'exportAllMasterWord'])->name('menus.export-all-master');
     Route::resource('menus', MenuController::class);
+    Route::get('menus/{menu}/export-word', [MenuController::class, 'exportWord'])->name('menus.export-word');
     Route::post('menus/{menu}/toggle-status', [MenuController::class, 'toggleStatus'])->name('menus.toggle-status');
 
     // Nutrition Reports

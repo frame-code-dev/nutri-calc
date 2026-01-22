@@ -255,4 +255,161 @@ class MenuController extends Controller
         
         return back()->with('success', "Menu berhasil {$status}!");
     }
+
+    /**
+     * Export menu to Word document (.docx)
+     */
+    public function exportWord(Menu $menu)
+    {
+        $menu->where('is_active', 1)->where('category','master')->load('menuItems.rawMaterial');
+
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
+        $phpWord->setDefaultFontName('Arial');
+        $phpWord->setDefaultFontSize(10);
+
+        $section = $phpWord->addSection([
+            'marginTop' => \PhpOffice\PhpWord\Shared\Converter::pixelToTwip(40),
+            'marginBottom' => \PhpOffice\PhpWord\Shared\Converter::pixelToTwip(40),
+            'marginLeft' => \PhpOffice\PhpWord\Shared\Converter::pixelToTwip(40),
+            'marginRight' => \PhpOffice\PhpWord\Shared\Converter::pixelToTwip(40),
+        ]);
+
+        // Header Table
+        $tableStyle = ['borderSize' => 6, 'borderColor' => '000000', 'cellMargin' => 50];
+        $phpWord->addTableStyle('HeaderTable', $tableStyle);
+        $headerTable = $section->addTable('HeaderTable');
+
+        // Row 1: Jenis Produk
+        $headerTable->addRow();
+        $headerTable->addCell(4000)->addText('Jenis Produk', ['bold' => true]);
+        $headerTable->addCell(500)->addText(':', ['bold' => true]);
+        $headerTable->addCell(5000)->addText('Jasa Penyembelihan', ['bold' => true]);
+
+        // Row 2: Menu Name
+        $headerTable->addRow();
+        $headerTable->addCell(4000)->addText($menu->name, ['bold' => true]);
+        $headerTable->addCell(500)->addText(':', ['bold' => true]);
+        $headerTable->addCell(5000)->addText('', ['bold' => true]);
+
+        $section->addTextBreak(1);
+        $section->addText('Material list:', ['bold' => true]);
+        $section->addTextBreak(1);
+
+        // Material Table
+        $phpWord->addTableStyle('MaterialTable', $tableStyle);
+        $materialTable = $section->addTable('MaterialTable');
+
+        // Header Row
+        $materialTable->addRow();
+        $materialTable->addCell(800)->addText('No', ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+        $materialTable->addCell(3500)->addText('Nama Bahan', ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+        $materialTable->addCell(3500)->addText('Produsen/No. Sh', ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+        $materialTable->addCell(2200)->addText('Keterangan', ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+
+        // Data Rows
+        $i = 1;
+        foreach ($menu->menuItems as $item) {
+            $material = $item->rawMaterial;
+            $materialTable->addRow();
+            $materialTable->addCell(800)->addText($i++ . '.', null, ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+            $materialTable->addCell(3500)->addText($material->name);
+            
+            // Produsen/No. Sh logic
+            // If code exists, show it. User mentioned "Produsen diisi no_sh jika ada jika tidak maka kosong"
+            $sh = $material->code ?? '';
+            $materialTable->addCell(3500)->addText($sh);
+            
+            $materialTable->addCell(2200)->addText('');
+        }
+
+        // Add dummy rows to match the "feel" if needed or keep it clean
+        // The image shows some specific additions like "Sunlight", "Air Sumur", "Food Tray" at the bottom
+        // Since this is a dynamic export, we only export what's in the menu items.
+
+        $fileName = 'Menu_Export_' . $menu->name . '.docx';
+        $fileName = str_replace(' ', '_', $fileName);
+
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+        
+        return response()->streamDownload(function () use ($objWriter) {
+            $objWriter->save('php://output');
+        }, $fileName, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        ]);
+    }
+
+    /**
+     * Export all master menus to a single Word document
+     */
+    public function exportAllMasterWord()
+    {
+        $menus = Menu::where('category', 'master')
+            ->where('is_active', true)
+            ->with('menuItems.rawMaterial')
+            ->get();
+
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
+        $phpWord->setDefaultFontName('Arial');
+        $phpWord->setDefaultFontSize(10);
+
+        $section = $phpWord->addSection([
+            'marginTop' => \PhpOffice\PhpWord\Shared\Converter::pixelToTwip(40),
+            'marginBottom' => \PhpOffice\PhpWord\Shared\Converter::pixelToTwip(40),
+            'marginLeft' => \PhpOffice\PhpWord\Shared\Converter::pixelToTwip(40),
+            'marginRight' => \PhpOffice\PhpWord\Shared\Converter::pixelToTwip(40),
+        ]);
+
+        $tableStyle = ['borderSize' => 6, 'borderColor' => '000000', 'cellMargin' => 50];
+        $phpWord->addTableStyle('MasterTable', $tableStyle);
+
+        foreach ($menus as $index => $menu) {
+            // Header Table for each menu
+            $headerTable = $section->addTable('MasterTable');
+            $headerTable->addRow();
+            $headerTable->addCell(4000)->addText('Jenis Produk', ['bold' => true]);
+            $headerTable->addCell(500)->addText(':', ['bold' => true]);
+            $headerTable->addCell(5000)->addText('Jasa Penyembelihan', ['bold' => true]);
+
+            $headerTable->addRow();
+            $headerTable->addCell(4000)->addText($menu->name, ['bold' => true]);
+            $headerTable->addCell(500)->addText(':', ['bold' => true]);
+            $headerTable->addCell(5000)->addText('', ['bold' => true]);
+
+            $section->addTextBreak(1);
+            $section->addText('Material list:', ['bold' => true]);
+            $section->addTextBreak(1);
+
+            // Material Table
+            $materialTable = $section->addTable('MasterTable');
+            $materialTable->addRow();
+            $materialTable->addCell(800)->addText('No', ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+            $materialTable->addCell(3500)->addText('Nama Bahan', ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+            $materialTable->addCell(3500)->addText('Produsen/No. Sh', ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+            $materialTable->addCell(2200)->addText('Keterangan', ['bold' => true], ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+
+            $itemCount = 1;
+            foreach ($menu->menuItems as $item) {
+                $material = $item->rawMaterial;
+                $materialTable->addRow();
+                $materialTable->addCell(800)->addText($itemCount++ . '.', null, ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+                $materialTable->addCell(3500)->addText($material->name);
+                $materialTable->addCell(3500)->addText($material->code ?? '');
+                $materialTable->addCell(2200)->addText('');
+            }
+
+            // Add break between menus, except for the last one
+            if ($index < $menus->count() - 1) {
+                $section->addPageBreak();
+            }
+        }
+
+        $fileName = 'Daftar_Master_Menu_' . date('Y-m-d') . '.docx';
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+        
+        return response()->streamDownload(function () use ($objWriter) {
+            $objWriter->save('php://output');
+        }, $fileName, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        ]);
+    }
 }
