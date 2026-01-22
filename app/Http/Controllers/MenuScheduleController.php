@@ -66,6 +66,7 @@ class MenuScheduleController extends Controller
         $totalPortions = 0;
         $totalRab = 0;
         $totalCost = 0;
+        $materialRequirements = [];
 
         if ($selectedSchool) {
             $stats = SchoolCalendar::where('school_id', $schoolId)
