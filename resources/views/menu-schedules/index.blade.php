@@ -33,13 +33,23 @@
             <!-- Stats Overview -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Portions Card -->
-                <div class="bg-white rounded p-6 border shadow-sm flex items-center gap-4">
-                    <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600">
+                <div class="bg-white rounded p-6 border shadow-sm flex items-center gap-6">
+                    <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 shrink-0">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     </div>
-                    <div>
-                        <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Total Porsi</p>
-                        <h3 class="text-2xl font-black text-gray-900">{{ number_format($totalPortions) }}</h3>
+                    <div class="flex-1 grid grid-cols-3 gap-4 divide-x">
+                        <div class="pl-0">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total Porsi</p>
+                            <h3 class="text-xl font-black text-gray-900">{{ number_format($totalPortions) }}</h3>
+                        </div>
+                        <div class="pl-4">
+                            <p class="text-[10px] font-bold text-blue-400 uppercase tracking-widest">Porsi Kecil</p>
+                            <h3 class="text-xl font-black text-gray-900">{{ number_format($totalSmallPortions) }}</h3>
+                        </div>
+                        <div class="pl-4">
+                            <p class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Porsi Besar</p>
+                            <h3 class="text-xl font-black text-gray-900">{{ number_format($totalLargePortions) }}</h3>
+                        </div>
                     </div>
                 </div>
 
@@ -121,34 +131,36 @@
                                         <div class="space-y-1">
                                             <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">{{ $day }}</p>
                                             <p class="text-[9px] text-gray-400 font-medium">{{ Carbon\Carbon::parse($dateStr)->format('d M Y') }}</p>
-                                            <p class="text-[10px] font-medium text-gray-300" id="menu-name-{{ $index }}">
-                                                @if($status === 'holiday')
+                                            <p class="text-[10px] font-medium text-gray-400" id="menu-name-{{ $index }}">
+                                                @if($assignedMenu)
+                                                    {{ $assignedMenu->name }}
+                                                @elseif($status === 'holiday')
                                                     <span class="text-rose-400 font-black uppercase">Libur</span>
                                                 @else
-                                                    {{ $assignedMenu ? $assignedMenu->name : 'Belum Dipilih' }}
+                                                    Belum Dipilih
                                                 @endif
                                             </p>
                                         </div>
                                         
-                                        <div class="relative {{ $status === 'holiday' ? 'cursor-not-allowed' : 'cursor-pointer' }}" 
-                                             @if($status !== 'holiday') onclick="openMenuModal({{ $index }}, '{{ $dates[$index] }}')" @endif>
+                                        <div class="relative cursor-pointer" 
+                                             onclick="openMenuModal({{ $index }}, '{{ $dates[$index] }}', '{{ $status }}')">
                                             <input type="hidden" name="assignments[{{ $index }}][date]" value="{{ $dates[$index] }}">
                                             <input type="hidden" name="assignments[{{ $index }}][menu_id]" id="menu-id-{{ $index }}" value="{{ $assignedMenuId }}">
                                             
                                             <div id="btn-{{ $index }}" class="w-full py-3 rounded-xl border-2 transition-all flex items-center justify-center 
-                                                {{ $status === 'holiday' ? 'border-rose-100 bg-rose-50 text-rose-300' : 
-                                                   ($assignedMenu ? ($assignedMenu->type == 'wet' ? 'border-blue-500 bg-blue-50 text-blue-600' : 'border-orange-500 bg-orange-50 text-orange-600') : 'border-dashed border-gray-200 text-gray-300 hover:border-blue-400 hover:text-blue-500') }}">
-                                                @if($status === 'holiday')
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                                @elseif($assignedMenu)
+                                                {{ $assignedMenu ? ($assignedMenu->type == 'wet' ? 'border-blue-500 bg-blue-50 text-blue-600' : 'border-orange-500 bg-orange-50 text-orange-600') : 
+                                                   ($status === 'holiday' ? 'border-rose-100 bg-rose-50 text-rose-300' : 'border-dashed border-gray-200 text-gray-300 hover:border-blue-400 hover:text-blue-500') }}">
+                                                @if($assignedMenu)
                                                     <span class="font-black text-[10px] uppercase">{{ $assignedMenu->type == 'wet' ? 'Basah' : 'Kering' }}</span>
+                                                @elseif($status === 'holiday')
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                                 @else
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                                                 @endif
                                             </div>
                                         </div>
 
-                                        @if($assignedMenuId && $status !== 'holiday')
+                                        @if($assignedMenuId)
                                             <button type="button" onclick="clearDayAssignment('{{ $dates[$index] }}')" class="absolute -top-2 -right-2 w-6 h-6 bg-rose-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
                                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                             </button>
@@ -272,7 +284,7 @@
 
                 <div class="space-y-8">
                     @foreach($menuGroups as $type => $group)
-                        <div class="space-y-4">
+                        <div class="space-y-4 menu-group-container" data-type="{{ $type }}">
                             <h4 class="text-xs font-black text-gray-400 uppercase tracking-widest">Kategori: {{ $type }}</h4>
                             <div class="grid grid-cols-2 gap-3">
                                 @foreach($group as $menu)
@@ -340,11 +352,26 @@
         let currentDayIndex = null;
         let days = @json($days);
 
-        function openMenuModal(index, date) {
+        function openMenuModal(index, date, status) {
             currentDayIndex = index;
             document.getElementById('modalDayName').innerText = 'Pilih Menu ' + days[index];
-            document.getElementById('modalDateDisplay').innerText = date;
+            document.getElementById('modalDateDisplay').innerText = date + (status === 'holiday' ? ' (LIBUR - Hanya Keringan)' : '');
             
+            // Filter menu groups if holiday
+            const containers = document.querySelectorAll('.menu-group-container');
+            containers.forEach(c => {
+                if (status === 'holiday') {
+                    // Only show 'dry' (kering) category if holiday
+                    if (c.dataset.type.toLowerCase() === 'dry') {
+                        c.classList.remove('hidden');
+                    } else {
+                        c.classList.add('hidden');
+                    }
+                } else {
+                    c.classList.remove('hidden');
+                }
+            });
+
             const modal = document.getElementById('menuModal');
             const content = document.getElementById('menuModalContent');
             modal.classList.remove('hidden');

@@ -59,9 +59,13 @@ class SchoolController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'required|string',
-            'student_count' => 'required|integer|min:0',
+            'small_portion_count' => 'required|integer|min:0',
+            'large_portion_count' => 'required|integer|min:0',
+            'teacher_count' => 'required|integer|min:0',
             'is_active' => 'boolean',
         ]);
+
+        $validated['student_count'] = $validated['small_portion_count'] + $validated['large_portion_count'];
 
         $school = School::create($validated);
 
@@ -103,9 +107,13 @@ class SchoolController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'required|string',
-            'student_count' => 'required|integer|min:0',
+            'small_portion_count' => 'required|integer|min:0',
+            'large_portion_count' => 'required|integer|min:0',
+            'teacher_count' => 'required|integer|min:0',
             'is_active' => 'boolean',
         ]);
+
+        $validated['student_count'] = $validated['small_portion_count'] + $validated['large_portion_count'];
 
         $school->update($validated);
 

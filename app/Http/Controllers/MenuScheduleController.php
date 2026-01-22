@@ -61,17 +61,23 @@ class MenuScheduleController extends Controller
         }
 
         // 3. School-Specific Analytics
-        $totalPortions = 0;
-        $totalCost = 0;
-        $materialRequirements = [];
-        $totalRab = 0;
+        $totalSmallPortions = 0;
+        $totalLargePortions = 0;
 
         if ($selectedSchool) {
-            $totalPortions = SchoolCalendar::where('school_id', $schoolId)
+            $stats = SchoolCalendar::where('school_id', $schoolId)
                 ->where('week_number', $weekNumber)
                 ->where('year', $year)
-                ->where('day_status', 'receive')
-                ->sum('portion_count');
+                ->where(function($q) {
+                    $q->where('day_status', 'receive')
+                      ->orWhereNotNull('menu_id');
+                })
+                ->selectRaw('SUM(portion_count) as total, SUM(small_portion_count) as small, SUM(large_portion_count) as large')
+                ->first();
+
+            $totalPortions = $stats->total ?? 0;
+            $totalSmallPortions = $stats->small ?? 0;
+            $totalLargePortions = $stats->large ?? 0;
 
             $totalRab = Rab::where('school_id', $schoolId)->sum('total_budget');
 
@@ -138,6 +144,8 @@ class MenuScheduleController extends Controller
             'selectedMenus',
             'allCalendars',
             'totalPortions',
+            'totalSmallPortions',
+            'totalLargePortions',
             'totalCost',
             'totalRab',
             'remainingRab',
@@ -169,8 +177,21 @@ class MenuScheduleController extends Controller
                     ->where('date', $assign['date'])
                     ->first();
 
-                if ($calendar && $calendar->day_status === 'receive') {
+                if ($calendar) {
+                    // Update menu
                     $calendar->menu_id = $assign['menu_id'];
+                    
+                    // If holiday but menu assigned, use school's default portions
+                    if ($calendar->day_status === 'holiday' && $assign['menu_id']) {
+                        $calendar->portion_count = $school->student_count;
+                        $calendar->small_portion_count = $school->small_portion_count;
+                        $calendar->large_portion_count = $school->large_portion_count;
+                    } elseif ($calendar->day_status === 'holiday' && !$assign['menu_id']) {
+                        $calendar->portion_count = 0;
+                        $calendar->small_portion_count = 0;
+                        $calendar->large_portion_count = 0;
+                    }
+                    
                     $calendar->save();
                 }
             }

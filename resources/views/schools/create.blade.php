@@ -41,17 +41,41 @@
                     @enderror
                 </div>
 
-                <!-- Student Count -->
-                <div>
-                    <label for="student_count" class="block text-sm font-medium text-gray-700 mb-2">
-                        Jumlah Siswa <span class="text-red-500">*</span>
-                    </label>
-                    <input type="number" name="student_count" id="student_count" value="{{ old('student_count') }}" min="0" required
-                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('student_count') border-red-500 @enderror"
-                        placeholder="contoh: 450">
-                    @error('student_count')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                <!-- Portions & Teacher -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label for="teacher_count" class="block text-sm font-medium text-gray-700 mb-2">
+                            Jumlah Guru <span class="text-red-500">*</span>
+                        </label>
+                        <input type="number" name="teacher_count" id="teacher_count" value="{{ old('teacher_count', 0) }}" min="0" required
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('teacher_count') border-red-500 @enderror"
+                            placeholder="0">
+                        @error('teacher_count')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="small_portion_count" class="block text-sm font-medium text-gray-700 mb-2">
+                            Porsi Kecil <span class="text-red-500">*</span>
+                        </label>
+                        <input type="number" name="small_portion_count" id="small_portion_count" value="{{ old('small_portion_count', 0) }}" min="0" required
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('small_portion_count') border-red-500 @enderror"
+                            placeholder="0">
+                        @error('small_portion_count')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="large_portion_count" class="block text-sm font-medium text-gray-700 mb-2">
+                            Porsi Besar <span class="text-red-500">*</span>
+                        </label>
+                        <input type="number" name="large_portion_count" id="large_portion_count" value="{{ old('large_portion_count', 0) }}" min="0" required
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('large_portion_count') border-red-500 @enderror"
+                            placeholder="0">
+                        @error('large_portion_count')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
 
                 <!-- Active Status -->

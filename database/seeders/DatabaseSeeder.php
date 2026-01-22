@@ -21,22 +21,24 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             
             // 3. Schools & Coordinators
-            SchoolSeeder::class,
+            // SchoolSeeder::class,
+            SchoolDataSeeder::class,
             
             // 4. Suppliers
             SupplierSeeder::class,
             
             // 5. Raw Materials & Nutrition Data
-            RawMaterialSeeder::class,
+            // RawMaterialSeeder::class,
+            BahanBakuSeeder::class,
 
             // 6. Office Items
-            OfficeItemSeeder::class,
+            // OfficeItemSeeder::class,
             
-            // 7. Menus & Menu Items
-            MenuSeeder::class,
+            // // 7. Menus & Menu Items
+            // MenuSeeder::class,
             
             // 7. Stock Transactions
-            StockSeeder::class,
+            // StockSeeder::class,
         ]);
 
         $this->command->info('✅ All seeders completed successfully!');

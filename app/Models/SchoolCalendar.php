@@ -18,6 +18,8 @@ class SchoolCalendar extends Model
         'allergy_menu_id',
         'allergy_notes',
         'portion_count',
+        'small_portion_count',
+        'large_portion_count',
         'week_number',
         'year',
     ];
@@ -25,6 +27,8 @@ class SchoolCalendar extends Model
     protected $casts = [
         'date' => 'date',
         'portion_count' => 'integer',
+        'small_portion_count' => 'integer',
+        'large_portion_count' => 'integer',
         'week_number' => 'integer',
         'year' => 'integer',
     ];

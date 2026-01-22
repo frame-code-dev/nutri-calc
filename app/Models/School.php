@@ -14,12 +14,18 @@ class School extends Model
         'name',
         'address',
         'student_count',
+        'teacher_count',
+        'small_portion_count',
+        'large_portion_count',
         'is_active',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
         'student_count' => 'integer',
+        'teacher_count' => 'integer',
+        'small_portion_count' => 'integer',
+        'large_portion_count' => 'integer',
     ];
 
     public function coordinators(): HasMany

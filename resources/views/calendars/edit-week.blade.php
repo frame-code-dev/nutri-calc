@@ -66,28 +66,40 @@
                                 <!-- Status Selection Tiles -->
                                 <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <!-- Receive Option -->
-                                    <label class="status-option-label relative cursor-pointer group">
-                                        <input type="radio" 
-                                               name="dates[{{ $index }}][day_status]" 
-                                               value="receive" 
-                                               class="sr-only status-radio"
-                                               {{ $currentStatus === 'receive' ? 'checked' : '' }}
-                                               required>
-                                        <div class="status-tile flex items-center gap-4 p-4 rounded-2xl border-2 border-gray-100 bg-white hover:bg-gray-50/50 transition-all duration-300">
-                                            <div class="status-icon-box p-2.5 rounded-xl bg-gray-50 text-gray-400 transition-all duration-300">
-                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                </svg>
+                                    <div class="space-y-3 flex-1">
+                                        <label class="status-option-label relative cursor-pointer group block">
+                                            <input type="radio" 
+                                                   name="dates[{{ $index }}][day_status]" 
+                                                   value="receive" 
+                                                   class="sr-only status-radio"
+                                                   {{ $currentStatus === 'receive' ? 'checked' : '' }}
+                                                   required>
+                                            <div class="status-tile flex items-center gap-4 p-4 rounded-2xl border-2 border-gray-100 bg-white hover:bg-gray-50/50 transition-all duration-300">
+                                                <div class="status-icon-box p-2.5 rounded-xl bg-gray-50 text-gray-400 transition-all duration-300">
+                                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <p class="font-bold text-gray-800 transition-colors duration-300">Menerima</p>
+                                                    <p class="text-[10px] text-gray-400 uppercase tracking-widest font-black transition-colors duration-300">Siswa Makan</p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p class="font-bold text-gray-800 transition-colors duration-300">Menerima</p>
-                                                <p class="text-[10px] text-gray-400 uppercase tracking-widest font-black transition-colors duration-300">Siswa Masukan</p>
+                                        </label>
+                                        <div class="flex gap-2 px-1">
+                                            <div class="flex-1 bg-blue-50/50 rounded-xl p-2 border border-blue-100/50">
+                                                <p class="text-[8px] font-black text-blue-400 uppercase tracking-widest">Porsi Kecil</p>
+                                                <p class="text-xs font-bold text-blue-700">{{ $school->small_portion_count }}</p>
+                                            </div>
+                                            <div class="flex-1 bg-indigo-50/50 rounded-xl p-2 border border-indigo-100/50">
+                                                <p class="text-[8px] font-black text-indigo-400 uppercase tracking-widest">Porsi Besar</p>
+                                                <p class="text-xs font-bold text-indigo-700">{{ $school->large_portion_count }}</p>
                                             </div>
                                         </div>
-                                    </label>
+                                    </div>
 
                                     <!-- Holiday Option -->
-                                    <label class="status-option-label relative cursor-pointer group">
+                                    <label class="status-option-label relative cursor-pointer group self-start">
                                         <input type="radio" 
                                                name="dates[{{ $index }}][day_status]" 
                                                value="holiday" 

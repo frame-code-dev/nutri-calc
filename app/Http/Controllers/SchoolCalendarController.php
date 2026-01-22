@@ -247,6 +247,8 @@ class SchoolCalendarController extends Controller
                     'year' => $year,
                     'day_status' => $item['day_status'],
                     'portion_count' => $item['day_status'] === 'receive' ? $school->student_count : 0,
+                    'small_portion_count' => $item['day_status'] === 'receive' ? $school->small_portion_count : 0,
+                    'large_portion_count' => $item['day_status'] === 'receive' ? $school->large_portion_count : 0,
                     'menu_id' => $globalMenu ? $globalMenu->menu_id : null,
                 ]
             );
