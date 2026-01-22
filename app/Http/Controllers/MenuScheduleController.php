@@ -63,6 +63,7 @@ class MenuScheduleController extends Controller
         // 3. School-Specific Analytics
         $totalSmallPortions = 0;
         $totalLargePortions = 0;
+        $totalPortions = 0;
         $totalRab = 0;
         $totalCost = 0;
 
