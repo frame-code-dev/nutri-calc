@@ -63,7 +63,7 @@
                 </div>
 
                 <!-- Ingredients Card -->
-                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
                     <div class="px-6 py-4 border-b border-gray-50 bg-gray-50/50 flex items-center justify-between">
                         <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider">Komposisi Bahan</h3>
                         <button type="button" id="addIngredient" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 text-[11px] font-bold uppercase tracking-wider rounded-lg hover:bg-blue-600 hover:text-white transition-all">

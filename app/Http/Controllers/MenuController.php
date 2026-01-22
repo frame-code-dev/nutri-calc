@@ -51,7 +51,9 @@ class MenuController extends Controller
             ->orderBy('name')
             ->get();
         
-        return view('menus.create', compact('rawMaterials'));
+        $categories = \App\Models\Category::orderBy('name')->get();
+        
+        return view('menus.create', compact('rawMaterials', 'categories'));
     }
 
     /**
@@ -122,7 +124,9 @@ class MenuController extends Controller
             ->orderBy('name')
             ->get();
         
-        return view('menus.edit', compact('menu', 'rawMaterials'));
+        $categories = \App\Models\Category::orderBy('name')->get();
+        
+        return view('menus.edit', compact('menu', 'rawMaterials', 'categories'));
     }
 
     /**
