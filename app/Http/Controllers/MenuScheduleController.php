@@ -121,7 +121,11 @@ class MenuScheduleController extends Controller
         $budgetProgress = $totalRab > 0 ? ($totalCost / $totalRab) * 100 : 0;
 
         $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-        $menuGroups = Menu::where('is_active', true)->get()->groupBy('type');
+        // ONLY show "Menu Paket" (Siklus) for scheduling
+        $menuGroups = Menu::where('is_active', true)
+            ->where('category', 'packet')
+            ->get()
+            ->groupBy('type');
 
         // Allergy Monitoring (Filter by school if selected)
         $allergyQuery = SchoolCalendar::with(['school', 'menu', 'allergyMenu'])

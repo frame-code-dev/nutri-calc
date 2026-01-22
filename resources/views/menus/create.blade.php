@@ -81,7 +81,7 @@
                             </svg>
                         </div>
                         <p class="text-sm font-bold text-gray-400">Belum ada bahan ditambahkan</p>
-                        <p class="text-xs text-gray-300 mt-1">Klik tombol "Tambah Bahan" untuk menyusun komposisi menu.</p>
+                        <p class="text-xs text-gray-300 mt-1">Klik tombol "Tambah Bahan" untuk mulai menyusun menu.</p>
                     </div>
 
                     <!-- Nutrition Footer Summary -->
@@ -322,11 +322,8 @@
         @if(!old('items'))
             addIngredientField();
         @else
+            // If validation failed, first empty state hidden
             document.getElementById('emptyState').style.display = 'none';
-            // TODO: Re-populate old data? implementing generic re-population for dynamic forms is tricky with Blade + JS
-            // For now, if validation fails, the user might lose dynamic fields. 
-            // Better to let them re-add or implement complex hydration.
-            // Given the scope, let's just make sure Create works perfectly first.
         @endif
     </script>
     @endpush

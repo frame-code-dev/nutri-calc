@@ -25,8 +25,8 @@ class RawMaterialController extends Controller
         if ($request->has('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+                $q->where('name', 'like', "%{$search}%");
+                //   ->orWhere('description', 'like', "%{$search}%");
             });
         }
 
@@ -75,6 +75,7 @@ class RawMaterialController extends Controller
             'category_id' => 'required|exists:categories,id',
             'unit' => 'required|string|max:50',
             'price_per_unit' => 'required|numeric|min:0',
+            'code' => 'nullable|string|max:50', // Added code validation
             'description' => 'nullable|string',
             'is_active' => 'boolean',
         ];
@@ -97,6 +98,7 @@ class RawMaterialController extends Controller
                 'category_id' => $validated['category_id'],
                 'unit' => $validated['unit'],
                 'price_per_unit' => $validated['price_per_unit'],
+                'code' => $validated['code'] ?? null, // Added code
                 'description' => $validated['description'] ?? null,
                 'is_active' => $validated['is_active'] ?? true,
             ]);
@@ -159,6 +161,7 @@ class RawMaterialController extends Controller
             'category_id' => 'required|exists:categories,id',
             'unit' => 'required|string|max:50',
             'price_per_unit' => 'required|numeric|min:0',
+            'code' => 'nullable|string|max:50', // Added code validation
             'description' => 'nullable|string',
             'is_active' => 'boolean',
         ];
@@ -181,6 +184,7 @@ class RawMaterialController extends Controller
                 'category_id' => $validated['category_id'],
                 'unit' => $validated['unit'],
                 'price_per_unit' => $validated['price_per_unit'],
+                'code' => $validated['code'] ?? null, // Added code
                 'description' => $validated['description'] ?? null,
                 'is_active' => $validated['is_active'] ?? true,
             ]);

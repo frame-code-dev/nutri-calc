@@ -14,8 +14,12 @@ class Menu extends Model
     protected $fillable = [
         'name',
         'type',
+        'category', // master, packet
         'description',
         'is_active',
+        'parent_id',
+        'version',
+        'code',
     ];
 
     protected $casts = [

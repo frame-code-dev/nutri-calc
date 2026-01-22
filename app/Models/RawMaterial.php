@@ -17,6 +17,7 @@ class RawMaterial extends Model
         'category_id',
         'unit',
         'price_per_unit',
+        'code',
         'description',
         'is_active',
     ];

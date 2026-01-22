@@ -34,6 +34,10 @@
                         <x-nav-link :href="route('menu-schedules.index')" :active="request()->routeIs('menu-schedules.*')">
                             📅 Siklus Menu
                         </x-nav-link>
+
+                        <x-nav-link :href="route('menus.index')" :active="request()->routeIs('menus.*')">
+                            🍽️ Manajemen Menu
+                        </x-nav-link>
                     @endrole
 
                     @role('Koordinator Sekolah')

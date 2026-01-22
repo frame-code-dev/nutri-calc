@@ -8,6 +8,10 @@
                     <p class="text-sm text-gray-500 mt-1">Kelola daftar menu makanan dan komposisi gizinya.</p>
                 </div>
                 <div class="flex items-center gap-3">
+                    <a href="{{ route('menus.generate') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-semibold rounded-xl transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                        Generate Paket
+                    </a>
                     <a href="{{ route('menus.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
                         Tambah Menu
@@ -15,9 +19,27 @@
                 </div>
             </div>
 
-            <!-- Search & Filter Bar -->
+            <!-- Tabs -->
+            <div class="border-b border-gray-200">
+                <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                    <a href="{{ route('menus.index', ['category' => 'master']) }}"
+                       class="{{ request('category', 'master') === 'master' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2">
+                        <svg class="w-5 h-5 {{ request('category', 'master') === 'master' ? 'text-blue-500' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        Master Menu (Komponen)
+                    </a>
+                    <a href="{{ route('menus.index', ['category' => 'packet']) }}"
+                       class="{{ request('category') === 'packet' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2">
+                        <svg class="w-5 h-5 {{ request('category') === 'packet' ? 'text-blue-500' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                        Menu Paket (Siklus)
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Menus Table Card -->
             <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
-                <form method="GET" action="{{ route('menus.index') }}" class="flex flex-col md:flex-row gap-4">
+                <!-- Filter Bar -->
+                <form method="GET" action="{{ route('menus.index') }}" class="flex flex-col md:flex-row gap-4 mb-0">
+                    <input type="hidden" name="category" value="{{ request('category', 'master') }}">
                     <div class="flex-1 relative">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                             <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,14 +60,14 @@
                         Filter
                     </button>
                     @if(request()->anyFilled(['search', 'type']))
-                        <a href="{{ route('menus.index') }}" class="inline-flex items-center justify-center px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-semibold rounded-xl transition-all">
+                        <a href="{{ route('menus.index', ['category' => request('category', 'master')]) }}" class="inline-flex items-center justify-center px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-semibold rounded-xl transition-all">
                             Reset
                         </a>
                     @endif
                 </form>
             </div>
 
-            <!-- Menus Table Card -->
+            <!-- Table -->
             <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                 <div class="overflow-x-auto overflow-y-hidden">
                     <table class="min-w-full divide-y divide-gray-100 table-fixed">

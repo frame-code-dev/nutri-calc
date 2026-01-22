@@ -52,6 +52,10 @@ Route::middleware('auth')->group(function () {
     Route::get('stocks/summary', [StockController::class, 'summary'])->name('stocks.summary');
     Route::resource('stocks', StockController::class);
 
+    // Generate Menu
+    Route::get('menus/generate', [App\Http\Controllers\MenuGenerationController::class, 'index'])->name('menus.generate');
+    Route::post('menus/generate', [App\Http\Controllers\MenuGenerationController::class, 'store'])->name('menus.generate.store');
+
     // Menu Management with Automatic Nutritional Calculation
     Route::resource('menus', MenuController::class);
     Route::post('menus/{menu}/toggle-status', [MenuController::class, 'toggleStatus'])->name('menus.toggle-status');

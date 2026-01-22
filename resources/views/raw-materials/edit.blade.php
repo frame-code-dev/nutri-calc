@@ -34,6 +34,19 @@
                             @enderror
                         </div>
 
+                        <!-- Code / No SH -->
+                        <div class="md:col-span-1">
+                            <label for="code" class="block text-sm font-medium text-gray-700 mb-2">
+                                ID / No SH (Opsional)
+                            </label>
+                            <input type="text" name="code" id="code" value="{{ old('code', $rawMaterial->code) }}"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('code') border-red-500 @enderror"
+                                placeholder="contoh: ID21320000007770320">
+                            @error('code')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <div class="md:col-span-1">
                             <label for="category_id" class="block text-sm font-medium text-gray-700 mb-2">
                                 Kategori <span class="text-red-500">*</span>

@@ -22,6 +22,11 @@ class MenuController extends Controller
     {
         $query = Menu::with('menuItems.rawMaterial');
 
+        // Filter by category (Tab)
+        // Default to 'master' if not specified
+        $category = $request->get('category', 'master');
+        $query->where('category', $category);
+
         // Search
         if ($request->has('search')) {
             $search = $request->search;
@@ -67,6 +72,7 @@ class MenuController extends Controller
             'description' => 'nullable|string',
             'is_active' => 'boolean',
             'items' => 'required|array|min:1',
+            'items.*.group_name' => 'nullable|string|max:255',
             'items.*.raw_material_id' => 'required|exists:raw_materials,id',
             'items.*.quantity_per_portion' => 'required|numeric|min:0.001',
         ]);
@@ -85,6 +91,7 @@ class MenuController extends Controller
             foreach ($validated['items'] as $item) {
                 MenuItem::create([
                     'menu_id' => $menu->id,
+                    'group_name' => $item['group_name'] ?? null,
                     'raw_material_id' => $item['raw_material_id'],
                     'quantity_per_portion' => $item['quantity_per_portion'],
                 ]);
@@ -140,6 +147,7 @@ class MenuController extends Controller
             'description' => 'nullable|string',
             'is_active' => 'boolean',
             'items' => 'required|array|min:1',
+            'items.*.group_name' => 'nullable|string|max:255',
             'items.*.raw_material_id' => 'required|exists:raw_materials,id',
             'items.*.quantity_per_portion' => 'required|numeric|min:0.001',
         ]);
@@ -166,6 +174,7 @@ class MenuController extends Controller
                 foreach ($validated['items'] as $item) {
                     MenuItem::create([
                         'menu_id' => $newMenu->id,
+                        'group_name' => $item['group_name'] ?? null,
                         'raw_material_id' => $item['raw_material_id'],
                         'quantity_per_portion' => $item['quantity_per_portion'],
                     ]);
@@ -197,6 +206,7 @@ class MenuController extends Controller
                 foreach ($validated['items'] as $item) {
                     MenuItem::create([
                         'menu_id' => $menu->id,
+                        'group_name' => $item['group_name'] ?? null,
                         'raw_material_id' => $item['raw_material_id'],
                         'quantity_per_portion' => $item['quantity_per_portion'],
                     ]);

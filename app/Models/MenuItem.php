@@ -14,6 +14,7 @@ class MenuItem extends Model
         'menu_id',
         'raw_material_id',
         'quantity_per_portion',
+        'group_name',
     ];
 
     protected $casts = [

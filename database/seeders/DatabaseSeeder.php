@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             // 5. Raw Materials & Nutrition Data
             // RawMaterialSeeder::class,
             BahanBakuSeeder::class,
+            MasterMenuSeeder::class,
 
             // 6. Office Items
             // OfficeItemSeeder::class,

@@ -56,6 +56,7 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bahan Baku</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Satuan</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga/Unit</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID / No SH</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stok Saat Ini</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gizi (per 100g)</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -80,6 +81,11 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="text-sm text-gray-900">Rp {{ number_format($material->price_per_unit) }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-xs font-mono text-gray-600 bg-gray-100 px-2 py-1 rounded inline-block">
+                                        {{ $material->code ?? '-' }}
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     @php
