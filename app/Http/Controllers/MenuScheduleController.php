@@ -63,6 +63,8 @@ class MenuScheduleController extends Controller
         // 3. School-Specific Analytics
         $totalSmallPortions = 0;
         $totalLargePortions = 0;
+        $totalRab = 0;
+        $totalCost = 0;
 
         if ($selectedSchool) {
             $stats = SchoolCalendar::where('school_id', $schoolId)
