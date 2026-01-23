@@ -21,16 +21,19 @@
                             📊 Monitoring & Kunci
                         </x-nav-link>
 
-                        <x-nav-link :href="route('nutritionist.dashboard')" :active="request()->routeIs('nutritionist.*')">
-                            👨‍🍳 Assignment Menu
+                        <x-nav-link :href="route('distribution.index')" :active="request()->routeIs('distribution.*')">
+                            🚚 Distribusi
+                        </x-nav-link>
+
+
+                        <x-nav-link :href="route('distribution.settings')" :active="request()->routeIs('distribution.settings')">
+                            📦 Setting Kloter
                         </x-nav-link>
 
                         <x-nav-link :href="route('procurements.index')" :active="request()->routeIs('procurements.*')">
                             🛒 Belanja
                         </x-nav-link>
-                    @endrole
 
-                    @role('Super Admin|Admin MBG|Ahli Gizi')
                         <x-nav-link :href="route('menu-schedules.index')" :active="request()->routeIs('menu-schedules.*')">
                             📅 Siklus Menu
                         </x-nav-link>
@@ -111,8 +114,11 @@
                 <x-responsive-nav-link :href="route('monitoring.index')" :active="request()->routeIs('monitoring.*')">
                     Monitoring & Kunci
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('nutritionist.dashboard')" :active="request()->routeIs('nutritionist.*')">
-                    Assignment Menu
+                <x-responsive-nav-link :href="route('distribution.index')" :active="request()->routeIs('distribution.*')">
+                    Distribusi
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('distribution.settings')" :active="request()->routeIs('distribution.settings')">
+                    Setting Kloter
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('procurements.index')" :active="request()->routeIs('procurements.*')">
                     Belanja

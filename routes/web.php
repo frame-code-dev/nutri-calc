@@ -8,6 +8,7 @@ use App\Http\Controllers\RawMaterialController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\KloterController;
 use App\Http\Controllers\NutritionReportController;
 use App\Http\Controllers\SchoolCalendarController;
 use App\Http\Controllers\WeeklyLockController;
@@ -62,6 +63,16 @@ Route::middleware('auth')->group(function () {
     Route::get('menus/{menu}/export-word', [MenuController::class, 'exportWord'])->name('menus.export-word');
     Route::post('menus/{menu}/toggle-status', [MenuController::class, 'toggleStatus'])->name('menus.toggle-status');
 
+    // Kloter (Batch) Management
+    Route::get('kloters/{kloter}/export-pdf', [KloterController::class, 'exportPdf'])->name('kloters.export-pdf');
+    Route::resource('kloters', KloterController::class);
+
+    // Distribution Dashboard & Settings
+    Route::get('distribution', [\App\Http\Controllers\DistributionController::class, 'index'])->name('distribution.index');
+    Route::get('distribution/export-word', [\App\Http\Controllers\DistributionController::class, 'exportWord'])->name('distribution.export-word');
+    Route::get('distribution/settings', [\App\Http\Controllers\DistributionController::class, 'settings'])->name('distribution.settings');
+    Route::post('distribution/settings', [\App\Http\Controllers\DistributionController::class, 'updateSettings'])->name('distribution.settings.update');
+
     // Nutrition Reports
     Route::get('nutrition-reports', [NutritionReportController::class, 'index'])->name('nutrition-reports.index');
     Route::get('nutrition-reports/menu/{menu}', [NutritionReportController::class, 'menuReport'])->name('nutrition-reports.menu');
@@ -94,10 +105,11 @@ Route::middleware('auth')->group(function () {
     Route::get('procurements/office', [\App\Http\Controllers\ProcurementController::class, 'officeInventory'])->name('procurements.office'); // Office Inventory
     Route::post('procurements', [\App\Http\Controllers\ProcurementController::class, 'store'])->name('procurements.store');
 
-    // Nutritionist Dashboard / Menu Schedules
+    // Nutritionist Dashboard & Menu Schedules
+    Route::post('nutritionist/allergy', [\App\Http\Controllers\MenuScheduleController::class, 'saveAllergy'])->name('nutritionist.save-allergy');
+    
     Route::resource('menu-schedules', \App\Http\Controllers\MenuScheduleController::class)->only(['index', 'store']);
     Route::post('menu-schedules/clear', [\App\Http\Controllers\MenuScheduleController::class, 'destroy'])->name('menu-schedules.clear');
-    Route::post('nutritionist/allergy', [\App\Http\Controllers\MenuScheduleController::class, 'saveAllergy'])->name('nutritionist.save-allergy');
 });
 
 require __DIR__.'/auth.php';

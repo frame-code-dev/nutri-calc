@@ -99,6 +99,23 @@
                     </svg>
                     Monitoring & Kunci
                 </a>
+
+                <a href="{{ route('distribution.index') }}" 
+                   class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-all duration-200 {{ request()->routeIs('distribution*') ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900' }}">
+                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('distribution*') ? 'text-blue-600' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9a1 1 0 01-1-1v-5a1 1 0 011-1h2a1 1 0 011 1v5zm0 0h1m4 0h1a1 1 0 001-1v-4a1 1 0 00-1-1h-2l-1-1V5a1 1 0 00-1-1h-2" />
+                    </svg>
+                    Distribusi
+                </a>
+
+                <a href="{{ route('distribution.settings') }}" 
+                   class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-all duration-200 {{ request()->routeIs('distribution.settings') ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900' }}">
+                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('kloters*') ? 'text-blue-600' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                    </svg>
+                    Setting Kloter
+                </a>
                 @endrole
 
                 <div class="pt-4 mb-2">

@@ -28,6 +28,11 @@ class School extends Model
         'large_portion_count' => 'integer',
     ];
 
+    public function distributions(): HasMany
+    {
+        return $this->hasMany(SchoolDistribution::class);
+    }
+
     public function coordinators(): HasMany
     {
         return $this->hasMany(SchoolCoordinator::class);
