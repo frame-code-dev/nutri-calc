@@ -146,12 +146,44 @@
         </div>
     </div>
 
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+    <style>
+        .ts-control {
+            border-radius: 0.75rem;
+            padding: 0.625rem 0.75rem;
+            border-color: #e5e7eb;
+            font-size: 0.875rem;
+            background-color: #f9fafb;
+        }
+        .ts-wrapper.focus .ts-control {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+        .ts-dropdown {
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: #e5e7eb;
+            z-index: 50;
+        }
+        .ts-dropdown .optgroup-header {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #9ca3af;
+            background-color: #f9fafb;
+        }
+    </style>
+
     @push('scripts')
     <script>
         let ingredientIndex = 0;
         const materials = @json($rawMaterials);
+        const categories = @json($categories);
         const existingItems = @json($menu->menuItems);
         const nutritionData = {};
+        const tomSelectInstances = {};
 
         // Build nutrition lookup
         materials.forEach(material => {
@@ -174,13 +206,36 @@
             const container = document.getElementById('ingredientsList');
             const emptyState = document.getElementById('emptyState');
             
+            // Build Options with Optgroups
+            let optionsHtml = '<option value="">Pilih Bahan</option>';
+            
+            categories.forEach(cat => {
+                const catMaterials = materials.filter(m => m.category_id == cat.id);
+                if (catMaterials.length > 0) {
+                    optionsHtml += `<optgroup label="${cat.name}">`;
+                    catMaterials.forEach(m => {
+                        optionsHtml += `<option value="${m.id}" ${m.id == materialId ? 'selected' : ''}>${m.name} (${m.unit})</option>`;
+                    });
+                    optionsHtml += `</optgroup>`;
+                }
+            });
+
+            // Add materials without category
+            const uncategorized = materials.filter(m => !m.category_id);
+            if (uncategorized.length > 0) {
+                optionsHtml += `<optgroup label="Lainnya">`;
+                uncategorized.forEach(m => {
+                    optionsHtml += `<option value="${m.id}" ${m.id == materialId ? 'selected' : ''}>${m.name} (${m.unit})</option>`;
+                });
+                optionsHtml += `</optgroup>`;
+            }
+            
             const ingredientHtml = `
                 <div class="ingredient-item bg-gray-50/50 p-4 rounded-2xl border border-gray-100 flex flex-col md:flex-row gap-4 items-end animate-in fade-in slide-in-from-bottom-2 duration-300" data-index="${ingredientIndex}">
                     <div class="flex-1 w-full">
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Bahan Baku</label>
-                        <select name="items[${ingredientIndex}][raw_material_id]" class="material-select block w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all font-semibold" required onchange="calculateNutrition()">
-                            <option value="">Pilih Bahan</option>
-                            ${materials.map(m => `<option value="${m.id}" ${m.id == materialId ? 'selected' : ''}>${m.name} (${m.unit})</option>`).join('')}
+                        <select name="items[${ingredientIndex}][raw_material_id]" id="select-${ingredientIndex}" class="material-select block w-full" required>
+                            ${optionsHtml}
                         </select>
                     </div>
                     <div class="w-full md:w-48">
@@ -189,7 +244,7 @@
                             <input type="number" name="items[${ingredientIndex}][quantity_per_portion]" 
                                    class="quantity-input block w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all font-bold pr-12" 
                                    min="0.001" step="0.001" required placeholder="0" value="${quantity}" oninput="calculateNutrition()">
-                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">gr/ml</span>
+                            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400 unit-label">${materialId ? (materials.find(m => m.id == materialId)?.unit || 'gr/ml') : 'gr/ml'}</span>
                         </div>
                     </div>
                     <button type="button" onclick="removeIngredient(${ingredientIndex})" 
@@ -200,6 +255,28 @@
             `;
             
             container.insertAdjacentHTML('beforeend', ingredientHtml);
+
+            // Initialize Tom Select
+            const selectEl = document.getElementById(`select-${ingredientIndex}`);
+            const ts = new TomSelect(selectEl, {
+                create: false,
+                sortField: {
+                    field: "text",
+                    direction: "asc"
+                },
+                placeholder: "Cari bahan baku...",
+                onChange: function(value) {
+                    calculateNutrition();
+                    // Update unit label
+                    const mat = materials.find(m => m.id == value);
+                    if (mat) {
+                        const unitLabel = document.querySelector(`.ingredient-item[data-index="${selectEl.id.split('-')[1]}"] .unit-label`);
+                        if (unitLabel) unitLabel.textContent = mat.unit;
+                    }
+                }
+            });
+            tomSelectInstances[ingredientIndex] = ts;
+
             ingredientIndex++;
             emptyState.style.display = 'none';
             calculateNutrition();
@@ -208,6 +285,13 @@
         function removeIngredient(index) {
             const item = document.querySelector(`.ingredient-item[data-index="${index}"]`);
             item.classList.add('animate-out', 'fade-out', 'slide-out-to-top-2', 'duration-200');
+
+            // Destroy Tom Select instance
+            if (tomSelectInstances[index]) {
+                tomSelectInstances[index].destroy();
+                delete tomSelectInstances[index];
+            }
+
             setTimeout(() => {
                 item.remove();
                 const remaining = document.querySelectorAll('.ingredient-item');
