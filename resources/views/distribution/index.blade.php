@@ -1,10 +1,10 @@
 <x-app-layout>
-    <div class="py-10 bg-[#f8fafc] flex-1 min-h-screen">
-        <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+    <div class="max-w-7xl mx-auto space-y-6">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
             <!-- Header -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
                 <div>
-                    <h2 class="text-3xl font-black text-gray-900 tracking-tight flex items-center gap-3">
+                    <h2 class="text-2xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
                         <span class="w-2 h-10 bg-blue-600 rounded-full"></span>
                         Status Distribusi MBG
                     </h2>
@@ -16,9 +16,9 @@
                 <div class="flex items-center gap-4">
                     <form method="GET" action="{{ route('distribution.index') }}" class="flex items-center gap-2">
                         <input type="date" name="date" value="{{ $date }}" onchange="this.form.submit()"
-                               class="rounded-2xl border-gray-200 bg-white shadow-sm text-sm font-black text-gray-700 focus:ring-blue-500 transition-all px-6 py-3">
+                               class="rounded-2xl border-gray-200 bg-white shadow-sm text-sm font-medium text-gray-700 focus:ring-blue-500 transition-all px-6 py-3">
                     </form>
-                    <a href="{{ route('distribution.settings') }}" class="px-6 py-3 bg-blue-600 border border-blue-500 rounded-2xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20 text-sm font-black text-white flex items-center gap-2 group">
+                    <a href="{{ route('distribution.settings') }}" class="px-6 py-3 bg-blue-600 border border-blue-500 rounded-2xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20 text-sm font-medium text-white flex items-center gap-2 group">
                         <svg class="w-5 h-5 transition-transform group-hover:rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         Edit Alokasi
                     </a>

@@ -1,133 +1,150 @@
 <x-app-layout>
-    <div class="py-10 bg-gray-50 flex-1">
-        <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl space-y-6">
-            <!-- Header section -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-3xl font-bold text-gray-900 tracking-tight">Daftar Belanja</h2>
-                    <p class="text-sm text-gray-500 mt-1">Kalkulasi kebutuhan bahan baku berdasarkan jadwal menu sekolah.</p>
-                </div>
-                <div>
-                    <a href="{{ route('procurements.office') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-semibold rounded-xl hover:bg-gray-50 transition-all shadow-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 012-2h2a2 2 0 012 2v16m-10 0V3a2 2 0 00-2-2H6a2 2 0 00-2 2v16m16 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                        Belanja Kantor
-                    </a>
-                </div>
+    <div class="max-w-7xl mx-auto space-y-6">
+        <!-- Header Section -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900">Daftar Belanja</h2>
+                <p class="text-sm text-gray-500 mt-1">Kalkulasi kebutuhan bahan baku berdasarkan jadwal menu sekolah.</p>
             </div>
+            
+            <a href="{{ route('procurements.office') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 rounded-xl font-semibold text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all shadow-sm">
+                <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 012-2h2a2 2 0 012 2v16m-10 0V3a2 2 0 00-2-2H6a2 2 0 00-2 2v16m16 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                Belanja Kantor
+            </a>
+        </div>
 
-            <!-- Filter Date Range Card -->
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 overflow-hidden">
-                <form method="GET" action="{{ route('procurements.index') }}" class="flex flex-col md:flex-row md:items-end gap-6">
+        <!-- Filter Date Range Card -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4">Periode Belanja</h3>
+            <form method="GET" action="{{ route('procurements.index') }}" class="flex flex-col md:flex-row md:items-end gap-6">
+                <div class="flex-1 flex items-center gap-4">
                     <div class="flex-1">
-                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Periode Belanja</label>
-                        <div class="flex items-center gap-3">
-                            <div class="relative flex-1">
-                                <input type="date" name="start_date" value="{{ $startDate }}" 
-                                    class="w-full pl-4 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all font-semibold text-gray-700">
-                            </div>
-                            <span class="text-gray-300 font-bold">sampai</span>
-                            <div class="relative flex-1">
-                                <input type="date" name="end_date" value="{{ $endDate }}" 
-                                    class="w-full pl-4 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all font-semibold text-gray-700">
-                            </div>
-                        </div>
+                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Dari Tanggal</label>
+                        <input type="date" name="start_date" value="{{ $startDate }}" 
+                               class="block w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-shadow">
                     </div>
-                    <button type="submit" class="px-8 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl shadow-lg shadow-blue-500/20 transition-all transform active:scale-95 group flex items-center gap-2">
-                        <svg class="w-4 h-4 text-blue-200 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                    <span class="text-gray-400 font-bold mt-6">-</span>
+                    <div class="flex-1">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Sampai Tanggal</label>
+                        <input type="date" name="end_date" value="{{ $endDate }}" 
+                               class="block w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-shadow">
+                    </div>
+                </div>
+                <div>
+                     <button type="submit" class="w-full md:w-auto inline-flex items-center justify-center px-6 py-2.5 bg-blue-600 border border-transparent rounded-xl font-bold text-sm text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all shadow-lg shadow-blue-500/30">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                        </svg>
                         Hitung Kebutuhan
                     </button>
-                </form>
+                </div>
+            </form>
+        </div>
+
+        <!-- Warning for Unplanned Portions -->
+        @if(isset($unplannedPortions) && $unplannedPortions > 0)
+            <div class="rounded-2xl border-l-4 border-yellow-500 bg-yellow-50 p-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-bold text-yellow-800">Menu Belum Terencana</h3>
+                        <div class="mt-2 text-sm text-yellow-700">
+                            <p>
+                                Terdeteksi <span class="font-bold border-b border-yellow-600">{{ number_format($unplannedPortions) }} porsi</span> yang diminta namun belum ada menu yang dijadwalkan.
+                                Bahan baku untuk porsi ini tidak masuk dalam hitungan.
+                            </p>
+                            <p class="mt-2">
+                                <a href="{{ route('menu-schedules.index') }}" class="text-yellow-800 underline hover:text-yellow-900 font-semibold">
+                                    Atur Jadwal Menu &rarr;
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
+        @endif
 
-            <!-- Warning for Unplanned Portions -->
-            @if(isset($unplannedPortions) && $unplannedPortions > 0)
-                <div class="bg-amber-50 rounded-2xl border border-amber-100 p-5 flex gap-4 animate-in fade-in slide-in-from-top-2 duration-500">
-                    <div class="flex-shrink-0 w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
-                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                    </div>
-                    <div>
-                        <h4 class="text-sm font-bold text-amber-900 tracking-tight">Menu Belum Terencana</h4>
-                        <p class="text-xs text-amber-700 mt-1 leading-relaxed">
-                            Terdeteksi <span class="font-bold underline">{{ number_format($unplannedPortions) }} porsi</span> yang diminta namun <strong>belum ada menu yang dijadwalkan</strong>. Bahan baku untuk porsi ini tidak masuk dalam hitungan.
-                        </p>
-                        <a href="{{ route('menu-schedules.index') }}" class="inline-flex items-center gap-1 text-[10px] font-bold text-amber-800 uppercase tracking-widest mt-3 hover:text-amber-900 transition-colors">
-                            Atur Jadwal Menu
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
-                        </a>
-                    </div>
+        <!-- Results Table -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+             <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
+                <div>
+                     <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest">Estimasi Kebutuhan</h3>
+                     <p class="text-xs text-gray-400 font-medium mt-0.5">{{ count($ingredients) }} Item Total</p>
                 </div>
-            @endif
-
-            <!-- Results Table Card -->
-            <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
-                <div class="px-8 py-5 border-b border-gray-50 flex items-center justify-between bg-gray-50/30">
-                    <div>
-                        <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider">Estimasi Kebutuhan Bahan</h3>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Total {{ count($ingredients) }} Item</p>
-                    </div>
-                    <div class="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wider rounded-lg">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 00-2 2z"></path></svg>
-                        {{ \Carbon\Carbon::parse($startDate)->format('d M') }} - {{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}
-                    </div>
-                </div>
-                
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-100">
-                        <thead>
-                            <tr class="bg-gray-50/50">
-                                <th scope="col" class="px-8 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">Detail Bahan Baku</th>
-                                <th scope="col" class="px-8 py-4 text-right text-[10px] font-bold text-gray-400 uppercase tracking-widest">Kebutuhan Total</th>
-                                <th scope="col" class="px-8 py-4 text-right text-[10px] font-bold text-gray-400 uppercase tracking-widest">Estimasi Biaya</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-50">
-                            @php $totalEstCost = 0; @endphp
-                            @forelse($ingredients as $item)
-                                <tr class="group hover:bg-gray-50/50 transition-all duration-200 border-l-4 border-l-transparent hover:border-l-blue-600">
-                                    <td class="px-8 py-5">
-                                        <div class="text-sm font-black text-gray-900 tracking-tight">{{ $item['raw_material']->name }}</div>
-                                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mt-0.5">{{ $item['raw_material']->category }}</div>
-                                    </td>
-                                    <td class="px-8 py-5 text-right">
-                                        <span class="text-base font-black text-gray-900 tracking-tighter">
-                                            {{ number_format($item['total_quantity'], 2) }}
-                                        </span>
-                                        <span class="text-[11px] font-bold text-gray-400 uppercase bg-gray-100 px-2 py-0.5 rounded-md ml-1 inline-block tracking-widest">
-                                            {{ $item['raw_material']->unit }}
-                                        </span>
-                                    </td>
-                                    <td class="px-8 py-5 text-right">
-                                        <div class="text-sm font-bold text-gray-700">Rp {{ number_format($item['total_cost_estimated'], 0, ',', '.') }}</div>
-                                        <div class="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">per unit: Rp {{ number_format($item['raw_material']->price_per_unit, 0, ',', '.') }}</div>
-                                    </td>
-                                </tr>
-                                @php $totalEstCost += $item['total_cost_estimated']; @endphp
-                            @empty
-                                <tr>
-                                    <td colspan="3" class="px-8 py-12 text-center">
-                                        <div class="flex flex-col items-center">
-                                            <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
-                                                <svg class="w-8 h-8 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                                            </div>
-                                            <p class="text-sm font-bold text-gray-400 uppercase tracking-widest">Daftar Kosong</p>
-                                            <p class="text-[10px] text-gray-300 font-bold uppercase tracking-widest mt-1">Ganti periode untuk menghitung kebutuhan.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                        <tfoot class="bg-gray-50/50">
-                            <tr>
-                                <td colspan="2" class="px-8 py-6 text-right text-xs font-bold text-gray-500 uppercase tracking-widest">Total Estimasi Anggaran:</td>
-                                <td class="px-8 py-6 text-right">
-                                    <span class="text-2xl font-black text-blue-600 tracking-tighter italic">
-                                        Rp {{ number_format($totalEstCost, 0, ',', '.') }}
+                <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold bg-blue-100 text-blue-700">
+                    {{ \Carbon\Carbon::parse($startDate)->format('d M') }} - {{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}
+                </span>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50/50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Bahan Baku</th>
+                            <th scope="col" class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Kebutuhan Total</th>
+                            <th scope="col" class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Estimasi Biaya</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @php $totalEstCost = 0; @endphp
+                        @forelse($ingredients as $item)
+                            <tr class="hover:bg-blue-50/50 transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                       <div class="h-8 w-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 mr-3">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                                            </svg>
+                                       </div>
+                                       <div>
+                                            <div class="text-sm font-bold text-gray-900">{{ $item['raw_material']->name }}</div>
+                                            <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">{{ $item['raw_material']->category ?? 'General' }}</div>
+                                       </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-right whitespace-nowrap">
+                                    <span class="text-base font-bold text-gray-900">
+                                        {{ number_format($item['total_quantity'], 2) }}
+                                    </span>
+                                    <span class="text-xs font-medium text-gray-500 ml-1">
+                                        {{ $item['raw_material']->unit }}
                                     </span>
                                 </td>
+                                <td class="px-6 py-4 text-right whitespace-nowrap">
+                                    <div class="text-sm font-bold text-gray-900">Rp {{ number_format($item['total_cost_estimated'], 0, ',', '.') }}</div>
+                                    <div class="text-[10px] text-gray-400">@ Rp {{ number_format($item['raw_material']->price_per_unit, 0, ',', '.') }} / {{ $item['raw_material']->unit }}</div>
+                                </td>
                             </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                            @php $totalEstCost += $item['total_cost_estimated']; @endphp
+                        @empty
+                            <tr>
+                                <td colspan="3" class="px-6 py-12 text-center">
+                                     <svg class="mx-auto h-12 w-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                    </svg>
+                                    <h3 class="mt-2 text-sm font-medium text-gray-900">Tidak ada data belanja</h3>
+                                    <p class="mt-1 text-sm text-gray-500">Silakan pilih periode tanggal dan pastikan menu sudah dijadwalkan.</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                    <tfoot class="bg-gray-50">
+                        <tr>
+                            <td colspan="2" class="px-6 py-4 text-right text-sm font-bold text-gray-500 uppercase tracking-widest">Total Estimasi Anggaran:</td>
+                            <td class="px-6 py-4 text-right">
+                                <span class="text-xl font-bold text-blue-600">
+                                    Rp {{ number_format($totalEstCost, 0, ',', '.') }}
+                                </span>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>

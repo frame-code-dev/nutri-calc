@@ -1,6 +1,6 @@
 <x-app-layout>
-    <div class="py-10 bg-gray-50 flex-1">
-        <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+    <div class="max-w-7xl mx-auto space-y-6">
+        <div class="max-w-7xl mx-auto sm:px-6 space-y-8">
             <!-- Header -->
             <div class="flex items-center justify-between mb-6">
                 <div>

@@ -1,10 +1,10 @@
 <x-app-layout>
-    <div class="pb-12">
+    <div class="max-w-7xl mx-auto space-y-6">
         <div class="mx-auto sm:px-6 lg:px-8 space-y-8">
             <!-- Header Section -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">
+                    <h2 class="text-2xl font-bold text-gray-900 tracking-tight">
                         Kalender MBG
                     </h2>
                     <p class="mt-1 text-sm text-gray-500">

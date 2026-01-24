@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="py-10 bg-gray-50 flex-1">
+    <div class="max-w-7xl mx-auto space-y-6">
         <div class="mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <!-- Header section -->
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

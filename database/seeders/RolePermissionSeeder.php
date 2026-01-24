@@ -21,6 +21,9 @@ class RolePermissionSeeder extends Seeder
             // User Management
             'manage users',
             'view users',
+            'create users',
+            'edit users',
+            'delete users',
             
             // School Management
             'manage schools',

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\RawMaterialController;
@@ -31,6 +32,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // User Management
+    Route::get('users/export', [UserController::class, 'export'])->name('users.export');
+    Route::resource('users', UserController::class);
 
     // Schools Management
     Route::resource('schools', SchoolController::class);
@@ -108,6 +113,7 @@ Route::middleware('auth')->group(function () {
     // Nutritionist Dashboard & Menu Schedules
     Route::post('nutritionist/allergy', [\App\Http\Controllers\MenuScheduleController::class, 'saveAllergy'])->name('nutritionist.save-allergy');
     
+    Route::post('menu-schedules/global', [\App\Http\Controllers\MenuScheduleController::class, 'storeGlobal'])->name('menu-schedules.store-global');
     Route::resource('menu-schedules', \App\Http\Controllers\MenuScheduleController::class)->only(['index', 'store']);
     Route::post('menu-schedules/clear', [\App\Http\Controllers\MenuScheduleController::class, 'destroy'])->name('menu-schedules.clear');
 });

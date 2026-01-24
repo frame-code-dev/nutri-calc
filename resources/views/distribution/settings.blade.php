@@ -1,6 +1,6 @@
 <x-app-layout>
-    <div class="py-10 bg-[#f8fafc] flex-1 min-h-screen">
-        <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-[1600px]">
+    <div class="max-w-7xl mx-auto space-y-6">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
             <!-- Header -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
                 <div>

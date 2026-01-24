@@ -1,161 +1,171 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center justify-between">
+    <div class="max-w-7xl mx-auto space-y-8">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-                <h2 class="text-2xl font-bold text-gray-900">Laporan Gizi Menu</h2>
-                <p class="mt-1 text-sm text-gray-600">{{ $menu->name }}</p>
+                <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
+                    <a href="{{ route('nutrition-reports.index') }}" class="hover:text-blue-600 transition-colors">Laporan</a>
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    <span>Detail Menu</span>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900 tracking-tight">{{ $menu->name }}</h2>
             </div>
             <div class="flex gap-3">
+                <a href="{{ route('nutrition-reports.index') }}" class="inline-flex items-center px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-gray-700 font-semibold text-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all shadow-sm">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    Kembali
+                </a>
                 <a href="{{ route('nutrition-reports.menu', ['menu' => $menu->id, 'format' => 'pdf']) }}" 
-                   class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium inline-flex items-center transition-colors">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   class="inline-flex items-center px-4 py-2.5 bg-red-600 border border-transparent rounded-xl text-white font-semibold text-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 shadow-lg shadow-red-500/30 transition-all">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
                     Download PDF
                 </a>
-                <a href="{{ route('nutrition-reports.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-medium transition-colors">
-                    Kembali
-                </a>
             </div>
         </div>
-    </x-slot>
 
-    <div class="space-y-6">
-        <!-- Menu Info -->
-        <div class="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Informasi Menu</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <label class="text-sm font-medium text-gray-500">Nama Menu</label>
-                    <p class="mt-1 text-base text-gray-900">{{ $menu->name }}</p>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column: Menu Info & Nutrition Cards -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- Nutrition Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Main Energy Card -->
+                    <div class="md:col-span-2 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl shadow-lg p-6 text-white relative overflow-hidden">
+                        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white opacity-10 rounded-full blur-xl"></div>
+                        <div class="relative z-10 flex items-center justify-between">
+                            <div>
+                                <p class="text-yellow-100 font-medium text-sm uppercase tracking-wider mb-1">Total Energi</p>
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-5xl font-black">{{ number_format($nutrition['energy'], 0) }}</span>
+                                    <span class="text-xl font-bold text-yellow-100">kcal</span>
+                                </div>
+                                <p class="mt-2 text-sm text-yellow-50 opacity-90">Per satu porsi sajian</p>
+                            </div>
+                            <div class="p-4 bg-white/20 rounded-2xl backdrop-blur-sm">
+                                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Macro Nutrients -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center text-red-500 mb-3">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                        </div>
+                        <p class="text-sm font-bold text-gray-400 uppercase tracking-widest">Protein</p>
+                        <p class="text-3xl font-black text-gray-900 mt-1">{{ number_format($nutrition['protein'], 1) }}<span class="text-base text-gray-400 font-medium ml-1">g</span></p>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                         <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-500 mb-3">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                        </div>
+                        <p class="text-sm font-bold text-gray-400 uppercase tracking-widest">Karbohidrat</p>
+                        <p class="text-3xl font-black text-gray-900 mt-1">{{ number_format($nutrition['carbohydrate'], 1) }}<span class="text-base text-gray-400 font-medium ml-1">g</span></p>
+                    </div>
+
+                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center text-orange-500 mb-3">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                        </div>
+                        <p class="text-sm font-bold text-gray-400 uppercase tracking-widest">Lemak</p>
+                        <p class="text-3xl font-black text-gray-900 mt-1">{{ number_format($nutrition['fat'], 1) }}<span class="text-base text-gray-400 font-medium ml-1">g</span></p>
+                    </div>
+
+                     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                         <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center text-green-500 mb-3">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <p class="text-sm font-bold text-gray-400 uppercase tracking-widest">Serat</p>
+                        <p class="text-3xl font-black text-gray-900 mt-1">{{ number_format($nutrition['fiber'], 1) }}<span class="text-base text-gray-400 font-medium ml-1">g</span></p>
+                    </div>
                 </div>
-                <div>
-                    <label class="text-sm font-medium text-gray-500">Jenis</label>
-                    <p class="mt-1">
-                        <span class="px-3 py-1 rounded-full text-sm font-medium {{ $menu->type === 'wet' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800' }}">
-                            {{ $menu->type === 'wet' ? 'Basah' : 'Kering' }}
+
+                <!-- Composition Table -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
+                         <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider">Komposisi Bahan Baku</h3>
+                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {{ $menu->menuItems->count() }} Item
                         </span>
-                    </p>
-                </div>
-                <div>
-                    <label class="text-sm font-medium text-gray-500">Status</label>
-                    <p class="mt-1">
-                        <span class="px-3 py-1 rounded-full text-sm font-medium {{ $menu->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                            {{ $menu->is_active ? 'Aktif' : 'Nonaktif' }}
-                        </span>
-                    </p>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50/50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Bahan</th>
+                                    <th class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Quantity</th>
+                                    <th class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Energi (kcal)</th>
+                                    <th class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Prot (g)</th>
+                                    <th class="px-6 py-3 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Lemak (g)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 bg-white">
+                                @foreach($menu->menuItems as $item)
+                                    <tr class="hover:bg-blue-50/50 transition-colors">
+                                        <td class="px-6 py-4 font-medium text-gray-900">{{ $item->rawMaterial->name }}</td>
+                                        <td class="px-6 py-4 text-right text-gray-600">
+                                            {{ number_format($item->quantity_per_portion) }} {{ $item->rawMaterial->unit }}
+                                        </td>
+                                        <td class="px-6 py-4 text-right text-gray-600">
+                                            {{ number_format($item->rawMaterial->nutrition->energy_per_100g ?? 0, 1) }}
+                                        </td>
+                                        <td class="px-6 py-4 text-right text-gray-600">
+                                            {{ number_format($item->rawMaterial->nutrition->protein_per_100g ?? 0, 1) }}
+                                        </td>
+                                        <td class="px-6 py-4 text-right text-gray-600">
+                                            {{ number_format($item->rawMaterial->nutrition->fat_per_100g ?? 0, 1) }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Nutrition Values -->
-        <div class="bg-white rounded-lg border border-gray-200 p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-6">Kandungan Gizi (per porsi)</h3>
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                <!-- Energy -->
-                <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 border-2 border-yellow-200 rounded-xl p-6 text-center">
-                    <div class="w-12 h-12 bg-yellow-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"/>
-                        </svg>
+            <!-- Right Column: Sidebar Info -->
+            <div class="space-y-6">
+                <!-- Status Panel -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                    <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4 leading-tight">Detail Status</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center py-2 border-b border-gray-50">
+                            <span class="text-sm text-gray-600">Tipe Menu</span>
+                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold {{ $menu->type === 'wet' ? 'bg-indigo-100 text-indigo-700' : 'bg-orange-100 text-orange-700' }}">
+                                {{ $menu->type === 'wet' ? 'Menu Basah' : 'Menu Kering' }}
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-50">
+                             <span class="text-sm text-gray-600">Status</span>
+                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold {{ $menu->is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                {{ $menu->is_active ? 'Aktif Digunakan' : 'Diarsipkan' }}
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-50">
+                            <span class="text-sm text-gray-600">Total Bahan</span>
+                            <span class="text-sm font-bold text-gray-900">{{ $menu->menuItems->count() }} Jenis</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2">
+                            <span class="text-sm text-gray-600">Dibuat Pada</span>
+                            <span class="text-sm font-bold text-gray-900">{{ $menu->created_at->format('d M Y') }}</span>
+                        </div>
                     </div>
-                    <div class="text-sm font-medium text-yellow-600 mb-1">Energi</div>
-                    <div class="text-3xl font-bold text-yellow-900">{{ number_format($nutrition['energy'], 1) }}</div>
-                    <div class="text-xs text-yellow-700 mt-1">kcal</div>
                 </div>
 
-                <!-- Protein -->
-                <div class="bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 rounded-xl p-6 text-center">
-                    <div class="w-12 h-12 bg-red-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
-                            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
+                <!-- Info Card -->
+                <div class="bg-blue-50 rounded-2xl border border-blue-100 p-5">
+                    <div class="flex gap-3">
+                         <svg class="w-6 h-6 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                         <div class="text-xs text-blue-800 leading-relaxed">
+                            <p class="mb-2 font-bold">Tentang Laporan Ini</p>
+                            Nilai gizi dihitung berdasarkan akumulasi kandungan nutrisi dari setiap bahan baku yang digunakan (data per 100g). Nilai aktual dapat bervariasi tergantung pada proses memasak dan kualitas bahan baku spesifik dari supplier.
+                         </div>
                     </div>
-                    <div class="text-sm font-medium text-red-600 mb-1">Protein</div>
-                    <div class="text-3xl font-bold text-red-900">{{ number_format($nutrition['protein'], 1) }}</div>
-                    <div class="text-xs text-red-700 mt-1">gram</div>
                 </div>
-
-                <!-- Fat -->
-                <div class="bg-gradient-to-br from-orange-50 to-orange-100 border-2 border-orange-200 rounded-xl p-6 text-center">
-                    <div class="w-12 h-12 bg-orange-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z"/>
-                            <path fill-rule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <div class="text-sm font-medium text-orange-600 mb-1">Lemak</div>
-                    <div class="text-3xl font-bold text-orange-900">{{ number_format($nutrition['fat'], 1) }}</div>
-                    <div class="text-xs text-orange-700 mt-1">gram</div>
-                </div>
-
-                <!-- Carbohydrate -->
-                <div class="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl p-6 text-center">
-                    <div class="w-12 h-12 bg-blue-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm2 1a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zm4-4a1 1 0 100 2h.01a1 1 0 100-2H13zM9 9a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zM7 8a1 1 0 000 2h.01a1 1 0 000-2H7z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <div class="text-sm font-medium text-blue-600 mb-1">Karbohidrat</div>
-                    <div class="text-3xl font-bold text-blue-900">{{ number_format($nutrition['carbohydrate'], 1) }}</div>
-                    <div class="text-xs text-blue-700 mt-1">gram</div>
-                </div>
-
-                <!-- Fiber -->
-                <div class="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-xl p-6 text-center">
-                    <div class="w-12 h-12 bg-green-500 rounded-full mx-auto mb-3 flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <div class="text-sm font-medium text-green-600 mb-1">Serat</div>
-                    <div class="text-3xl font-bold text-green-900">{{ number_format($nutrition['fiber'], 1) }}</div>
-                    <div class="text-xs text-green-700 mt-1">gram</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Ingredients -->
-        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
-            <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-900">Komposisi Bahan</h3>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bahan</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Quantity</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Energi</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Protein</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Lemak</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Karbohidrat</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200">
-                        @foreach($menu->menuItems as $item)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 text-sm text-gray-900">{{ $item->rawMaterial->name }}</td>
-                                <td class="px-6 py-4 text-sm text-right text-gray-900 font-medium">
-                                    {{ number_format($item->quantity_per_portion) }} {{ $item->rawMaterial->unit }}
-                                </td>
-                                <td class="px-6 py-4 text-sm text-right text-gray-600">
-                                    {{ number_format($item->rawMaterial->nutrition->energy_per_100g ?? 0, 1) }} kcal
-                                </td>
-                                <td class="px-6 py-4 text-sm text-right text-gray-600">
-                                    {{ number_format($item->rawMaterial->nutrition->protein_per_100g ?? 0, 1) }}g
-                                </td>
-                                <td class="px-6 py-4 text-sm text-right text-gray-600">
-                                    {{ number_format($item->rawMaterial->nutrition->fat_per_100g ?? 0, 1) }}g
-                                </td>
-                                <td class="px-6 py-4 text-sm text-right text-gray-600">
-                                    {{ number_format($item->rawMaterial->nutrition->carbohydrate_per_100g ?? 0, 1) }}g
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>

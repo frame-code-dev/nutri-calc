@@ -114,7 +114,6 @@ class SchoolCalendarController extends Controller
                     'menu' => $menu?->menu
                 ];
             }
-
             return view('calendars.index', compact(
                 'schools',
                 'weekNumber',

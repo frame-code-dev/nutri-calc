@@ -1,20 +1,17 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
+    <div class="max-w-7xl mx-auto space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <h2 class="text-2xl font-bold text-gray-900">Sekolah</h2>
-                <p class="mt-1 text-sm text-gray-600">Kelola data sekolah dan koordinator</p>
+                <p class="text-sm text-gray-500 mt-1">Kelola data sekolah dan koordinator</p>
             </div>
-            <a href="{{ route('schools.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium inline-flex items-center transition-colors">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            <a href="{{ route('schools.create') }}" class="flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-sm text-white hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all shadow-sm hover:shadow-md">
+                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                 </svg>
                 Tambah Sekolah
             </a>
         </div>
-    </x-slot>
-
-    <div class="space-y-6">
         <!-- Search & Filter -->
         <div class="bg-white rounded-lg border border-gray-200 p-6">
             <form method="GET" action="{{ route('schools.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">

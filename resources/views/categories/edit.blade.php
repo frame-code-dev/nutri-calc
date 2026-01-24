@@ -1,49 +1,62 @@
 <x-app-layout>
-    <div class="py-10 bg-gray-50 flex-1">
-        <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
-            <!-- Breadcrumbs/Back -->
-            <a href="{{ route('categories.index') }}" class="inline-flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-widest hover:text-blue-600 transition-colors mb-6 group">
-                <svg class="w-3 h-3 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
-                Kembali ke Daftar
+    <div class="max-w-7xl mx-auto space-y-6">
+         <!-- Header -->
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900">Edit Kategori</h2>
+                <p class="text-sm text-gray-500 mt-1">Perbarui informasi kelompok bahan baku.</p>
+            </div>
+            <a href="{{ route('categories.index') }}" class="inline-flex items-center px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-gray-700 font-semibold text-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all shadow-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Kembali
             </a>
+        </div>
 
-            <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
-                <div class="px-8 py-6 border-b border-gray-50 bg-gray-50/30">
-                    <h2 class="text-xl font-black text-gray-900 tracking-tight">Edit Kategori</h2>
-                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Perbarui informasi kelompok bahan baku.</p>
+        <div class="max-w-3xl mx-auto">
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div class="p-8">
+                    <form action="{{ route('categories.update', $category) }}" method="POST" class="space-y-6">
+                        @csrf
+                        @method('PUT')
+                        
+                        <!-- Name -->
+                        <div>
+                            <label for="name" class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                                Nama Kategori <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" name="name" id="name" value="{{ old('name', $category->name) }}" required
+                                class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-shadow"
+                                placeholder="Contoh: Sayuran, Daging, Alat Tulis">
+                            @error('name')
+                                <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Description -->
+                        <div>
+                            <label for="description" class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                                Deskripsi (Opsional)
+                            </label>
+                            <textarea name="description" id="description" rows="4"
+                                class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-shadow resize-none"
+                                placeholder="Berikan penjelasan singkat mengenai kategori ini...">{{ old('description', $category->description) }}</textarea>
+                            @error('description')
+                                <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Submit Button -->
+                         <div class="pt-4 flex items-center justify-end gap-3 border-t border-gray-50">
+                             <a href="{{ route('categories.index') }}" class="px-6 py-3 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all shadow-sm">
+                                Batal
+                            </a>
+                            <button type="submit" class="inline-flex items-center px-6 py-3 bg-blue-600 border border-transparent rounded-xl text-sm font-bold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all shadow-lg shadow-blue-500/30">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Perbarui Kategori
+                            </button>
+                        </div>
+                    </form>
                 </div>
-
-                <form action="{{ route('categories.update', $category) }}" method="POST" class="p-8 space-y-6">
-                    @csrf
-                    @method('PUT')
-                    
-                    <div class="space-y-2">
-                        <label for="name" class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Nama Kategori</label>
-                        <input type="text" name="name" id="name" value="{{ old('name', $category->name) }}" required
-                            class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-semibold text-gray-900 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none"
-                            placeholder="Contoh: Sayuran, Daging, Alat Tulis">
-                        @error('name')
-                            <p class="text-[10px] font-bold text-rose-500 uppercase tracking-tight mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="space-y-2">
-                        <label for="description" class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">Deskripsi (Opsional)</label>
-                        <textarea name="description" id="description" rows="4"
-                            class="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-semibold text-gray-900 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none resize-none"
-                            placeholder="Berikan penjelasan singkat mengenai kategori ini...">{{ old('description', $category->description) }}</textarea>
-                        @error('description')
-                            <p class="text-[10px] font-bold text-rose-500 uppercase tracking-tight mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="pt-4 flex items-center gap-4">
-                        <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold uppercase tracking-widest py-4 rounded-2xl shadow-lg shadow-blue-500/20 transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 group">
-                            <svg class="w-4 h-4 text-blue-200 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
-                            Perbarui Kategori
-                        </button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>

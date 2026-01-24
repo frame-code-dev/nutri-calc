@@ -1,10 +1,10 @@
 <x-app-layout>
-    <div class="py-12 bg-gray-50/50 min-h-screen">
+    <div class="max-w-7xl mx-auto space-y-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
             <!-- Header -->
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 class="text-3xl font-black text-gray-900 tracking-tight">Monitoring & Kunci</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Monitoring & Kunci</h2>
                     <p class="text-sm font-medium text-gray-500 mt-1">Pantau progres pengisian jadwal sekolah</p>
                 </div>
                 <div class="flex items-center gap-3">
@@ -19,7 +19,7 @@
             </div>
 
             <!-- Lock Info Card -->
-            <div class="bg-blue-600 rounded-[40px] p-8 text-white relative overflow-hidden shadow-xl shadow-blue-200/50">
+            <div class="bg-blue-600 rounded-[10px] p-8 text-white relative overflow-hidden shadow-xl shadow-blue-200/50">
                 <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div class="space-y-2">
                         <h3 class="text-xl font-black">Kendali Penguncian Jadwal</h3>
@@ -42,7 +42,7 @@
             </div>
 
             <!-- Monitoring Table -->
-            <div class="bg-white rounded-[40px] border border-gray-100 shadow-sm overflow-hidden">
+            <div class="bg-white rounded-[10px] border border-gray-100 shadow-sm overflow-hidden">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-50/50">

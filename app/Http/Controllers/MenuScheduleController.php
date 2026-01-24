@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class MenuScheduleController extends Controller
 {
+    // ... (index, store, destroy, saveAllergy methods unchanged) ...
     public function index(Request $request)
     {
         $weekNumber = $request->get('week', Carbon::now()->addWeek()->isoWeek);
@@ -121,7 +122,6 @@ class MenuScheduleController extends Controller
         $budgetProgress = $totalRab > 0 ? ($totalCost / $totalRab) * 100 : 0;
 
         $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-        // ONLY show "Menu Paket" (Siklus) for scheduling
         $menuGroups = Menu::where('is_active', true)
             ->where('category', 'packet')
             ->get()
@@ -161,12 +161,9 @@ class MenuScheduleController extends Controller
             'materialRequirements'
         ));
     }
-
-    /**
-     * Assign menus to all schools for specific dates
-     */
-    public function store(Request $request)
-    {
+    
+    public function store(Request $request) {
+        // ... (unchanged)
         $request->validate([
             'week' => 'required|integer',
             'year' => 'required|integer',
@@ -186,20 +183,7 @@ class MenuScheduleController extends Controller
                     ->first();
 
                 if ($calendar) {
-                    // Update menu
                     $calendar->menu_id = $assign['menu_id'];
-                    
-                    // If holiday but menu assigned, use school's default portions
-                    if ($calendar->day_status === 'holiday' && $assign['menu_id']) {
-                        $calendar->portion_count = $school->student_count;
-                        $calendar->small_portion_count = $school->small_portion_count;
-                        $calendar->large_portion_count = $school->large_portion_count;
-                    } elseif ($calendar->day_status === 'holiday' && !$assign['menu_id']) {
-                        $calendar->portion_count = 0;
-                        $calendar->small_portion_count = 0;
-                        $calendar->large_portion_count = 0;
-                    }
-                    
                     $calendar->save();
                 }
             }
@@ -211,11 +195,8 @@ class MenuScheduleController extends Controller
         }
     }
 
-    /**
-     * Clear menu assignment for a specific date across all schools
-     */
-    public function destroy(Request $request)
-    {
+    public function destroy(Request $request) {
+        // ... (unchanged)
         $request->validate([
             'date' => 'required|date',
             'school_id' => 'required|exists:schools,id',
@@ -231,13 +212,10 @@ class MenuScheduleController extends Controller
             return back()->with('error', 'Gagal mengosongkan menu: ' . $e->getMessage());
         }
     }
-
-    /**
-     * Management for individual allergy replacements
-     */
-    public function saveAllergy(Request $request)
-    {
-        $request->validate([
+    
+    public function saveAllergy(Request $request) {
+        // ... (unchanged)
+         $request->validate([
             'calendar_id' => 'required|exists:school_calendars,id',
             'allergy_menu_id' => 'required|exists:menus,id',
             'allergy_notes' => 'nullable|string',
@@ -250,5 +228,144 @@ class MenuScheduleController extends Controller
         ]);
 
         return back()->with('success', 'Menu alergi berhasil disimpan.');
+    }
+
+    /**
+     * Store Global Menu Assignment (Weekly or Per-Day)
+     */
+    public function storeGlobal(Request $request)
+    {
+        $request->validate([
+            'week' => 'required|integer',
+            'year' => 'required|integer',
+            // If mode is 'weekly', we don't need 'global_assignments'
+            'mode' => 'nullable|string',
+            'global_assignments' => 'nullable|array',
+            'weekly_wet_menu_id' => 'nullable', // string 'random_wet' or int
+            'weekly_dry_menu_id' => 'nullable', // string 'random_dry' or int
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $schools = School::where('is_active', true)->get();
+            $updatedCount = 0;
+            
+            // Pre-fetch menus for random selection if needed
+            $allWetMenus = Menu::where('type', 'wet')->get();
+            $allDryMenus = Menu::where('type', 'dry')->get(); // Keringan for holidays or manual dry
+
+            // Determine if using Weekly Mode or Legacy Daily Mode
+            if ($request->mode === 'weekly') {
+                // 1. WEEKLY MODE LOGIC
+                // Generate Dates for Mon-Sat (6 days) for the given week
+                $startOfWeek = Carbon::now()->setISODate($request->year, $request->week)->startOfWeek(Carbon::MONDAY);
+                $dates = [];
+                for ($i = 0; $i < 6; $i++) {
+                    $dates[] = $startOfWeek->copy()->addDays($i)->toDateString();
+                }
+
+                $wetInput = $request->weekly_wet_menu_id;
+                $dryInput = $request->weekly_dry_menu_id;
+
+                foreach ($schools as $school) {
+                     foreach ($dates as $dateStr) {
+                         $calendar = SchoolCalendar::firstOrNew([
+                            'school_id' => $school->id,
+                            'date' => $dateStr
+                        ]);
+
+                        if (!$calendar->exists) {
+                            $calendar->week_number = $request->week;
+                            $calendar->year = $request->year;
+                            $calendar->day_status = 'receive'; 
+                            $calendar->portion_count = $school->student_count; 
+                            $calendar->small_portion_count = $school->small_portion_count;
+                            $calendar->large_portion_count = $school->large_portion_count;
+                        }
+
+                        // Determine Menu to Assign based on status
+                        if ($calendar->day_status === 'holiday') {
+                             // --- HOLIDAY LOGIC ---
+                             // Apply Dry Input Selection
+                             if ($dryInput === 'random_dry') {
+                                 // Random dry menu each day/time
+                                 $calendar->menu_id = $allDryMenus->isNotEmpty() ? $allDryMenus->random()->id : null;
+                             } elseif ($dryInput) {
+                                 // Specific ID
+                                 $calendar->menu_id = $dryInput;
+                             }
+                             // Note: If no dry input, leave explicitly NULL or untouched? 
+                             // Usually if they apply globally, they expect update.
+                        } else {
+                             // --- RECEIVE LOGIC ---
+                             // Apply Wet Input Selection
+                             if ($wetInput === 'random_wet') {
+                                 $calendar->menu_id = $allWetMenus->isNotEmpty() ? $allWetMenus->random()->id : null;
+                             } elseif ($wetInput) {
+                                 $calendar->menu_id = $wetInput;
+                             }
+                        }
+                        
+                        $calendar->save();
+                        $updatedCount++;
+                     }
+                }
+            } else {
+                // 2. LEGACY (DAILY) MODE LOGIC
+                // (Only used if form submits old structure, kept for safety)
+                if (!$request->global_assignments) {
+                     return back()->with('error', 'Tidak ada data assignment.');
+                }
+
+                foreach ($request->global_assignments as $assign) {
+                    $rawRegularId = $assign['menu_id'] ?? null;
+                    $holidayMenuId = $assign['holiday_menu_id'] ?? null;
+
+                    if (!$rawRegularId && !$holidayMenuId) continue;
+
+                    foreach ($schools as $school) {
+                        $calendar = SchoolCalendar::firstOrNew([
+                            'school_id' => $school->id,
+                            'date' => $assign['date']
+                        ]);
+                        
+                        if (!$calendar->exists) {
+                            $calendar->week_number = $request->week;
+                            $calendar->year = $request->year;
+                            $calendar->day_status = 'receive'; 
+                            $calendar->portion_count = $school->student_count; 
+                            $calendar->small_portion_count = $school->small_portion_count;
+                            $calendar->large_portion_count = $school->large_portion_count;
+                        }
+                        
+                        if ($calendar->day_status === 'holiday') {
+                            // Legacy holiday logic
+                             if ($holidayMenuId === 'random_dry') {
+                                 $calendar->menu_id = $allDryMenus->isNotEmpty() ? $allDryMenus->random()->id : null;
+                             } elseif ($holidayMenuId) {
+                                 $calendar->menu_id = $holidayMenuId;
+                             }
+                        } else {
+                            if ($rawRegularId === 'random_wet') {
+                                $calendar->menu_id = $allWetMenus->isNotEmpty() ? $allWetMenus->random()->id : null;
+                            } elseif ($rawRegularId === 'random_dry') {
+                                $calendar->menu_id = $allDryMenus->isNotEmpty() ? $allDryMenus->random()->id : null;
+                            } elseif ($rawRegularId) {
+                                $calendar->menu_id = $rawRegularId;
+                            }
+                        }
+
+                        $calendar->save();
+                        $updatedCount++;
+                    }
+                }
+            }
+
+            DB::commit();
+            return back()->with('success', 'Menu berhasil diterapkan secara MINGGUAN untuk ' . $schools->count() . ' sekolah.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal menerapkan menu global: ' . $e->getMessage());
+        }
     }
 }

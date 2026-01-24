@@ -92,7 +92,7 @@ class SchoolDataSeeder extends Seeder
                 );
                 
                 // Assign role (assuming RolePermissionSeeder has run)
-                // $user->assignRole('Koordinator');
+                $user->assignRole('Koordinator Sekolah');
 
                 // 3. Link them in SchoolCoordinator
                 SchoolCoordinator::updateOrCreate(

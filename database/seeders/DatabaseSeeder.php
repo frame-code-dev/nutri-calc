@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
             
             // 7. Stock Transactions
             // StockSeeder::class,
+            AssignWeeklyMenuSeeder::class,
         ]);
 
         $this->command->info('✅ All seeders completed successfully!');
