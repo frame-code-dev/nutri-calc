@@ -93,6 +93,8 @@ Route::middleware('auth')->group(function () {
     Route::get('calendars', [\App\Http\Controllers\SchoolCalendarController::class, 'index'])->name('calendars.index');
     Route::get('calendars/edit-week', [\App\Http\Controllers\SchoolCalendarController::class, 'editWeek'])->name('calendars.edit-week');
     Route::post('calendars/save-week', [\App\Http\Controllers\SchoolCalendarController::class, 'saveWeek'])->name('calendars.save-week');
+    Route::post('calendars/update-status', [\App\Http\Controllers\SchoolCalendarController::class, 'updateStatus'])->name('calendars.update-status');
+    Route::post('calendars/bulk-update-status', [\App\Http\Controllers\SchoolCalendarController::class, 'bulkUpdateStatus'])->name('calendars.bulk-update-status');
     Route::post('calendars/send-notification', [\App\Http\Controllers\SchoolCalendarController::class, 'sendNotification'])->name('calendars.send-notification');
     Route::delete('calendars/{calendar}', [\App\Http\Controllers\SchoolCalendarController::class, 'destroy'])->name('calendars.destroy');
 

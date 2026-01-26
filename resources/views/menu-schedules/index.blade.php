@@ -5,26 +5,37 @@
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-3xl font-black text-gray-900 tracking-tight">Siklus Menu</h2>
-                    <p class="text-sm font-medium text-gray-500 mt-1">Minggu ke-{{ $weekNumber }}, {{ $year }}</p>
+                    <p class="text-sm font-medium text-gray-500 mt-1">Minggu ke-{{ $weekNumber }}, {{ $year }}
+                    </p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3">
-                    <form method="GET" action="{{ route('menu-schedules.index') }}" class="flex flex-wrap items-center gap-2">
-                        <select name="school_id" class="rounded-xl border-gray-200 bg-white text-gray-700 text-sm font-bold focus:border-blue-500 focus:ring-blue-500 py-2 pl-4 pr-10 transition-all duration-200" onchange="this.form.submit()">
+                    <form method="GET" action="{{ route('menu-schedules.index') }}"
+                        class="flex flex-wrap items-center gap-2">
+                        <select name="school_id"
+                            class="rounded-xl border-gray-200 bg-white text-gray-700 text-sm font-bold focus:border-blue-500 focus:ring-blue-500 py-2 pl-4 pr-10 transition-all duration-200"
+                            onchange="this.form.submit()">
                             <option value="">-- Pilih Sekolah --</option>
-                            @foreach($schoolsWithCalendars as $school)
-                                <option value="{{ $school->id }}" {{ ($selectedSchool?->id == $school->id) ? 'selected' : '' }}>
+                            @foreach ($schoolsWithCalendars as $school)
+                                <option value="{{ $school->id }}"
+                                    {{ $selectedSchool?->id == $school->id ? 'selected' : '' }}>
                                     {{ $school->name }}
                                 </option>
                             @endforeach
                         </select>
-                        <select name="week" class="rounded-xl border-gray-200 bg-white text-gray-700 text-sm focus:border-blue-500 focus:ring-blue-500 py-2 transition-all duration-200" onchange="this.form.submit()">
-                            @for($i = 1; $i <= 52; $i++)
-                                <option value="{{ $i }}" {{ $weekNumber == $i ? 'selected' : '' }}>Minggu {{ $i }}</option>
+                        <select name="week"
+                            class="rounded-xl border-gray-200 bg-white text-gray-700 text-sm focus:border-blue-500 focus:ring-blue-500 py-2 transition-all duration-200"
+                            onchange="this.form.submit()">
+                            @for ($i = 1; $i <= 52; $i++)
+                                <option value="{{ $i }}" {{ $weekNumber == $i ? 'selected' : '' }}>Minggu
+                                    {{ $i }}</option>
                             @endfor
                         </select>
-                        <select name="year" class="rounded-xl border-gray-200 bg-white text-gray-700 text-sm focus:border-blue-500 focus:ring-blue-500 py-2 transition-all duration-200" onchange="this.form.submit()">
-                            @for($y = 2024; $y <= 2026; $y++)
-                                <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
+                        <select name="year"
+                            class="rounded-xl border-gray-200 bg-white text-gray-700 text-sm focus:border-blue-500 focus:ring-blue-500 py-2 transition-all duration-200"
+                            onchange="this.form.submit()">
+                            @for ($y = 2024; $y <= 2026; $y++)
+                                <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>
+                                    {{ $y }}</option>
                             @endfor
                         </select>
                     </form>
@@ -32,31 +43,36 @@
             </div>
 
             {{-- Alerts --}}
-            @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
-                {{ session('success') }}
-            </div>
+            @if (session('success'))
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
+                    {{ session('success') }}
+                </div>
             @endif
-            @if(session('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
-                {{ session('error') }}
-            </div>
+            @if (session('error'))
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+                    {{ session('error') }}
+                </div>
             @endif
-            @if($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
-                <ul class="list-disc pl-5">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
+            @if ($errors->any())
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+                    <ul class="list-disc pl-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
             @endif
             <!-- Stats Overview -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Portions Card -->
                 <div class="bg-white rounded p-6 border shadow-sm flex items-center gap-6">
-                    <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 shrink-0">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    <div
+                        class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 shrink-0">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                            </path>
+                        </svg>
                     </div>
                     <div class="flex-1 grid grid-cols-3 gap-4 divide-x">
                         <div class="pl-0">
@@ -77,7 +93,11 @@
                 <!-- Cost Card -->
                 <div class="bg-white rounded p-6 border shadow-sm flex items-center gap-4">
                     <div class="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z">
+                            </path>
+                        </svg>
                     </div>
                     <div>
                         <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Total Biaya</p>
@@ -91,15 +111,19 @@
                 <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
                     <div class="flex items-center gap-3">
                         <div class="p-2 bg-indigo-100 rounded-lg text-indigo-600">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
                         </div>
                         <div>
                             <h3 class="text-lg font-bold text-gray-900">Global Assignment</h3>
-                            <p class="text-sm text-gray-500">Terapkan menu yang sama untuk <strong>SEMUA</strong> sekolah aktif minggu ini.</p>
+                            <p class="text-sm text-gray-500">Terapkan menu yang sama untuk <strong>SEMUA</strong>
+                                sekolah aktif minggu ini.</p>
                         </div>
                     </div>
                 </div>
-                
+
                 <form action="{{ route('menu-schedules.store-global') }}" method="POST" class="p-6">
                     @csrf
                     <input type="hidden" name="week" value="{{ $weekNumber }}">
@@ -108,59 +132,77 @@
 
 
                     <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                        @foreach($days as $index => $day)
-                            @if($index < 5) <!-- Only Mon-Fri usually -->
-                            <div class="space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-100">
-                                <div class="flex items-center justify-between mb-2">
-                                    <span class="text-xs font-black text-gray-900 uppercase tracking-widest">{{ $day }}</span>
-                                    <span class="text-[10px] text-gray-400 font-mono">{{ \Carbon\Carbon::parse($dates[$index])->format('d/m') }}</span>
-                                </div>
-                                
-                                <input type="hidden" name="global_assignments[{{ $index }}][date]" value="{{ $dates[$index] }}">
-                                
-                                <!-- Menu Reguler -->
-                                <div class="space-y-1">
-                                    <label class="text-[10px] font-bold text-blue-500 uppercase">Menu Reguler (Menerima)</label>
-                                    <select name="global_assignments[{{ $index }}][menu_id]" class="w-full rounded-lg border-gray-200 text-xs focus:border-indigo-500 focus:ring-indigo-500 py-2 pl-3 pr-8 shadow-sm">
-                                        <option value="">- Pilih Menu -</option>
-                                        <optgroup label="✨ Pilihan Cepat (Otomatis)">
-                                            <option value="random_wet">🎲 Menu Basah (Acak)</option>
-                                            <option value="random_dry">🎲 Menu Kering (Acak)</option>
-                                        </optgroup>
-                                        @foreach($menuGroups as $type => $group)
-                                            <optgroup label="{{ strtolower($type) == 'wet' ? 'Menu Basah' : 'Menu Kering' }}">
-                                                @foreach($group as $menu)
-                                                    <option value="{{ $menu->id }}">{{ $menu->name }}</option>
-                                                @endforeach
-                                            </optgroup>
-                                        @endforeach
-                                    </select>
-                                </div>
+                        @foreach ($days as $index => $day)
+                            @if ($index < 5)
+                                <!-- Only Mon-Fri usually -->
+                                <div class="space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span
+                                            class="text-xs font-black text-gray-900 uppercase tracking-widest">{{ $day }}</span>
+                                        <span
+                                            class="text-[10px] text-gray-400 font-mono">{{ \Carbon\Carbon::parse($dates[$index])->format('d/m') }}</span>
+                                    </div>
 
-                                <!-- Menu Libur -->
-                                <div class="space-y-1">
-                                    <label class="text-[10px] font-bold text-rose-500 uppercase">Jika Libur (Opsional)</label>
-                                    <select name="global_assignments[{{ $index }}][holiday_menu_id]" class="w-full rounded-lg border-rose-100 text-xs text-rose-600 focus:border-rose-500 focus:ring-rose-500 py-2 pl-3 pr-8 shadow-sm bg-white">
-                                        <option value="">- Kosongkan (Tetap Libur) -</option>
-                                        @foreach($menuGroups as $type => $group)
-                                            @if(strtolower($type) == 'dry') <!-- Only show Dry menus for holiday -->
-                                            <optgroup label="{{ strtolower($type) == 'wet' ? 'Menu Basah' : 'Menu Kering' }}">
-                                                @foreach($group as $menu)
-                                                    <option value="{{ $menu->id }}">{{ $menu->name }}</option>
-                                                @endforeach
+                                    <input type="hidden" name="global_assignments[{{ $index }}][date]"
+                                        value="{{ $dates[$index] }}">
+
+                                    <!-- Menu Reguler -->
+                                    <div class="space-y-1">
+                                        <label class="text-[10px] font-bold text-blue-500 uppercase">Menu Reguler
+                                            (Menerima)</label>
+                                        <select name="global_assignments[{{ $index }}][menu_id]"
+                                            class="w-full rounded-lg border-gray-200 text-xs focus:border-indigo-500 focus:ring-indigo-500 py-2 pl-3 pr-8 shadow-sm">
+                                            <option value="">- Pilih Menu -</option>
+                                            <optgroup label="✨ Pilihan Cepat (Otomatis)">
+                                                <option value="random_wet">🎲 Menu Basah (Acak)</option>
+                                                <option value="random_dry">🎲 Menu Kering (Acak)</option>
                                             </optgroup>
-                                            @endif
-                                        @endforeach
-                                    </select>
+                                            @foreach ($menuGroups as $type => $group)
+                                                <optgroup
+                                                    label="{{ strtolower($type) == 'wet' ? 'Menu Basah' : 'Menu Kering' }}">
+                                                    @foreach ($group as $menu)
+                                                        <option value="{{ $menu->id }}">{{ $menu->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </optgroup>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <!-- Menu Libur -->
+                                    <div class="space-y-1">
+                                        <label class="text-[10px] font-bold text-rose-500 uppercase">Jika Libur
+                                            (Opsional)</label>
+                                        <select name="global_assignments[{{ $index }}][holiday_menu_id]"
+                                            class="w-full rounded-lg border-rose-100 text-xs text-rose-600 focus:border-rose-500 focus:ring-rose-500 py-2 pl-3 pr-8 shadow-sm bg-white">
+                                            <option value="">- Kosongkan (Tetap Libur) -</option>
+                                            @foreach ($menuGroups as $type => $group)
+                                                @if (strtolower($type) == 'dry')
+                                                    <!-- Only show Dry menus for holiday -->
+                                                    <optgroup
+                                                        label="{{ strtolower($type) == 'wet' ? 'Menu Basah' : 'Menu Kering' }}">
+                                                        @foreach ($group as $menu)
+                                                            <option value="{{ $menu->id }}">{{ $menu->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </optgroup>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
                             @endif
                         @endforeach
                     </div>
 
                     <div class="mt-8 flex justify-end">
-                        <button type="submit" onclick="return confirm('Yakin ingin menerapkan menu ini ke SEMUA sekolah?')" class="inline-flex items-center px-6 py-3 bg-indigo-600 text-white font-bold text-sm rounded-xl hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition-all shadow-lg shadow-indigo-500/30">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        <button type="submit"
+                            onclick="return confirm('Yakin ingin menerapkan menu ini ke SEMUA sekolah?')"
+                            class="inline-flex items-center px-6 py-3 bg-indigo-600 text-white font-bold text-sm rounded-xl hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition-all shadow-lg shadow-indigo-500/30">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
                             Terapkan ke Semua Sekolah
                         </button>
                     </div>
@@ -168,60 +210,80 @@
             </div>
 
             <!-- Budget Progress -->
-            @if($totalRab > 0)
-            <div class="bg-white rounded p-8 border shadow-sm space-y-4">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-sm font-bold text-gray-700">Progress Anggaran ({{ $selectedSchool?->name }})</h3>
-                    <span class="text-xs font-black text-gray-400 uppercase tracking-widest">{{ number_format($budgetProgress, 1) }}% dari RAB</span>
+            @if ($totalRab > 0)
+                <div class="bg-white rounded p-8 border shadow-sm space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-bold text-gray-700">Progress Anggaran ({{ $selectedSchool?->name }})
+                        </h3>
+                        <span
+                            class="text-xs font-black text-gray-400 uppercase tracking-widest">{{ number_format($budgetProgress, 1) }}%
+                            dari RAB</span>
+                    </div>
+                    <div class="relative w-full h-4 bg-gray-100 rounded-full overflow-hidden">
+                        <div class="absolute inset-y-0 left-0 {{ $budgetProgress > 100 ? 'bg-rose-500' : 'bg-emerald-500' }} rounded-full transition-all duration-1000"
+                            style="width: {{ min($budgetProgress, 100) }}%"></div>
+                    </div>
+                    <div class="flex justify-between text-[10px] font-bold text-gray-400 tracking-widest uppercase">
+                        <span>Terpakai: Rp {{ number_format($totalCost) }}</span>
+                        <span>Total RAB: Rp {{ number_format($totalRab) }}</span>
+                    </div>
                 </div>
-                <div class="relative w-full h-4 bg-gray-100 rounded-full overflow-hidden">
-                    <div class="absolute inset-y-0 left-0 {{ $budgetProgress > 100 ? 'bg-rose-500' : 'bg-emerald-500' }} rounded-full transition-all duration-1000" style="width: {{ min($budgetProgress, 100) }}%"></div>
-                </div>
-                <div class="flex justify-between text-[10px] font-bold text-gray-400 tracking-widest uppercase">
-                    <span>Terpakai: Rp {{ number_format($totalCost) }}</span>
-                    <span>Total RAB: Rp {{ number_format($totalRab) }}</span>
-                </div>
-            </div>
             @endif
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Matrix Assignment Menu -->
                 <div class="lg:col-span-2 space-y-6">
                     <div class="bg-white rounded p-8 border shadow-sm relative overflow-hidden">
-                        <div class="flex flex-col gap-1 mb-8">
-                            <h3 class="text-xl font-black text-gray-900">Matrix Assignment Menu</h3>
-                            <p class="text-sm font-medium text-gray-500">
-                                @if($selectedSchool)
-                                    Jadwal untuk <strong>{{ $selectedSchool->name }}</strong>
-                                @else
-                                    Silakan pilih sekolah untuk memulai assignment
-                                @endif
-                            </p>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                            <div class="flex flex-col gap-1">
+                                <h3 class="text-xl font-black text-gray-900">Matrix Assignment Menu</h3>
+                                <p class="text-sm font-medium text-gray-500">
+                                    @if ($selectedSchool)
+                                        Jadwal untuk <strong>{{ $selectedSchool->name }}</strong>
+                                    @else
+                                        Silakan pilih sekolah untuk memulai assignment
+                                    @endif
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <button type="button" onclick="openShareModal()"
+                                    class="inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-green-100 transition-all border border-green-200">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                            d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.483 8.412-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.308 1.656zm6.29-4.171c1.51.893 3.078 1.364 4.691 1.365 5.24.002 9.505-4.265 9.507-9.504.002-2.541-.988-4.93-2.788-6.731s-4.191-2.789-6.731-2.791c-5.242-.002-9.506 4.265-9.507 9.504-.002 1.678.445 3.31 1.293 4.729l-.809 2.956 3.034-.796zm13.064-5.257c-.104-.173-.383-.277-.764-.467-.38-.191-2.251-1.111-2.592-1.236-.342-.125-.591-.187-.839.187s-.96 1.236-1.176 1.488-.432.28-.813.09c-.381-.191-1.609-.594-3.064-1.892-1.132-1.01-1.897-2.257-2.119-2.639s-.024-.589.166-.778c.171-.17.381-.444.571-.667.19-.223.254-.381.381-.635s.063-.476-.032-.667c-.095-.191-.839-2.022-1.149-2.774-.302-.733-.61-.634-.839-.646-.216-.011-.464-.012-.711-.012s-.651.093-.991.467c-.34.374-1.3 1.269-1.3 3.094s1.334 3.585 1.524 3.84c.191.254 2.624 4.006 6.357 5.613 3.733 1.606 3.733 1.07 4.4 1.006.666-.063 2.147-.878 2.451-1.725.305-.847.305-1.571.213-1.725z" />
+                                    </svg>
+                                    Share Ke Dapur
+                                </button>
+                            </div>
                         </div>
 
-                        <form action="{{ route('menu-schedules.store') }}" method="POST" id="assignForm" class="space-y-8">
+                        <form action="{{ route('menu-schedules.store') }}" method="POST" id="assignForm"
+                            class="space-y-8">
                             @csrf
                             <input type="hidden" name="week" value="{{ $weekNumber }}">
                             <input type="hidden" name="year" value="{{ $year }}">
                             <input type="hidden" name="school_id" value="{{ $selectedSchool?->id }}">
-                            
+
                             <div class="flex flex-wrap gap-4 justify-between">
-                                @foreach($days as $index => $day)
+                                @foreach ($days as $index => $day)
                                     @php
                                         $dateStr = $dates[$index];
                                         $status = $dayStatuses[$dateStr] ?? 'pending';
                                         $assignedMenuId = $selectedMenus[$dateStr] ?? null;
                                         $assignedMenu = null;
-                                        if($assignedMenuId) {
+                                        if ($assignedMenuId) {
                                             $assignedMenu = \App\Models\Menu::find($assignedMenuId);
                                         }
                                     @endphp
                                     <div class="flex-1 min-w-[120px] space-y-4 text-center relative group">
                                         <div class="space-y-1">
-                                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">{{ $day }}</p>
-                                            <p class="text-[9px] text-gray-400 font-medium">{{ Carbon\Carbon::parse($dateStr)->format('d M Y') }}</p>
-                                            <p class="text-[10px] font-medium text-gray-400" id="menu-name-{{ $index }}">
-                                                @if($assignedMenu)
+                                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
+                                                {{ $day }}</p>
+                                            <p class="text-[9px] text-gray-400 font-medium">
+                                                {{ Carbon\Carbon::parse($dateStr)->format('d M Y') }}</p>
+                                            <p class="text-[10px] font-medium text-gray-400"
+                                                id="menu-name-{{ $index }}">
+                                                @if ($assignedMenu)
                                                     {{ $assignedMenu->name }}
                                                 @elseif($status === 'holiday')
                                                     <span class="text-rose-400 font-black uppercase">Libur</span>
@@ -230,28 +292,51 @@
                                                 @endif
                                             </p>
                                         </div>
-                                        
-                                        <div class="relative cursor-pointer" 
-                                             onclick="openMenuModal({{ $index }}, '{{ $dates[$index] }}', '{{ $status }}')">
-                                            <input type="hidden" name="assignments[{{ $index }}][date]" value="{{ $dates[$index] }}">
-                                            <input type="hidden" name="assignments[{{ $index }}][menu_id]" id="menu-id-{{ $index }}" value="{{ $assignedMenuId }}">
-                                            
-                                            <div id="btn-{{ $index }}" class="w-full py-3 rounded-xl border-2 transition-all flex items-center justify-center 
-                                                {{ $assignedMenu ? ($assignedMenu->type == 'wet' ? 'border-blue-500 bg-blue-50 text-blue-600' : 'border-orange-500 bg-orange-50 text-orange-600') : 
-                                                   ($status === 'holiday' ? 'border-rose-100 bg-rose-50 text-rose-300' : 'border-dashed border-gray-200 text-gray-300 hover:border-blue-400 hover:text-blue-500') }}">
-                                                @if($assignedMenu)
-                                                    <span class="font-black text-[10px] uppercase">{{ $assignedMenu->type == 'wet' ? 'Basah' : 'Kering' }}</span>
+
+                                        <div class="relative cursor-pointer"
+                                            onclick="openMenuModal({{ $index }}, '{{ $dates[$index] }}', '{{ $status }}')">
+                                            <input type="hidden" name="assignments[{{ $index }}][date]"
+                                                value="{{ $dates[$index] }}">
+                                            <input type="hidden" name="assignments[{{ $index }}][menu_id]"
+                                                id="menu-id-{{ $index }}" value="{{ $assignedMenuId }}">
+
+                                            <div id="btn-{{ $index }}"
+                                                class="w-full py-3 rounded-xl border-2 transition-all flex items-center justify-center 
+                                                {{ $assignedMenu
+                                                    ? ($assignedMenu->type == 'wet'
+                                                        ? 'border-blue-500 bg-blue-50 text-blue-600'
+                                                        : 'border-orange-500 bg-orange-50 text-orange-600')
+                                                    : ($status === 'holiday'
+                                                        ? 'border-rose-100 bg-rose-50 text-rose-300'
+                                                        : 'border-dashed border-gray-200 text-gray-300 hover:border-blue-400 hover:text-blue-500') }}">
+                                                @if ($assignedMenu)
+                                                    <span
+                                                        class="font-black text-[10px] uppercase">{{ $assignedMenu->type == 'wet' ? 'Basah' : 'Kering' }}</span>
                                                 @elseif($status === 'holiday')
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                    </svg>
                                                 @else
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                                    </svg>
                                                 @endif
                                             </div>
                                         </div>
 
-                                        @if($assignedMenuId)
-                                            <button type="button" onclick="clearDayAssignment('{{ $dates[$index] }}')" class="absolute -top-2 -right-2 w-6 h-6 bg-rose-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                        @if ($assignedMenuId)
+                                            <button type="button"
+                                                onclick="clearDayAssignment('{{ $dates[$index] }}')"
+                                                class="absolute -top-2 -right-2 w-6 h-6 bg-rose-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
                                             </button>
                                         @endif
                                     </div>
@@ -259,13 +344,15 @@
                             </div>
 
                             <div class="flex justify-end pt-4">
-                                <button type="submit" class="px-8 py-3 bg-gray-900 text-white font-black text-sm rounded-2xl shadow-lg hover:bg-black transition-all">
+                                <button type="submit"
+                                    class="px-8 py-3 bg-gray-900 text-white font-black text-sm rounded-2xl shadow-lg hover:bg-black transition-all">
                                     Simpan Perubahan
                                 </button>
                             </div>
                         </form>
-                        
-                        <form id="clearForm" action="{{ route('menu-schedules.clear') }}" method="POST" class="hidden">
+
+                        <form id="clearForm" action="{{ route('menu-schedules.clear') }}" method="POST"
+                            class="hidden">
                             @csrf
                             <input type="hidden" name="date" id="clearDateInput">
                             <input type="hidden" name="school_id" value="{{ $selectedSchool?->id }}">
@@ -287,23 +374,35 @@
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-50">
-                                    @foreach($allCalendars as $cal)
+                                    @foreach ($allCalendars as $cal)
                                         <tr>
-                                            <td class="py-4 font-bold text-gray-700 text-sm">{{ $cal->school->name }}</td>
-                                            <td class="py-4 text-sm text-gray-500">{{ $cal->date->format('d/m') }}</td>
-                                            <td class="py-4">
-                                                <span class="px-2 py-1 bg-gray-100 rounded-lg text-xs font-bold text-gray-600">{{ $cal->menu->name ?? '-' }}</span>
+                                            <td class="py-4 font-bold text-gray-700 text-sm">{{ $cal->school->name }}
+                                            </td>
+                                            <td class="py-4 text-sm text-gray-500">{{ $cal->date->format('d/m') }}
                                             </td>
                                             <td class="py-4">
-                                                @if($cal->allergyMenu)
-                                                    <span class="px-2 py-1 bg-rose-50 text-rose-600 rounded-lg text-xs font-bold">{{ $cal->allergyMenu->name }}</span>
+                                                <span
+                                                    class="px-2 py-1 bg-gray-100 rounded-lg text-xs font-bold text-gray-600">{{ $cal->menu->name ?? '-' }}</span>
+                                            </td>
+                                            <td class="py-4">
+                                                @if ($cal->allergyMenu)
+                                                    <span
+                                                        class="px-2 py-1 bg-rose-50 text-rose-600 rounded-lg text-xs font-bold">{{ $cal->allergyMenu->name }}</span>
                                                 @else
                                                     <span class="text-xs text-gray-300 italic">Belum diatur</span>
                                                 @endif
                                             </td>
                                             <td class="py-4 text-right">
-                                                <button onclick="openAllergyModal({{ $cal->id }}, '{{ $cal->school->name }}', '{{ $cal->date->format('Y-m-d') }}')" class="p-2 hover:bg-rose-50 rounded-xl group transition-all">
-                                                    <svg class="w-5 h-5 text-gray-300 group-hover:text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                <button
+                                                    onclick="openAllergyModal({{ $cal->id }}, '{{ $cal->school->name }}', '{{ $cal->date->format('Y-m-d') }}')"
+                                                    class="p-2 hover:bg-rose-50 rounded-xl group transition-all">
+                                                    <svg class="w-5 h-5 text-gray-300 group-hover:text-rose-500"
+                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                        </path>
+                                                    </svg>
                                                 </button>
                                             </td>
                                         </tr>
@@ -322,28 +421,39 @@
                             <p class="text-sm font-medium text-gray-500">Estimasi berdasarkan assignment</p>
                         </div>
 
-                        @if(empty($materialRequirements))
+                        @if (empty($materialRequirements))
                             <div class="flex flex-col items-center justify-center py-12 text-center opacity-30">
-                                <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                                <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                </svg>
                                 <p class="text-sm font-bold">Assign menu untuk melihat bahan</p>
                             </div>
                         @else
                             <div class="space-y-6">
-                                @foreach($materialRequirements as $id => $mat)
+                                @foreach ($materialRequirements as $id => $mat)
                                     @php $isShortage = $mat['needed'] > $mat['stock']; @endphp
                                     <div class="flex items-center justify-between group">
                                         <div class="space-y-0.5">
                                             <h4 class="text-sm font-bold text-gray-800">{{ $mat['name'] }}</h4>
-                                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">@ Rp {{ number_format($mat['price']) }}/{{ $mat['unit'] }}</p>
+                                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">@
+                                                Rp {{ number_format($mat['price']) }}/{{ $mat['unit'] }}</p>
                                         </div>
                                         <div class="text-right space-y-1">
-                                            <p class="text-sm font-black text-gray-900">{{ number_format($mat['needed'], 1) }} {{ $mat['unit'] }}</p>
+                                            <p class="text-sm font-black text-gray-900">
+                                                {{ number_format($mat['needed'], 1) }} {{ $mat['unit'] }}</p>
                                             <div class="flex items-center justify-end gap-1.5">
-                                                <span class="text-[9px] font-black uppercase text-gray-400">{{ number_format($mat['stock']) }} STOK</span>
-                                                @if($isShortage)
-                                                    <span class="px-1.5 py-0.5 bg-rose-50 text-rose-500 rounded text-[9px] font-black uppercase">Kurang {{ number_format($mat['needed'] - $mat['stock'], 1) }}</span>
+                                                <span
+                                                    class="text-[9px] font-black uppercase text-gray-400">{{ number_format($mat['stock']) }}
+                                                    STOK</span>
+                                                @if ($isShortage)
+                                                    <span
+                                                        class="px-1.5 py-0.5 bg-rose-50 text-rose-500 rounded text-[9px] font-black uppercase">Kurang
+                                                        {{ number_format($mat['needed'] - $mat['stock'], 1) }}</span>
                                                 @else
-                                                    <span class="px-1.5 py-0.5 bg-emerald-50 text-emerald-500 rounded text-[9px] font-black uppercase">Cukup</span>
+                                                    <span
+                                                        class="px-1.5 py-0.5 bg-emerald-50 text-emerald-500 rounded text-[9px] font-black uppercase">Cukup</span>
                                                 @endif
                                             </div>
                                         </div>
@@ -358,27 +468,37 @@
     </div>
 
     <!-- Menu Selection Modal -->
-    <div id="menuModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-[40px] w-full max-w-lg overflow-hidden shadow-2xl transform transition-all scale-95 opacity-0 duration-300" id="menuModalContent">
+    <div id="menuModal"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-[40px] w-full max-w-lg overflow-hidden shadow-2xl transform transition-all scale-95 opacity-0 duration-300"
+            id="menuModalContent">
             <div class="p-8">
                 <div class="flex justify-between items-center mb-8">
                     <div>
                         <h3 class="text-2xl font-black text-gray-900 tracking-tight" id="modalDayName">Pilih Menu</h3>
                         <p class="text-sm font-medium text-gray-400" id="modalDateDisplay"></p>
                     </div>
-                    <button onclick="closeMenuModal()" class="w-10 h-10 flex items-center justify-center bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
-                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <button onclick="closeMenuModal()"
+                        class="w-10 h-10 flex items-center justify-center bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
                     </button>
                 </div>
 
                 <div class="space-y-8">
-                    @foreach($menuGroups as $type => $group)
+                    @foreach ($menuGroups as $type => $group)
                         <div class="space-y-4 menu-group-container" data-type="{{ $type }}">
-                            <h4 class="text-xs font-black text-gray-400 uppercase tracking-widest">Kategori: {{ $type }}</h4>
+                            <h4 class="text-xs font-black text-gray-400 uppercase tracking-widest">Kategori:
+                                {{ $type }}</h4>
                             <div class="grid grid-cols-2 gap-3">
-                                @foreach($group as $menu)
-                                    <button type="button" onclick="selectMenuForDay({{ $menu->id }}, '{{ $menu->name }}', '{{ $type }}')" class="p-4 rounded border-2 hover:border-blue-500 hover:bg-blue-50 transition-all text-left group">
-                                        <p class="text-sm font-bold text-gray-700 group-hover:text-blue-700">{{ $menu->name }}</p>
+                                @foreach ($group as $menu)
+                                    <button type="button"
+                                        onclick="selectMenuForDay({{ $menu->id }}, '{{ $menu->name }}', '{{ $type }}')"
+                                        class="p-4 rounded border-2 hover:border-blue-500 hover:bg-blue-50 transition-all text-left group">
+                                        <p class="text-sm font-bold text-gray-700 group-hover:text-blue-700">
+                                            {{ $menu->name }}</p>
                                         <p class="text-[10px] text-gray-400 font-medium">Bahan Baku Lengkap</p>
                                     </button>
                                 @endforeach
@@ -390,49 +510,92 @@
         </div>
     </div>
 
-    <!-- Allergy Modal -->
-    <div id="allergyModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-[40px] w-full max-w-md overflow-hidden shadow-2xl" id="allergyModalContent">
+    <!-- Share to Kitchen Modal -->
+    <div id="shareModal"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-[32px] w-full max-w-xl overflow-hidden shadow-2xl transform transition-all scale-95 opacity-0 duration-300"
+            id="shareModalContent">
             <div class="p-8">
-                <div class="flex justify-between items-center mb-6">
+                <div class="flex justify-between items-start mb-6">
                     <div>
-                        <h3 class="text-2xl font-black text-gray-900 tracking-tight">Atur Menu Alergi</h3>
-                        <p class="text-sm font-medium text-gray-400" id="allergySchoolName"></p>
+                        <h3 class="text-2xl font-black text-gray-900 tracking-tight">Kirim Rekap ke Dapur</h3>
+                        <p class="text-sm font-medium text-gray-400">Bagikan kebutuhan bahan baku harian via WhatsApp
+                        </p>
                     </div>
-                    <button onclick="closeAllergyModal()" class="w-10 h-10 flex items-center justify-center bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
-                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <button onclick="closeShareModal()"
+                        class="w-10 h-10 flex items-center justify-center bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
                     </button>
                 </div>
 
-                <form action="{{ route('nutritionist.save-allergy') }}" method="POST" class="space-y-6">
-                    @csrf
-                    <input type="hidden" name="calendar_id" id="allergyCalendarId">
-                    
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Menu Pengganti</label>
-                        <select name="allergy_menu_id" required class="w-full rounded-2xl border-gray-200 bg-gray-50 text-gray-700 text-sm focus:border-blue-500 focus:ring-blue-500 py-3">
-                            <option value="">Pilih Menu Pengganti...</option>
-                            @foreach($menuGroups as $type => $group)
-                                <optgroup label="{{ $type }}">
-                                    @foreach($group as $menu)
-                                        <option value="{{ $menu->id }}">{{ $menu->name }}</option>
-                                    @endforeach
-                                </optgroup>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Step 1: Seç Pilih Day -->
+                    <div class="space-y-4">
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">1. Pilih
+                            Hari</label>
+                        <div class="grid grid-cols-1 gap-2 max-h-[300px] overflow-y-auto pr-2">
+                            @foreach ($dates as $index => $date)
+                                <button type="button"
+                                    onclick="selectShareDay('{{ $date }}', '{{ $days[$index] }}')"
+                                    id="share-day-{{ $date }}"
+                                    class="share-day-btn text-left p-4 rounded-2xl border-2 border-gray-100 hover:border-indigo-200 hover:bg-indigo-50 transition-all group">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="font-bold text-gray-700 group-hover:text-indigo-700">
+                                                {{ $days[$index] }}</p>
+                                            <p class="text-[10px] text-gray-400">
+                                                {{ \Carbon\Carbon::parse($date)->format('d M Y') }}</p>
+                                        </div>
+                                        @if (count($dailyGlobalRequirements[$date]['menus']) > 0)
+                                            <span
+                                                class="px-2 py-0.5 bg-green-100 text-green-600 rounded text-[9px] font-black uppercase">Ready</span>
+                                        @else
+                                            <span
+                                                class="px-2 py-0.5 bg-gray-100 text-gray-400 rounded text-[9px] font-black uppercase">Empty</span>
+                                        @endif
+                                    </div>
+                                </button>
                             @endforeach
-                        </select>
+                        </div>
                     </div>
 
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Catatan Alergi</label>
-                        <textarea name="allergy_notes" rows="3" class="w-full rounded-2xl border-gray-200 bg-gray-50 text-gray-700 text-sm focus:border-blue-500 focus:ring-blue-500 py-3" placeholder="Contoh: Pengganti menu ayam bagi siswa alergi seafood..."></textarea>
-                    </div>
+                    <!-- Step 2: Choose Coordinator & Preview -->
+                    <div class="space-y-6">
+                        <div class="space-y-4">
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">2.
+                                Koordinator Dapur</label>
+                            <select id="coordinatorSelect"
+                                class="w-full rounded-2xl border-gray-200 bg-gray-50 text-sm focus:border-indigo-500 focus:ring-indigo-500 py-3">
+                                <option value="">Pilih Koordinator...</option>
+                                @foreach ($kitchenCoordinators as $coord)
+                                    <option value="{{ $coord->phone }}">{{ $coord->name }} ({{ $coord->phone }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                    <div class="pt-4">
-                        <button type="submit" class="w-full py-4 bg-rose-600 text-white font-black text-sm rounded-2xl shadow-lg hover:bg-rose-700 transition-all">
-                            Simpan Perubahan
+                        <div class="space-y-4">
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Preview
+                                Pesan</label>
+                            <div id="messagePreview"
+                                class="bg-gray-900 text-green-400 p-4 rounded-2xl text-[11px] font-mono whitespace-pre-wrap h-[200px] overflow-y-auto border-2 border-gray-800">
+                                Pilih hari untuk melihat preview...
+                            </div>
+                        </div>
+
+                        <button id="whatsappBtn" disabled onclick="sendWhatsApp()"
+                            class="w-full py-4 bg-green-600 text-white font-black text-sm rounded-2xl shadow-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.246 2.248 3.484 5.232 3.483 8.412-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.308 1.656zm6.29-4.171c1.51.893 3.078 1.364 4.691 1.365 5.24.002 9.505-4.265 9.507-9.504.002-2.541-.988-4.93-2.788-6.731s-4.191-2.789-6.731-2.791c-5.242-.002-9.506 4.265-9.507 9.504-.002 1.678.445 3.31 1.293 4.729l-.809 2.956 3.034-.796zm13.064-5.257c-.104-.173-.383-.277-.764-.467-.38-.191-2.251-1.111-2.592-1.236-.342-.125-.591-.187-.839.187s-.96 1.236-1.176 1.488-.432.28-.813.09c-.381-.191-1.609-.594-3.064-1.892-1.132-1.01-1.897-2.257-2.119-2.639s-.024-.589.166-.778c.171-.17.381-.444.571-.667.19-.223.254-.381.381-.635s.063-.476-.032-.667c-.095-.191-.839-2.022-1.149-2.774-.302-.733-.61-.634-.839-.646-.216-.011-.464-.012-.711-.012s-.651.093-.991.467c-.34.374-1.3 1.269-1.3 3.094s1.334 3.585 1.524 3.84c.191.254 2.624 4.006 6.357 5.613 3.733 1.606 3.733 1.07 4.4 1.006.666-.063 2.147-.878 2.451-1.725.305-.847.305-1.571.213-1.725z" />
+                            </svg>
+                            Kirim Sekarang
                         </button>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -444,8 +607,9 @@
         function openMenuModal(index, date, status) {
             currentDayIndex = index;
             document.getElementById('modalDayName').innerText = 'Pilih Menu ' + days[index];
-            document.getElementById('modalDateDisplay').innerText = date + (status === 'holiday' ? ' (LIBUR - Hanya Keringan)' : '');
-            
+            document.getElementById('modalDateDisplay').innerText = date + (status === 'holiday' ?
+                ' (LIBUR - Hanya Keringan)' : '');
+
             // Filter menu groups if holiday
             const containers = document.querySelectorAll('.menu-group-container');
             containers.forEach(c => {
@@ -482,20 +646,22 @@
         function selectMenuForDay(id, name, type) {
             document.getElementById('menu-id-' + currentDayIndex).value = id;
             document.getElementById('menu-name-' + currentDayIndex).innerText = name;
-            
+
             const btn = document.getElementById('btn-' + currentDayIndex);
             btn.innerHTML = `<span class="font-black text-[10px] uppercase">${type}</span>`;
             if (type === 'Basah') {
-                btn.className = "w-full py-3 rounded-xl border-2 border-blue-500 bg-blue-50 text-blue-600 flex items-center justify-center transition-all";
+                btn.className =
+                    "w-full py-3 rounded-xl border-2 border-blue-500 bg-blue-50 text-blue-600 flex items-center justify-center transition-all";
             } else {
-                btn.className = "w-full py-3 rounded-xl border-2 border-orange-500 bg-orange-50 text-orange-600 flex items-center justify-center transition-all";
+                btn.className =
+                    "w-full py-3 rounded-xl border-2 border-orange-500 bg-orange-50 text-orange-600 flex items-center justify-center transition-all";
             }
             closeMenuModal();
         }
 
         function clearDayAssignment(date) {
             const schoolName = '{{ $selectedSchool?->name ?? 'Sekolah' }}';
-            if(confirm('Hapus assignment menu untuk tanggal ' + date + ' di ' + schoolName + '?')) {
+            if (confirm('Hapus assignment menu untuk tanggal ' + date + ' di ' + schoolName + '?')) {
                 document.getElementById('clearDateInput').value = date;
                 document.getElementById('clearForm').submit();
             }
@@ -510,5 +676,103 @@
         function closeAllergyModal() {
             document.getElementById('allergyModal').classList.add('hidden');
         }
+
+        // WhatsApp Share Logic
+        const dailyData = @json($dailyGlobalRequirements);
+        let selectedDate = null;
+        let selectedDayName = null;
+
+        function openShareModal() {
+            const modal = document.getElementById('shareModal');
+            const content = document.getElementById('shareModalContent');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeShareModal() {
+            const content = document.getElementById('shareModalContent');
+            content.classList.add('scale-95', 'opacity-0');
+            content.classList.remove('scale-100', 'opacity-100');
+            setTimeout(() => {
+                document.getElementById('shareModal').classList.add('hidden');
+            }, 300);
+        }
+
+        function selectShareDay(date, dayName) {
+            selectedDate = date;
+            selectedDayName = dayName;
+
+            // UI Toggle
+            document.querySelectorAll('.share-day-btn').forEach(btn => {
+                btn.classList.remove('border-indigo-500', 'bg-indigo-50');
+            });
+            document.getElementById('share-day-' + date).classList.add('border-indigo-500', 'bg-indigo-50');
+
+            updatePreview();
+        }
+
+        function updatePreview() {
+            if (!selectedDate) return;
+
+            const data = dailyData[selectedDate];
+            const dishes = [];
+            const materials = [];
+
+            // Collect unique dishes from all menus that day
+            Object.values(data.menus).forEach(m => {
+                m.dishes.forEach(d => {
+                    if (!dishes.includes(d)) dishes.push(d);
+                });
+            });
+
+            // Collect materials
+            Object.values(data.materials).forEach(m => {
+                materials.push(
+                `${m.name} ${m.total.toLocaleString('id-ID', {minimumFractionDigits: 1})} ${m.unit}`);
+            });
+
+            const dateParts = selectedDate.split('-');
+            const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+
+            let message = `menu : ${selectedDayName}, ${formattedDate}\n`;
+            message += `dari generate packet menu:\n`;
+            if (dishes.length > 0) {
+                message += dishes.join('\n') + '\n';
+            } else {
+                message += `(Belum ada menu)\n`;
+            }
+
+            message += `\nbahan-bahan :\n`;
+            if (materials.length > 0) {
+                message += materials.join('\n');
+            } else {
+                message += `(Belum ada bahan data)`;
+            }
+
+            document.getElementById('messagePreview').innerText = message;
+            document.getElementById('whatsappBtn').disabled = false;
+        }
+
+        function sendWhatsApp() {
+            const phone = document.getElementById('coordinatorSelect').value;
+            if (!phone) {
+                alert('Silakan pilih koordinator dapur terlebih dahulu.');
+                return;
+            }
+
+            const message = document.getElementById('messagePreview').innerText;
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/${phone}?text=${encodedMessage}`, '_blank');
+        }
+
+        // Auto Open if session exists
+        @if (session('show_share'))
+            document.addEventListener('DOMContentLoaded', function() {
+                openShareModal();
+            });
+        @endif
     </script>
 </x-app-layout>

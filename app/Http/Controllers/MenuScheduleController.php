@@ -8,6 +8,7 @@ use App\Models\School;
 use App\Models\SchoolCalendar;
 use App\Models\RawMaterial;
 use App\Models\Rab;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -140,6 +141,51 @@ class MenuScheduleController extends Controller
 
         $allCalendars = $allergyQuery->get();
 
+        // --- GLOBAL DAILY REQUIREMENTS FOR WHATSAPP SHARE ---
+        $dailyGlobalRequirements = [];
+        $kitchenCoordinators = User::role('Koordinator Dapur')->get();
+        
+        foreach ($dates as $date) {
+            $dailyGlobalRequirements[$date] = [
+                'menus' => [],
+                'materials' => [],
+                'total_portions' => 0
+            ];
+            
+            // Get all calendars for ALL schools on this specific date
+            $allCalendarsForDay = SchoolCalendar::where('date', $date)
+                ->where('day_status', 'receive')
+                ->whereNotNull('menu_id')
+                ->with(['menu.menuItems.rawMaterial'])
+                ->get();
+            
+            foreach ($allCalendarsForDay as $cal) {
+                $menu = $cal->menu;
+                if (!isset($dailyGlobalRequirements[$date]['menus'][$menu->id])) {
+                    $dailyGlobalRequirements[$date]['menus'][$menu->id] = [
+                        'name' => $menu->name,
+                        'dishes' => $menu->menuItems->pluck('group_name')->unique()->filter()->values()->toArray()
+                    ];
+                }
+                
+                $dailyGlobalRequirements[$date]['total_portions'] += $cal->portion_count;
+                
+                foreach ($menu->menuItems as $item) {
+                    $matId = $item->raw_material_id;
+                    $needed = $item->quantity_per_portion * $cal->portion_count;
+                    
+                    if (!isset($dailyGlobalRequirements[$date]['materials'][$matId])) {
+                        $dailyGlobalRequirements[$date]['materials'][$matId] = [
+                            'name' => $item->rawMaterial->name,
+                            'total' => 0,
+                            'unit' => $item->rawMaterial->unit
+                        ];
+                    }
+                    $dailyGlobalRequirements[$date]['materials'][$matId]['total'] += $needed;
+                }
+            }
+        }
+
         return view('menu-schedules.index', compact(
             'schoolsWithCalendars',
             'selectedSchool',
@@ -158,7 +204,9 @@ class MenuScheduleController extends Controller
             'totalRab',
             'remainingRab',
             'budgetProgress',
-            'materialRequirements'
+            'materialRequirements',
+            'dailyGlobalRequirements',
+            'kitchenCoordinators'
         ));
     }
     
@@ -188,7 +236,7 @@ class MenuScheduleController extends Controller
                 }
             }
             DB::commit();
-            return back()->with('success', 'Menu untuk ' . $school->name . ' berhasil diperbarui.');
+            return back()->with('success', 'Menu untuk ' . $school->name . ' berhasil diperbarui.')->with('show_share', true);
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Gagal menyimpan menu: ' . $e->getMessage());
@@ -362,7 +410,7 @@ class MenuScheduleController extends Controller
             }
 
             DB::commit();
-            return back()->with('success', 'Menu berhasil diterapkan secara MINGGUAN untuk ' . $schools->count() . ' sekolah.');
+            return back()->with('success', 'Menu berhasil diterapkan secara MINGGUAN untuk ' . $schools->count() . ' sekolah.')->with('show_share', true);
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Gagal menerapkan menu global: ' . $e->getMessage());

@@ -64,6 +64,7 @@ class UserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'phone' => ['nullable', 'string', 'max:20'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => ['required', 'exists:roles,name'],
         ]);
@@ -71,6 +72,7 @@ class UserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
         ]);
 
@@ -101,12 +103,14 @@ class UserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
+            'phone' => ['nullable', 'string', 'max:20'],
             'role' => ['required', 'exists:roles,name'],
         ]);
 
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
         ]);
 
         if ($request->filled('password')) {
@@ -170,11 +174,12 @@ class UserController extends Controller
         $sheet->setCellValue('A1', 'ID');
         $sheet->setCellValue('B1', 'Name');
         $sheet->setCellValue('C1', 'Email');
-        $sheet->setCellValue('D1', 'Roles');
-        $sheet->setCellValue('E1', 'Created At');
+        $sheet->setCellValue('D1', 'Phone');
+        $sheet->setCellValue('E1', 'Roles');
+        $sheet->setCellValue('F1', 'Created At');
 
         // Style the header
-        $sheet->getStyle('A1:E1')->getFont()->setBold(true);
+        $sheet->getStyle('A1:F1')->getFont()->setBold(true);
 
         // Data
         $row = 2;
@@ -182,13 +187,14 @@ class UserController extends Controller
             $sheet->setCellValue('A' . $row, $user->id);
             $sheet->setCellValue('B' . $row, $user->name);
             $sheet->setCellValue('C' . $row, $user->email);
-            $sheet->setCellValue('D' . $row, $user->roles->pluck('name')->implode(', '));
-            $sheet->setCellValue('E' . $row, $user->created_at->format('Y-m-d H:i:s'));
+            $sheet->setCellValue('D' . $row, $user->phone);
+            $sheet->setCellValue('E' . $row, $user->roles->pluck('name')->implode(', '));
+            $sheet->setCellValue('F' . $row, $user->created_at->format('Y-m-d H:i:s'));
             $row++;
         }
 
         // Auto size columns
-        foreach (range('A', 'E') as $col) {
+        foreach (range('A', 'F') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
