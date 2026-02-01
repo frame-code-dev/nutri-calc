@@ -60,6 +60,7 @@ class UserSeeder extends Seeder
         $koordinatorDapur = User::create([
             'name' => 'Ibu Fatimah',
             'email' => 'fatimah.dapur@mbg.id',
+            'phone' => '6281234567890',
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
         ]);
@@ -68,6 +69,7 @@ class UserSeeder extends Seeder
         $koordinatorDapur2 = User::create([
             'name' => 'Pak Joko',
             'email' => 'joko.dapur@mbg.id',
+            'phone' => '6281298765432',
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
         ]);
