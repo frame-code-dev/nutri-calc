@@ -247,15 +247,120 @@
                 }
             });
 
+            // Load existing items with Grouping Logic
+            if (existingItems.length > 0) {
+                // Group items by group_name
+                const groupedItems = {};
+                const noGroupItems = [];
+
+                existingItems.forEach(item => {
+                    if (item.group_name) {
+                        if (!groupedItems[item.group_name]) {
+                            groupedItems[item.group_name] = [];
+                        }
+                        groupedItems[item.group_name].push(item);
+                    } else {
+                        noGroupItems.push(item);
+                    }
+                });
+
+                // Render Groups
+                for (const [groupName, items] of Object.entries(groupedItems)) {
+                    createGroup(groupName, items);
+                }
+
+                // Render Non-Grouped Items (Legacy or manual)
+                if (noGroupItems.length > 0) {
+                    // Treat them as a "General" group or just loose items? 
+                    // Let's create a "Manual" group to be consistent, or just append them.
+                    // Ideally, we append them to a default container.
+                    // For simplycity/consistency, let's create a "Tambahan" group if groups exist, or just loose if no groups.
+                    const container = document.getElementById('ingredientsList');
+
+                    // If we have groups, let's label this "Bahan Tambahan"
+                    if (Object.keys(groupedItems).length > 0) {
+                        createGroup("Bahan Tambahan / Manual", noGroupItems, false);
+                    } else {
+                        noGroupItems.forEach(item => {
+                            addIngredientField(item);
+                        });
+                    }
+                }
+            } else {
+                addIngredientField(); // Empty state start
+            }
+
+            function createGroup(groupName, items, isDeletable = true) {
+                const mainContainer = document.getElementById('ingredientsList');
+                const groupId = 'group-' + Math.random().toString(36).substr(2, 9);
+
+                const groupHtml = `
+                    <div id="${groupId}" class="bg-white border border-gray-200 rounded-2xl overflow-hidden mb-6 shadow-sm group-container">
+                        <div class="px-6 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
+                            <h4 class="text-sm font-bold text-gray-800 flex items-center gap-2">
+                                <span class="w-2 h-6 bg-blue-500 rounded-full"></span>
+                                ${groupName}
+                            </h4>
+                            ${isDeletable ? `
+                                    <button type="button" onclick="removeGroup('${groupId}')" 
+                                        class="text-xs font-bold text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        Hapus Menu Ini
+                                    </button>` : ''}
+                        </div>
+                        <div class="p-4 space-y-4 item-container">
+                            <!-- Items go here -->
+                        </div>
+                    </div>
+                `;
+
+                mainContainer.insertAdjacentHTML('beforeend', groupHtml);
+                const groupContainer = document.getElementById(groupId).querySelector('.item-container');
+
+                items.forEach(item => {
+                    addIngredientField(item, groupContainer, groupName);
+                });
+            }
+
+            function removeGroup(groupId) {
+                if (!confirm('Apakah Anda yakin ingin menghapus seluruh bahan dari menu ini?')) return;
+
+                const groupEl = document.getElementById(groupId);
+                const itemEls = groupEl.querySelectorAll('.ingredient-item');
+
+                // Cleanup Select Instances
+                itemEls.forEach(item => {
+                    const index = item.getAttribute('data-index');
+                    if (tomSelectInstances[index]) {
+                        tomSelectInstances[index].destroy();
+                        delete tomSelectInstances[index];
+                    }
+                });
+
+                groupEl.remove();
+
+                // Check if totally empty
+                const remaining = document.querySelectorAll('.ingredient-item');
+                if (remaining.length === 0) {
+                    document.getElementById('emptyState').style.display = 'block';
+                    document.getElementById('nutritionPreview').style.display = 'none';
+                }
+
+                calculateNutrition();
+            }
+
             document.getElementById('addIngredient').addEventListener('click', function() {
+                // When adding manually, we just add to the main list (no group or default group)
+                // If there's a "Bahan Tambahan" group, maybe add there? 
+                // For now, simpler is straight to list, effectively "Manual" mode.
                 addIngredientField();
             });
 
-            function addIngredientField(itemData = null) {
-                const container = document.getElementById('ingredientsList');
+            function addIngredientField(itemData = null, container = null, groupName = null) {
+                const targetContainer = container || document.getElementById('ingredientsList');
                 const emptyState = document.getElementById('emptyState');
 
-                // Build Options with Optgroups
+                // Build Options with Optgroups (Existing logic)
                 let optionsHtml = '<option value="">Pilih Bahan</option>';
 
                 categories.forEach(cat => {
@@ -263,7 +368,6 @@
                     if (catMaterials.length > 0) {
                         optionsHtml += `<optgroup label="${cat.name}">`;
                         catMaterials.forEach(m => {
-                            // Check if selected
                             let selected = '';
                             if (itemData && itemData.raw_material_id == m.id) {
                                 selected = 'selected';
@@ -275,7 +379,6 @@
                     }
                 });
 
-                // Add materials without category
                 const uncategorized = materials.filter(m => !m.category_id);
                 if (uncategorized.length > 0) {
                     optionsHtml += `<optgroup label="Lainnya">`;
@@ -295,16 +398,12 @@
                 let qtyPerPortionVal = '';
                 let unitVal = '';
                 let convFactorVal = 1;
+                let groupNameVal = groupName || (itemData ? itemData.group_name : null) || '';
 
                 if (itemData) {
                     const mat = materials.find(m => m.id == itemData.raw_material_id);
-                    // Backward compatibility: if no unit saved, use base unit
                     unitVal = itemData.unit || (mat ? mat.unit : '');
-
-                    // If old data (no quantity_input), assume input = quantity_per_portion (base unit)
-                    // If new data, use quantity_input
                     qtyInputVal = itemData.quantity_input !== null ? itemData.quantity_input : itemData.quantity_per_portion;
-
                     qtyPerPortionVal = itemData.quantity_per_portion;
                     convFactorVal = itemData.conversion_factor !== null ? itemData.conversion_factor : 1;
                 }
@@ -317,38 +416,41 @@
                 });
 
                 const ingredientHtml = `
-                <div class="ingredient-item bg-gray-50/50 p-4 rounded-2xl border border-gray-100 flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300" data-index="${ingredientIndex}">
+                <div class="ingredient-item bg-white p-0 rounded-xl flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300 md:border-b md:border-gray-50 pb-4 mb-2 last:border-0 last:mb-0 last:pb-0" data-index="${ingredientIndex}">
+                    <input type="hidden" name="items[${ingredientIndex}][group_name]" value="${groupNameVal}">
+                    
                     <div class="flex flex-col md:flex-row gap-4 items-start">
-                        <div class="flex-1 w-full">
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Bahan Baku</label>
+                        <div class="flex-1 w-full relative">
+                             ${!container ? '<label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Bahan Baku</label>' : ''}
                             <select name="items[${ingredientIndex}][raw_material_id]" id="select-${ingredientIndex}" class="material-select block w-full" required>
                                 ${optionsHtml}
                             </select>
                         </div>
                         
                         <div class="w-full md:w-32">
-                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Satuan</label>
+                             ${!container ? '<label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Satuan</label>' : ''}
                              <select name="items[${ingredientIndex}][unit]" id="unit-${ingredientIndex}" class="unit-select block w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 font-bold" required onchange="handleUnitChange(${ingredientIndex})">
                                 ${unitOptionsHtml}
                              </select>
                         </div>
 
                         <div class="w-full md:w-40">
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Jumlah</label>
+                            ${!container ? '<label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Jumlah</label>' : ''}
                             <input type="number" name="items[${ingredientIndex}][quantity_input]" id="qty-${ingredientIndex}"
                                    class="quantity-input block w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all font-bold" 
                                    min="0.001" step="0.001" required placeholder="0" value="${qtyInputVal}" oninput="calculateRow(${ingredientIndex})">
                         </div>
                         
-                        <button type="button" onclick="removeIngredient(${ingredientIndex})" 
-                                class="mt-7 p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Hapus Bahan">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                        </button>
+                        <div class="${!container ? 'mt-7' : ''} flex items-center">
+                            <button type="button" onclick="removeIngredient(${ingredientIndex})" 
+                                    class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Hapus Bahan">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
                     </div>
 
                     <div id="conversion-row-${ingredientIndex}" class="hidden w-full bg-yellow-50 rounded-xl p-3 border border-yellow-100">
                         <div class="flex items-center gap-3 text-sm text-yellow-800">
-                            <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             <div class="flex items-center gap-2 flex-1 flex-wrap">
                                 <span class="font-bold whitespace-nowrap">Konversi:</span>
                                 <span>1 <span id="label-unit-selected-${ingredientIndex}" class="font-bold underline">Unit</span> = </span>
@@ -364,7 +466,8 @@
                 </div>
             `;
 
-                container.insertAdjacentHTML('beforeend', ingredientHtml);
+                targetContainer.insertAdjacentHTML('beforeend', ingredientHtml);
+                // ... (rest of logic: TomSelect, conversion visibility remains same)
 
                 const selectEl = document.getElementById(`select-${ingredientIndex}`);
                 const ts = new TomSelect(selectEl, {
@@ -380,13 +483,10 @@
                 });
                 tomSelectInstances[ingredientIndex] = ts;
 
-                // Check visibility of conversion row
                 if (itemData && itemData.raw_material_id) {
                     const mat = materials.find(m => m.id == itemData.raw_material_id);
-                    // Ensure unit option exists if it was custom
                     const unitSelect = document.getElementById(`unit-${ingredientIndex}`);
                     if (unitVal && mat && unitVal !== mat.unit) {
-                        // Check if in options
                         let found = false;
                         for (let i = 0; i < unitSelect.options.length; i++) {
                             if (unitSelect.options[i].value === unitVal) {
@@ -395,17 +495,14 @@
                             }
                         }
                         if (!found) {
-                            const opt = new Option(unitVal, unitVal);
-                            unitSelect.add(opt);
+                            unitSelect.add(new Option(unitVal, unitVal));
                             unitSelect.value = unitVal;
                         }
                     }
 
-                    // Trigger handleUnitChange logic (just UI update)
                     document.getElementById(`label-unit-selected-${ingredientIndex}`).textContent = unitVal;
                     if (mat) {
                         document.getElementById(`label-unit-base-${ingredientIndex}`).textContent = mat.unit;
-
                         if (unitVal && mat.unit && unitVal.toLowerCase() !== mat.unit.toLowerCase()) {
                             document.getElementById(`conversion-row-${ingredientIndex}`).classList.remove('hidden');
                         }
@@ -414,129 +511,6 @@
 
                 ingredientIndex++;
                 emptyState.style.display = 'none';
-            }
-
-            function handleMaterialChange(index, materialId) {
-                const material = materials.find(m => m.id == materialId);
-                if (!material) return;
-
-                const unitSelect = document.getElementById(`unit-${index}`);
-                let found = false;
-                for (let i = 0; i < unitSelect.options.length; i++) {
-                    if (unitSelect.options[i].value === material.unit) {
-                        unitSelect.selectedIndex = i;
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    const opt = new Option(material.unit, material.unit);
-                    unitSelect.add(opt);
-                    unitSelect.value = material.unit;
-                }
-
-                handleUnitChange(index);
-            }
-
-            function handleUnitChange(index) {
-                const materialId = document.getElementById(`select-${index}`).value;
-                const unitSelected = document.getElementById(`unit-${index}`).value;
-                const material = materials.find(m => m.id == materialId);
-                const conversionRow = document.getElementById(`conversion-row-${index}`);
-                const conversionInput = document.getElementById(`conv-${index}`);
-
-                if (!material) return;
-
-                document.getElementById(`label-unit-selected-${index}`).textContent = unitSelected;
-                document.getElementById(`label-unit-base-${index}`).textContent = material.unit;
-
-                if (unitSelected && material.unit && unitSelected.toLowerCase() !== material.unit.toLowerCase()) {
-                    conversionRow.classList.remove('hidden');
-                } else {
-                    conversionRow.classList.add('hidden');
-                    conversionInput.value = 1;
-                }
-
-                calculateRow(index);
-            }
-
-            function calculateRow(index) {
-                const qtyInput = parseFloat(document.getElementById(`qty-${index}`).value) || 0;
-                const convFactor = parseFloat(document.getElementById(`conv-${index}`).value) || 1;
-                const calcField = document.getElementById(`calc-${index}`);
-
-                const baseQty = qtyInput * convFactor;
-                calcField.value = baseQty;
-
-                calculateNutrition();
-            }
-
-            function removeIngredient(index) {
-                const item = document.querySelector(`.ingredient-item[data-index="${index}"]`);
-                item.classList.add('animate-out', 'fade-out', 'slide-out-to-top-2', 'duration-200');
-
-                if (tomSelectInstances[index]) {
-                    tomSelectInstances[index].destroy();
-                    delete tomSelectInstances[index];
-                }
-
-                setTimeout(() => {
-                    item.remove();
-                    const remaining = document.querySelectorAll('.ingredient-item');
-                    if (remaining.length === 0) {
-                        document.getElementById('emptyState').style.display = 'block';
-                        document.getElementById('nutritionPreview').style.display = 'none';
-                    }
-                    calculateNutrition();
-                }, 200);
-            }
-
-            function calculateNutrition() {
-                const items = document.querySelectorAll('.ingredient-item');
-                let totals = {
-                    energy: 0,
-                    protein: 0,
-                    fat: 0,
-                    carbohydrate: 0,
-                    fiber: 0
-                };
-                let hasSelection = false;
-
-                items.forEach(item => {
-                    const index = item.getAttribute('data-index');
-                    const materialId = document.getElementById(`select-${index}`).value;
-                    const baseQuantity = parseFloat(document.getElementById(`calc-${index}`).value) || 0;
-
-                    if (materialId && baseQuantity && nutritionData[materialId]) {
-                        hasSelection = true;
-                        const factor = baseQuantity / 100;
-                        totals.energy += nutritionData[materialId].energy * factor;
-                        totals.protein += nutritionData[materialId].protein * factor;
-                        totals.fat += nutritionData[materialId].fat * factor;
-                        totals.carbohydrate += nutritionData[materialId].carbohydrate * factor;
-                        totals.fiber += nutritionData[materialId].fiber * factor;
-                    }
-                });
-
-                if (hasSelection) {
-                    document.getElementById('nutritionPreview').style.display = 'block';
-                    document.getElementById('preview-energy').textContent = Math.round(totals.energy);
-                    document.getElementById('preview-protein').textContent = totals.protein.toFixed(1);
-                    document.getElementById('preview-fat').textContent = totals.fat.toFixed(1);
-                    document.getElementById('preview-carb').textContent = totals.carbohydrate.toFixed(1);
-                    document.getElementById('preview-fiber').textContent = totals.fiber.toFixed(1);
-                } else {
-                    document.getElementById('nutritionPreview').style.display = 'none';
-                }
-            }
-
-            // Load existing items
-            if (existingItems.length > 0) {
-                existingItems.forEach(item => {
-                    addIngredientField(item);
-                });
-            } else {
-                addIngredientField();
             }
         </script>
     @endpush
