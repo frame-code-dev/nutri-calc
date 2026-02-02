@@ -14,6 +14,9 @@ class MenuItem extends Model
         'menu_id',
         'raw_material_id',
         'quantity_per_portion',
+        'unit',
+        'quantity_input',
+        'conversion_factor',
         'group_name',
     ];
 

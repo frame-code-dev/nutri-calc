@@ -416,4 +416,133 @@ class MenuScheduleController extends Controller
             return back()->with('error', 'Gagal menerapkan menu global: ' . $e->getMessage());
         }
     }
+    /**
+     * Display the Weekly Menu Report Page
+     */
+    public function weeklyReportView(Request $request)
+    {
+        $weekNumber = $request->get('week', Carbon::now()->addWeek()->isoWeek);
+        $year = $request->get('year', Carbon::now()->year);
+
+        // Generate Dates
+        $startOfWeek = Carbon::now()->setISODate($year, $weekNumber)->startOfWeek(Carbon::MONDAY);
+        $dates = [];
+        for ($i = 0; $i < 6; $i++) {
+            $dates[] = $startOfWeek->copy()->addDays($i);
+        }
+
+        return view('reports.weekly-menu', compact('weekNumber', 'year', 'dates'));
+    }
+
+    /**
+     * Export Weekly Menu Report to Excel
+     */
+    public function exportWeeklyExcel(Request $request)
+    {
+        $weekNumber = $request->get('week', Carbon::now()->addWeek()->isoWeek);
+        $year = $request->get('year', Carbon::now()->year);
+
+        // Generate Dates (Mon-Sat)
+        $startOfWeek = Carbon::now()->setISODate($year, $weekNumber)->startOfWeek(Carbon::MONDAY);
+        $dates = [];
+        $headerDates = [];
+        for ($i = 0; $i < 6; $i++) {
+            $dt = $startOfWeek->copy()->addDays($i);
+            $dates[] = $dt->toDateString();
+            $headerDates[] = $dt->isoFormat('dddd, D MMM Y');
+        }
+
+        // --- GATHER DATA (GLOBAL AGGREGATION) ---
+        // This follows the logic of "Daily Global Requirements"
+        $reportData = [];
+
+        foreach ($dates as $index => $date) {
+            $reportData[$date] = [
+                'ingredients' => []
+            ];
+
+            // Get all calendars for ALL schools on this specific date that are 'receive'
+            // We assume the report wants to know what SHOULD be cooked.
+            $allCalendarsForDay = SchoolCalendar::where('date', $date)
+                ->where('day_status', 'receive')
+                ->whereNotNull('menu_id')
+                ->with(['menu.menuItems.rawMaterial'])
+                ->get();
+
+            // We aggregate unique ingredients used in ANY menu that day.
+            // If multiple schools have different menus, we list ALL ingredients.
+            $ingredientsList = collect();
+
+            foreach ($allCalendarsForDay as $cal) {
+                if (!$cal->menu) continue;
+
+                foreach ($cal->menu->menuItems as $item) {
+                    $ingredientsList->push($item->rawMaterial->name);
+                }
+            }
+
+            // Unique and Sort
+            $reportData[$date]['ingredients'] = $ingredientsList->unique()->sort()->values()->all();
+        }
+
+        // --- CREATE EXCEL ---
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle("Laporan Menu Minggu {$weekNumber}");
+
+        // 1. Header Row (Dates)
+        $colIndex = 1; // Column A
+        foreach ($headerDates as $hDate) {
+            $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($colIndex) . '1';
+            $sheet->setCellValue($cell, $hDate);
+            
+            // Format Header
+            $sheet->getStyle($cell)->getFont()->setBold(true);
+            $sheet->getStyle($cell)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()->setARGB('C6E0B4'); // Light Green like screenshot
+            $sheet->getStyle($cell)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            
+            $colIndex++;
+        }
+
+        // 2. Data Rows
+        // Find max number of ingredients to determine value vertical loop
+        $maxRows = 0;
+        foreach ($reportData as $data) {
+            $count = count($data['ingredients']);
+            if ($count > $maxRows) $maxRows = $count;
+        }
+
+        // Fill columns
+        for ($r = 0; $r < $maxRows; $r++) {
+            $currentRow = $r + 2; // Start from row 2
+            $colIndex = 1;
+
+            foreach ($dates as $date) {
+                $ingredient = $reportData[$date]['ingredients'][$r] ?? '';
+                $cell = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($colIndex) . $currentRow;
+                $sheet->setCellValue($cell, $ingredient);
+                
+                // Border
+                $sheet->getStyle($cell)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+                $colIndex++;
+            }
+        }
+
+        // 3. Auto Size Columns
+        for ($i = 1; $i <= 6; $i++) {
+            $sheet->getColumnDimension(\PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($i))->setAutoSize(true);
+        }
+
+        // 4. Download
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $fileName = "Laporan_Menu_Minggu_{$weekNumber}_{$year}.xlsx";
+
+        return response()->streamDownload(function () use ($writer) {
+            $writer->save('php://output');
+        }, $fileName, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ]);
+    }
 }

@@ -75,6 +75,9 @@ class MenuController extends Controller
             'items.*.group_name' => 'nullable|string|max:255',
             'items.*.raw_material_id' => 'required|exists:raw_materials,id',
             'items.*.quantity_per_portion' => 'required|numeric|min:0.001',
+            'items.*.unit' => 'nullable|string|max:50',
+            'items.*.quantity_input' => 'nullable|numeric|min:0.001',
+            'items.*.conversion_factor' => 'nullable|numeric|min:0.0001',
         ]);
 
         DB::beginTransaction();
@@ -94,6 +97,9 @@ class MenuController extends Controller
                     'group_name' => $item['group_name'] ?? null,
                     'raw_material_id' => $item['raw_material_id'],
                     'quantity_per_portion' => $item['quantity_per_portion'],
+                    'unit' => $item['unit'] ?? null,
+                    'quantity_input' => $item['quantity_input'] ?? $item['quantity_per_portion'],
+                    'conversion_factor' => $item['conversion_factor'] ?? 1,
                 ]);
             }
 
@@ -150,6 +156,9 @@ class MenuController extends Controller
             'items.*.group_name' => 'nullable|string|max:255',
             'items.*.raw_material_id' => 'required|exists:raw_materials,id',
             'items.*.quantity_per_portion' => 'required|numeric|min:0.001',
+            'items.*.unit' => 'nullable|string|max:50',
+            'items.*.quantity_input' => 'nullable|numeric|min:0.001',
+            'items.*.conversion_factor' => 'nullable|numeric|min:0.0001',
         ]);
 
         DB::beginTransaction();
@@ -177,6 +186,9 @@ class MenuController extends Controller
                         'group_name' => $item['group_name'] ?? null,
                         'raw_material_id' => $item['raw_material_id'],
                         'quantity_per_portion' => $item['quantity_per_portion'],
+                        'unit' => $item['unit'] ?? null,
+                        'quantity_input' => $item['quantity_input'] ?? $item['quantity_per_portion'],
+                        'conversion_factor' => $item['conversion_factor'] ?? 1,
                     ]);
                 }
                 
@@ -209,6 +221,9 @@ class MenuController extends Controller
                         'group_name' => $item['group_name'] ?? null,
                         'raw_material_id' => $item['raw_material_id'],
                         'quantity_per_portion' => $item['quantity_per_portion'],
+                        'unit' => $item['unit'] ?? null,
+                        'quantity_input' => $item['quantity_input'] ?? $item['quantity_per_portion'],
+                        'conversion_factor' => $item['conversion_factor'] ?? 1,
                     ]);
                 }
 

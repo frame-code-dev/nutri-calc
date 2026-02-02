@@ -19,6 +19,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Reports
+Route::group(['prefix' => 'reports', 'as' => 'reports.', 'middleware' => 'auth'], function () {
+    Route::get('weekly-menu', [\App\Http\Controllers\MenuScheduleController::class, 'weeklyReportView'])->name('weekly-menu');
+    Route::post('weekly-menu/export', [\App\Http\Controllers\MenuScheduleController::class, 'exportWeeklyExcel'])->name('weekly-menu.export');
+});
+
 // Protected routes
 Route::middleware('auth')->group(function () {
     // Dashboard

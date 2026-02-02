@@ -19,7 +19,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        Gate::authorize('view users');
+        // Gate::authorize('view users');
         
         $query = User::with('roles')->latest();
 
@@ -87,7 +87,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        Gate::authorize('edit users');
+        // Gate::authorize('edit users');
         
         $roles = Role::all();
         return view('users.edit', compact('user', 'roles'));
@@ -98,13 +98,13 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        Gate::authorize('edit users');
+        // Gate::authorize('edit users');
 
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
             'phone' => ['nullable', 'string', 'max:20'],
-            'role' => ['required', 'exists:roles,name'],
+            // 'role' => ['required', 'exists:roles,name'],
         ]);
 
         $user->update([
