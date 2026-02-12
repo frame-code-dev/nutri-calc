@@ -24,9 +24,8 @@ class RawMaterialController extends Controller
         // Search
         if ($request->has('search')) {
             $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-                //   ->orWhere('description', 'like', "%{$search}%");
+            $query->when($search, function ($query) use ($search) {
+                $query->where('name', 'ILIKE', '%' . $search . '%');
             });
         }
 
