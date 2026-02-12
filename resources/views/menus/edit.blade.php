@@ -59,6 +59,26 @@
                             @enderror
                         </div>
 
+                        <div>
+                            <label for="category"
+                                class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Kategori
+                                Menu
+                                <span class="text-red-500">*</span></label>
+                            <select name="category" id="category" required
+                                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all font-bold text-gray-700"
+                                onchange="toggleIngredientButtons()">
+                                <option value="master"
+                                    {{ old('category', $menu->category) === 'master' ? 'selected' : '' }}>📋
+                                    Menu Komponen</option>
+                                <option value="packet"
+                                    {{ old('category', $menu->category) === 'packet' ? 'selected' : '' }}>📦
+                                    Menu Paket/Harian</option>
+                            </select>
+                            @error('category')
+                                <p class="mt-1.5 text-xs text-red-600 font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <div class="flex items-end pb-2">
                             <label class="inline-flex items-center cursor-pointer group">
                                 <div class="relative">
@@ -90,7 +110,7 @@
                     <div class="px-6 py-4 border-b border-gray-50 bg-gray-50/50 flex items-center justify-between">
                         <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider">Komposisi Bahan</h3>
                         <button type="button" id="addIngredient"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 text-[11px] font-bold uppercase tracking-wider rounded-lg hover:bg-blue-600 hover:text-white transition-all">
+                            class="add-ingredient-btn inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 text-[11px] font-bold uppercase tracking-wider rounded-lg hover:bg-blue-600 hover:text-white transition-all">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                     d="M12 4v16m8-8H4"></path>
@@ -302,11 +322,11 @@
                                 ${groupName}
                             </h4>
                             ${isDeletable ? `
-                                    <button type="button" onclick="removeGroup('${groupId}')" 
-                                        class="text-xs font-bold text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                        Hapus Menu Ini
-                                    </button>` : ''}
+                                            <button type="button" onclick="removeGroup('${groupId}')" 
+                                                class="text-xs font-bold text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                Hapus Menu Ini
+                                            </button>` : ''}
                         </div>
                         <div class="p-4 space-y-4 item-container">
                             <!-- Items go here -->
@@ -443,7 +463,7 @@
                         
                         <div class="${!container ? 'mt-7' : ''} flex items-center">
                             <button type="button" onclick="removeIngredient(${ingredientIndex})" 
-                                    class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Hapus Bahan">
+                                    class="remove-ingredient-btn p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Hapus Bahan">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                             </button>
                         </div>
@@ -511,7 +531,32 @@
 
                 ingredientIndex++;
                 emptyState.style.display = 'none';
+
+                // Apply visibility based on current category
+                toggleIngredientButtons();
             }
+
+            // Function to toggle ingredient buttons based on category
+            function toggleIngredientButtons() {
+                const category = document.getElementById('category').value;
+                const addButtons = document.querySelectorAll('.add-ingredient-btn');
+                const removeButtons = document.querySelectorAll('.remove-ingredient-btn');
+
+                if (category === 'packet') {
+                    // Hide all add and remove buttons for packet category
+                    addButtons.forEach(btn => btn.style.display = 'none');
+                    removeButtons.forEach(btn => btn.style.display = 'none');
+                } else {
+                    // Show all add and remove buttons for master category
+                    addButtons.forEach(btn => btn.style.display = 'inline-flex');
+                    removeButtons.forEach(btn => btn.style.display = 'flex');
+                }
+            }
+
+            // Initialize button visibility on page load
+            document.addEventListener('DOMContentLoaded', function() {
+                toggleIngredientButtons();
+            });
         </script>
     @endpush
 </x-app-layout>
