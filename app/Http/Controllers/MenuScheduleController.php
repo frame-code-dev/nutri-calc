@@ -62,29 +62,27 @@ class MenuScheduleController extends Controller
             }
         }
 
-        // 3. School-Specific Analytics
-        $totalSmallPortions = 0;
-        $totalLargePortions = 0;
-        $totalPortions = 0;
+        // 3. Analytics
+        // Total portions for ALL schools in the selected week (pk + pb + guru)
+        // Get unique schools that have calendars for this week
+        $schoolIdsInWeek = SchoolCalendar::where('week_number', $weekNumber)
+            ->where('year', $year)
+            ->distinct()
+            ->pluck('school_id');
+
+        $weekSchools = School::whereIn('id', $schoolIdsInWeek)->get();
+        
+        $totalSmallPortions = $weekSchools->sum('small_portion_count');
+        $totalLargePortions = $weekSchools->sum('large_portion_count');
+        $totalTeachers = $weekSchools->sum('teacher_count');
+        $totalPortions = $totalSmallPortions + $totalLargePortions + $totalTeachers;
+
+        // School-Specific Analytics (for material requirements and costs)
         $totalRab = 0;
         $totalCost = 0;
         $materialRequirements = [];
 
         if ($selectedSchool) {
-            $stats = SchoolCalendar::where('school_id', $schoolId)
-                ->where('week_number', $weekNumber)
-                ->where('year', $year)
-                ->where(function($q) {
-                    $q->where('day_status', 'receive')
-                      ->orWhereNotNull('menu_id');
-                })
-                ->selectRaw('SUM(portion_count) as total, SUM(small_portion_count) as small, SUM(large_portion_count) as large')
-                ->first();
-
-            $totalPortions = $stats->total ?? 0;
-            $totalSmallPortions = $stats->small ?? 0;
-            $totalLargePortions = $stats->large ?? 0;
-
             $totalRab = Rab::where('school_id', $schoolId)->sum('total_budget');
 
             foreach ($dates as $date) {
@@ -200,6 +198,7 @@ class MenuScheduleController extends Controller
             'totalPortions',
             'totalSmallPortions',
             'totalLargePortions',
+            'totalTeachers',
             'totalCost',
             'totalRab',
             'remainingRab',

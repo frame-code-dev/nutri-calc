@@ -74,7 +74,7 @@
                             </path>
                         </svg>
                     </div>
-                    <div class="flex-1 grid grid-cols-3 gap-4 divide-x">
+                    <div class="flex-1 grid grid-cols-4 gap-4 divide-x">
                         <div class="pl-0">
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total Porsi</p>
                             <h3 class="text-xl font-black text-gray-900">{{ number_format($totalPortions) }}</h3>
@@ -86,6 +86,10 @@
                         <div class="pl-4">
                             <p class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Porsi Besar</p>
                             <h3 class="text-xl font-black text-gray-900">{{ number_format($totalLargePortions) }}</h3>
+                        </div>
+                        <div class="pl-4">
+                            <p class="text-[10px] font-bold text-purple-400 uppercase tracking-widest">Guru</p>
+                            <h3 class="text-xl font-black text-gray-900">{{ number_format($totalTeachers) }}</h3>
                         </div>
                     </div>
                 </div>
@@ -131,10 +135,10 @@
 
 
 
-                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
                         @foreach ($days as $index => $day)
-                            @if ($index < 5)
-                                <!-- Only Mon-Fri usually -->
+                            @if ($index < 6)
+                                <!-- Mon-Sat (6 days) -->
                                 <div class="space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-100">
                                     <div class="flex items-center justify-between mb-2">
                                         <span
@@ -731,7 +735,7 @@
             // Collect materials
             Object.values(data.materials).forEach(m => {
                 materials.push(
-                `${m.name} ${m.total.toLocaleString('id-ID', {minimumFractionDigits: 1})} ${m.unit}`);
+                    `${m.name} ${m.total.toLocaleString('id-ID', {minimumFractionDigits: 1})} ${m.unit}`);
             });
 
             const dateParts = selectedDate.split('-');

@@ -20,8 +20,8 @@ class SchoolController extends Controller
      */
     public function index(Request $request)
     {
-        $query = School::withCount('coordinators')
-            ->with('coordinators');
+        // 1. Base Query with filters only
+        $query = School::query();
 
         // Search
         if ($request->has('search')) {
@@ -38,9 +38,38 @@ class SchoolController extends Controller
             $query->where('is_active', $isActive);
         }
 
-        $schools = $query->latest()->paginate(10);
+        // 2. Stats Query (Clone base query, no eager loads)
+        $totals = [
+            'small_portions' => 0,
+            'large_portions' => 0,
+            'teachers' => 0,
+            'overall' => 0
+        ];
 
-        return view('schools.index', compact('schools'));
+        try {
+            $stats = (clone $query)->selectRaw('
+                SUM(small_portion_count) as total_small,
+                SUM(large_portion_count) as total_large,
+                SUM(teacher_count) as total_teacher
+            ')->first();
+
+            $totals = [
+                'small_portions' => $stats->total_small ?? 0,
+                'large_portions' => $stats->total_large ?? 0,
+                'teachers' => $stats->total_teacher ?? 0,
+                'overall' => ($stats->total_small ?? 0) + ($stats->total_large ?? 0) + ($stats->total_teacher ?? 0)
+            ];
+        } catch (\Exception $e) {
+            // Fallback or log error if needed
+        }
+
+        // 3. Main Query (Add relations and pagination)
+        $schools = $query->withCount('coordinators')
+            ->with('coordinators')
+            ->latest()
+            ->paginate(10);
+
+        return view('schools.index', compact('schools', 'totals'));
     }
 
     /**

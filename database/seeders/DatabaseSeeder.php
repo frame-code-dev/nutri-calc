@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             
             // 3. Schools & Coordinators
             // SchoolSeeder::class,
+            KloterSeeder::class,
             SchoolDataSeeder::class,
             
             // 4. Suppliers
