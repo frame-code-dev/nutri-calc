@@ -77,7 +77,7 @@ class DistributionController extends Controller
     {
         $kloters = Kloter::with(['distributions.school', 'distributions.unit'])->get();
         $units = DistributionUnit::all();
-        $schools = School::orderBy('name')->get();
+        $schools = School::orderBy('name')->where('is_active', true)->get();
 
         return view('distribution.settings', compact('kloters', 'units', 'schools'));
     }
