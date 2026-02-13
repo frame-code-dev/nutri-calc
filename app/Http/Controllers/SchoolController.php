@@ -36,6 +36,8 @@ class SchoolController extends Controller
         if ($request->has('status')) {
             $isActive = $request->status === 'active';
             $query->where('is_active', $isActive);
+        }else{
+            $query->where('is_active', true);
         }
 
         // 2. Stats Query (Clone base query, no eager loads)
