@@ -13,6 +13,7 @@ class Category extends Model
     protected $fillable = [
         'name',
         'description',
+        'sppg_id',
     ];
 
     public function rawMaterials(): HasMany

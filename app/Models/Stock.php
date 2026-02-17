@@ -18,6 +18,7 @@ class Stock extends Model
         'notes',
         'transaction_date',
         'created_by',
+        'sppg_id',
     ];
 
     protected $casts = [

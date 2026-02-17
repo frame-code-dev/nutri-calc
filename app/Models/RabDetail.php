@@ -17,6 +17,7 @@ class RabDetail extends Model
         'quantity',
         'price_per_unit',
         'subtotal',
+        'sppg_id',
     ];
 
     protected $casts = [

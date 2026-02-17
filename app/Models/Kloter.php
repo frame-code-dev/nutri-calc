@@ -15,6 +15,7 @@ class Kloter extends Model
         'date',
         'description',
         'is_active',
+        'sppg_id',
     ];
 
     protected $casts = [

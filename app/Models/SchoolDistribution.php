@@ -14,7 +14,8 @@ class SchoolDistribution extends Model
         'small_portion_count',
         'large_portion_count',
         'teacher_count',
-        'is_active'
+        'is_active',
+        'sppg_id',
     ];
 
     public function school()

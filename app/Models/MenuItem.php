@@ -18,6 +18,7 @@ class MenuItem extends Model
         'quantity_input',
         'conversion_factor',
         'group_name',
+        'sppg_id',
     ];
 
     protected $casts = [

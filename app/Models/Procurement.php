@@ -19,6 +19,7 @@ class Procurement extends Model
         'status',
         'notes',
         'created_by',
+        'sppg_id',
     ];
 
     protected $casts = [

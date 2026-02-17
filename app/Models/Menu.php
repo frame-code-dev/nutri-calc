@@ -20,6 +20,7 @@ class Menu extends Model
         'parent_id',
         'version',
         'code',
+        'sppg_id',
     ];
 
     protected $casts = [

@@ -20,6 +20,7 @@ class RawMaterial extends Model
         'code',
         'description',
         'is_active',
+        'sppg_id',
     ];
 
     protected $casts = [

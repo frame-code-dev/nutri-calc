@@ -17,6 +17,7 @@ class SchoolWeeklyStatus extends Model
         'is_locked',
         'locked_at',
         'locked_by',
+        'sppg_id',
     ];
 
     protected $casts = [

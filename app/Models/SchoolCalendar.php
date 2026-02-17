@@ -22,6 +22,7 @@ class SchoolCalendar extends Model
         'large_portion_count',
         'week_number',
         'year',
+        'sppg_id',
     ];
 
     protected $casts = [

@@ -15,6 +15,7 @@ class MenuSchedule extends Model
         'menu_id',
         'description',
         'created_by',
+        'sppg_id',
     ];
 
     protected $casts = [

@@ -17,6 +17,7 @@ class SchoolCoordinator extends Model
         'position',
         'whatsapp_number',
         'is_active',
+        'sppg_id',
     ];
 
     protected $casts = [

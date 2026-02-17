@@ -16,6 +16,7 @@ class Rab extends Model
         'school_id',
         'total_budget',
         'total_portions',
+        'sppg_id',
     ];
 
     protected $casts = [

@@ -19,6 +19,7 @@ class RawMaterialNutrition extends Model
         'fat_per_100g',
         'carbohydrate_per_100g',
         'fiber_per_100g',
+        'sppg_id',
     ];
 
     protected $casts = [

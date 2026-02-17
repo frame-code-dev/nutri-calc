@@ -19,6 +19,7 @@ class WeeklyLock extends Model
         'status',
         'locked_by',
         'locked_at',
+        'sppg_id',
     ];
 
     protected $casts = [

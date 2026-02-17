@@ -18,6 +18,7 @@ class School extends Model
         'small_portion_count',
         'large_portion_count',
         'is_active',
+        'sppg_id',
     ];
 
     protected $casts = [
