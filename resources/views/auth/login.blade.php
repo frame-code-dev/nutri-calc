@@ -174,7 +174,7 @@
                 </form>
 
                 <!-- Footer Links -->
-                <div class="mt-8 text-center space-y-4 w-full">
+                <div class="mt-8 text-center space-y-4">
                     <x-support-modal class="w-full" :bankDetails="$bankDetails" />
                 </div>
             </div>
