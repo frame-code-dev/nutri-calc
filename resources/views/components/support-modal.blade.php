@@ -4,7 +4,7 @@
 <button onclick="openSupportModal()"
     class="inline-flex items-center justify-center px-8 py-3 bg-white border border-gray-900 text-gray-900 text-sm font-bold rounded-2xl hover:bg-gray-100 hover:shadow-xl hover:shadow-gray-200 transition-all duration-300 transform hover:-translate-y-0.5 active:scale-95"
     title="Support System">
-    Support Me
+    💖 Donasi untuk Situs Ini
 </button>
 
 <!-- Modal -->
