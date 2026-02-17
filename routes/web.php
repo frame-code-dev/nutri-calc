@@ -10,6 +10,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\KloterController;
+use App\Http\Controllers\MasterSppgController;
 use App\Http\Controllers\NutritionReportController;
 use App\Http\Controllers\SchoolCalendarController;
 use App\Http\Controllers\WeeklyLockController;
@@ -124,6 +125,11 @@ Route::middleware('auth')->group(function () {
     Route::post('menu-schedules/global', [\App\Http\Controllers\MenuScheduleController::class, 'storeGlobal'])->name('menu-schedules.store-global');
     Route::resource('menu-schedules', \App\Http\Controllers\MenuScheduleController::class)->only(['index', 'store']);
     Route::post('menu-schedules/clear', [\App\Http\Controllers\MenuScheduleController::class, 'destroy'])->name('menu-schedules.clear');
+
+    // master sppg 
+    Route::resource('master-sppg', MasterSppgController::class);
+    Route::post('master-sppg/{masterSppg}/toggle-status', [MasterSppgController::class, 'toggleStatus'])->name('master-sppg.toggle-status');
+        
 });
 
 require __DIR__.'/auth.php';

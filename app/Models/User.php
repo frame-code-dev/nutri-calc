@@ -23,7 +23,13 @@ class User extends Authenticatable
         'email',
         'phone',
         'password',
+        'sppg_id',
     ];
+
+    public function sppg()
+    {
+        return $this->belongsTo(MasterSppg::class, 'sppg_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

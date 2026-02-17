@@ -233,6 +233,18 @@
                 </a>
             @endrole
 
+            @role('Super Admin')
+                <a href="{{ route('master-sppg.index') }}"
+                    class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('master-sppg*') ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900' }}">
+                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('master-sppg*') ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600' }}"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    Master SPPG
+                </a>
+            @endrole
+
             @can('view schools')
                 <a href="{{ route('schools.index') }}"
                     class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('schools*') ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900' }}">

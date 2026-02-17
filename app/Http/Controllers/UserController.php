@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
@@ -89,7 +90,15 @@ class UserController extends Controller
     {
         // Gate::authorize('edit users');
         
-        $roles = Role::all();
+        $currentUser = Auth::user();
+
+        if ($currentUser->hasRole('super admin')) {
+            // Super admin bisa lihat semua role
+            $roles = Role::all();
+        } else {
+            // Admin tidak bisa assign role super admin
+            $roles = Role::where('name', '!=', 'super admin')->get();
+        }
         return view('users.edit', compact('user', 'roles'));
     }
 
