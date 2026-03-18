@@ -213,7 +213,49 @@
             </a>
         </div>
 
-        <!-- Group: Administrator -->
+        <!-- Group: SDM / Gaji Relawan -->
+        <div class="pt-2 pb-2">
+            <div class="px-3 mb-2 flex items-center gap-2">
+                <div class="h-px bg-gray-200 flex-1"></div>
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">SDM</span>
+                <div class="h-px bg-gray-200 flex-1"></div>
+            </div>
+
+            @role('Super Admin|Admin MBG')
+                <a href="{{ route('relawans.index') }}"
+                    class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('relawans*') ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900' }}">
+                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('relawans*') ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600' }}"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    Data Relawan
+                </a>
+
+                <a href="{{ route('gaji-relawan.index') }}"
+                    class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('gaji-relawan*') ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900' }}">
+                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('gaji-relawan*') ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600' }}"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    Gaji Relawan
+                </a>
+
+                <a href="{{ route('salary-settings.index') }}"
+                    class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('salary-settings*') ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900' }}">
+                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('salary-settings*') ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600' }}"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    Setting Upah
+                </a>
+            @endrole
+        </div>
+
+
         <div class="pt-2 pb-2">
             <div class="px-3 mb-2 flex items-center gap-2">
                 <div class="h-px bg-gray-200 flex-1"></div>

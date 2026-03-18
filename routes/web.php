@@ -129,7 +129,31 @@ Route::middleware('auth')->group(function () {
     // master sppg 
     Route::resource('master-sppg', MasterSppgController::class);
     Route::post('master-sppg/{masterSppg}/toggle-status', [MasterSppgController::class, 'toggleStatus'])->name('master-sppg.toggle-status');
+
+    // ── Gaji Relawan ──────────────────────────────────────────────────────────
+    // Master Relawan
+    Route::resource('relawans', \App\Http\Controllers\RelawanController::class);
+
+    // Setting Upah per Jabatan
+    Route::get('salary-settings', [\App\Http\Controllers\SalarySettingController::class, 'index'])->name('salary-settings.index');
+    Route::post('salary-settings', [\App\Http\Controllers\SalarySettingController::class, 'store'])->name('salary-settings.store');
+    Route::put('salary-settings/{salarySetting}', [\App\Http\Controllers\SalarySettingController::class, 'update'])->name('salary-settings.update');
+    Route::delete('salary-settings/{salarySetting}', [\App\Http\Controllers\SalarySettingController::class, 'destroy'])->name('salary-settings.destroy');
+
+    // Gaji Relawan — Periode & Absensi
+    Route::get('gaji-relawan', [\App\Http\Controllers\GajiRelawanController::class, 'index'])->name('gaji-relawan.index');
+    Route::get('gaji-relawan/create', [\App\Http\Controllers\GajiRelawanController::class, 'create'])->name('gaji-relawan.create');
+    Route::post('gaji-relawan', [\App\Http\Controllers\GajiRelawanController::class, 'store'])->name('gaji-relawan.store');
+    Route::get('gaji-relawan/{gajiRelawan}', [\App\Http\Controllers\GajiRelawanController::class, 'show'])->name('gaji-relawan.show');
+    Route::post('gaji-relawan/{gajiRelawan}/absensi', [\App\Http\Controllers\GajiRelawanController::class, 'saveAbsensi'])->name('gaji-relawan.save-absensi');
+    Route::post('gaji-relawan/component/{detail}', [\App\Http\Controllers\GajiRelawanController::class, 'saveComponent'])->name('gaji-relawan.save-component');
+    Route::delete('gaji-relawan/component/{component}/delete', [\App\Http\Controllers\GajiRelawanController::class, 'deleteComponent'])->name('gaji-relawan.delete-component');
+    // Cetak PDF
+    Route::get('gaji-relawan/{gajiRelawan}/slip-pdf', [\App\Http\Controllers\GajiRelawanController::class, 'slipPdf'])->name('gaji-relawan.slip-pdf');
+    Route::get('gaji-relawan/{gajiRelawan}/relawan/{relawan}/slip', [\App\Http\Controllers\GajiRelawanController::class, 'slipSinglePdf'])->name('gaji-relawan.slip-single');
+    Route::get('gaji-relawan/{gajiRelawan}/rekap-pdf', [\App\Http\Controllers\GajiRelawanController::class, 'rekapPdf'])->name('gaji-relawan.rekap-pdf');
         
 });
 
 require __DIR__.'/auth.php';
+

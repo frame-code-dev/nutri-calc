@@ -42,6 +42,9 @@ class DatabaseSeeder extends Seeder
             // 7. Stock Transactions
             // StockSeeder::class,
             AssignWeeklyMenuSeeder::class,
+
+            // 8. SDM / Gaji Relawan
+            GajiRelawanSeeder::class,
         ]);
 
         $this->command->info('✅ All seeders completed successfully!');
