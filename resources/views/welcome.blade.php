@@ -21,7 +21,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MBG System - Monitoring Gizi Otomatis</title>
+    <title>Nutric Calc System - Monitoring Gizi Otomatis</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -453,7 +453,7 @@
                 <h2 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight">Siap Optimalkan <br> Program
                     Anda?</h2>
                 <p class="text-emerald-100 text-lg md:text-xl max-w-2xl mx-auto">
-                    Bergabunglah bersama MBG System untuk manajemen gizi yang lebih presisi, efisien, dan berdampak
+                    Bergabunglah bersama Management Gizi untuk manajemen gizi yang lebih presisi, efisien, dan berdampak
                     nyata bagi generasi mendatang.
                 </p>
                 <div class="flex justify-center pt-8">
@@ -478,7 +478,7 @@
                         </path>
                     </svg>
                 </div>
-                <span>© 2024 MBG System. All rights reserved.</span>
+                <span>© 2024 Management Gizi. All rights reserved.</span>
             </div>
             <div class="flex gap-8">
                 <a href="#" class="hover:text-emerald-600 transition-colors">Privacy Policy</a>

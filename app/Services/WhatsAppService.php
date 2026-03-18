@@ -123,7 +123,7 @@ class WhatsAppService
      */
     protected function buildReminderMessage(string $schoolName, int $weekNumber, int $year): string
     {
-        return "🍽️ *REMINDER MBG SYSTEM*\n\n"
+        return "🍽️ *REMINDER Management Gizi*\n\n"
             . "Yth. Koordinator {$schoolName}\n\n"
             . "Mohon segera mengisi status penerimaan MBG untuk:\n"
             . "📅 Minggu ke-{$weekNumber} Tahun {$year}\n\n"

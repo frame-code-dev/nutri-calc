@@ -1,8 +1,8 @@
-# MBG System - Setup Guide
+# Management Gizi - Setup Guide
 
 ## 🚀 Quick Setup Instructions
 
-Follow these steps to get the MBG system up and running on your local machine.
+Follow these steps to get the Management Gizi up and running on your local machine.
 
 ### Prerequisites
 
@@ -26,6 +26,7 @@ composer install
 ```
 
 This will install:
+
 - Laravel 12 framework
 - Spatie Laravel Permission (already added)
 - Other dependencies
@@ -38,6 +39,7 @@ php artisan breeze:install blade
 ```
 
 When prompted, choose:
+
 - **Stack**: Blade
 - **Dark mode**: No (or Yes, your preference)
 - **Testing framework**: Pest (or PHPUnit)
@@ -72,6 +74,7 @@ CREATE DATABASE mbg_system CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 Or using command line:
+
 ```bash
 mysql -u root -p
 CREATE DATABASE mbg_system;
@@ -91,6 +94,7 @@ php artisan migrate
 ```
 
 This will create all 13 tables:
+
 - users, password_resets, sessions (Laravel/Breeze)
 - roles, permissions, role_has_permissions, model_has_roles, model_has_permissions (Spatie)
 - schools, school_coordinators, suppliers
@@ -107,6 +111,7 @@ php artisan db:seed
 ```
 
 This will populate:
+
 - ✅ 5 Roles with 40+ Permissions
 - ✅ 10 Sample Users (all roles)
 - ✅ 6 Schools with Coordinators
@@ -125,6 +130,7 @@ npm run dev
 Keep this terminal open for hot-reload during development.
 
 Or build for production:
+
 ```bash
 npm run build
 ```
@@ -145,13 +151,13 @@ The application will be available at: **http://localhost:8000**
 
 After seeding, you can login with these accounts:
 
-| Role | Email | Password |
-|------|-------|----------|
-| **Super Admin** | superadmin@mbg.id | password |
-| **Admin MBG** | admin@mbg.id | password |
+| Role                    | Email                   | Password |
+| ----------------------- | ----------------------- | -------- |
+| **Super Admin**         | superadmin@mbg.id       | password |
+| **Admin MBG**           | admin@mbg.id            | password |
 | **Koordinator Sekolah** | budi.koordinator@mbg.id | password |
-| **Koordinator Dapur** | fatimah.dapur@mbg.id | password |
-| **Supplier** | supplier1@mbg.id | password |
+| **Koordinator Dapur**   | fatimah.dapur@mbg.id    | password |
+| **Supplier**            | supplier1@mbg.id        | password |
 
 ---
 
@@ -197,6 +203,7 @@ print_r($nutrition);
 Visit: `http://localhost:8000/menus/1`
 
 You should see the **Menu Ayam Riza** with:
+
 - ✅ Beautiful nutrition cards showing all 5 nutrients
 - ✅ Ingredients table
 - ✅ Auto-calculated values
@@ -216,10 +223,13 @@ echo "Current Stock: " . $ayam->getCurrentStock() . " gram\n";
 ## 📁 What's Been Created
 
 ### Migrations (13 files)
+
 ✅ All database tables with proper relationships
 
 ### Models (13 files)
+
 ✅ All Eloquent models with relationships:
+
 - School, SchoolCoordinator, Supplier
 - RawMaterial, RawMaterialNutrition, Stock
 - Menu ⭐ (with calculateNutrition()), MenuItem
@@ -227,13 +237,17 @@ echo "Current Stock: " . $ayam->getCurrentStock() . " gram\n";
 - Rab, RabDetail, NotificationLog
 
 ### Services (1 file)
+
 ✅ NutritionCalculator.php ⭐
 
 ### Controllers (1 file)
+
 ✅ MenuController.php ⭐
 
 ### Seeders (7 files)
+
 ✅ Complete sample data:
+
 1. RolePermissionSeeder
 2. UserSeeder
 3. SchoolSeeder
@@ -243,6 +257,7 @@ echo "Current Stock: " . $ayam->getCurrentStock() . " gram\n";
 7. StockSeeder
 
 ### Views (2 files)
+
 ✅ menus/show.blade.php ⭐ (nutrition display)
 ✅ welcome.blade.php (demo page)
 
@@ -251,22 +266,26 @@ echo "Current Stock: " . $ayam->getCurrentStock() . " gram\n";
 ## 🎯 Core Features Ready
 
 ### ⭐ Automatic Nutritional Calculation
+
 - **Status**: 100% Functional
 - **Location**: Menu model, NutritionCalculator service
 - **UI**: Beautiful Tailwind CSS cards
 - **Calculation**: Real-time based on ingredients
 
 ### 🏫 Schools Management
+
 - **Models**: School, SchoolCoordinator
 - **Sample Data**: 6 schools, various student counts
 - **Coordinators**: Linked to users with WhatsApp numbers
 
 ### 📦 Inventory System
+
 - **Models**: RawMaterial, Stock, Supplier
 - **Features**: Stock IN/OUT tracking, current balance calculation
 - **Sample Data**: 8 materials, 8 suppliers, 17 transactions
 
 ### 🍽️ Menu System
+
 - **Models**: Menu, MenuItem
 - **Features**: Wet/dry types, composition management
 - **Nutrition**: Automatic calculation for all nutrients
@@ -302,6 +321,7 @@ npm run dev
 ### Permission Errors (Spatie)
 
 Make sure you run:
+
 ```bash
 php artisan cache:clear
 php artisan config:clear
@@ -310,6 +330,7 @@ php artisan config:clear
 ### Can't See Roles/Permissions
 
 Clear cache:
+
 ```bash
 php artisan optimize:clear
 ```
@@ -321,7 +342,7 @@ php artisan optimize:clear
 After migration and seeding, you'll have:
 
 ```
-📁 MBG System Database
+📁 Management Gizi Database
 ├── 👥 Users & Auth (8 tables)
 │   ├── users
 │   ├── roles (5 roles)
@@ -369,6 +390,7 @@ php artisan db:seed
 ```
 
 Or in one command:
+
 ```bash
 php artisan migrate:fresh --seed
 ```
@@ -393,25 +415,25 @@ After setup, verify:
 Now that Phase 3 is complete, continue with:
 
 1. **Complete CRUD Controllers**
-   - SchoolController
-   - RawMaterialController
-   - StockController
-   - etc.
+    - SchoolController
+    - RawMaterialController
+    - StockController
+    - etc.
 
 2. **Build Dashboards**
-   - Admin dashboard with charts
-   - Coordinator dashboards
-   - Reports
+    - Admin dashboard with charts
+    - Coordinator dashboards
+    - Reports
 
 3. **WhatsApp Integration**
-   - Setup Fonnte API
-   - Create notification service
-   - Setup scheduler
+    - Setup Fonnte API
+    - Create notification service
+    - Setup scheduler
 
 4. **Advanced Features**
-   - Weekly locking mechanism
-   - RAB generation
-   - Calendar management
+    - Weekly locking mechanism
+    - RAB generation
+    - Calendar management
 
 ---
 
