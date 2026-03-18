@@ -22,7 +22,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: "8.5"
           extensions: mbstring, bcmath, pdo, pdo_mysql, xml, zip, gd
           coverage: none
 
@@ -40,8 +40,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install NPM dependencies
         run: npm ci
@@ -72,9 +72,9 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.SERVER_HOST }}        # IP / domain server
-          username: ${{ secrets.SERVER_USER }}    # user di server
-          key: ${{ secrets.SERVER_SSH_KEY }}      # private key
+          host: ${{ secrets.SERVER_HOST }} # IP / domain server
+          username: ${{ secrets.SERVER_USER }} # user di server
+          key: ${{ secrets.SERVER_SSH_KEY }} # private key
           script: |
             set -e
             cd /var/www/mbg-system
