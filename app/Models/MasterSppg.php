@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class MasterSppg extends Model
 {
@@ -14,6 +13,8 @@ class MasterSppg extends Model
         'name',
         'instagram',
         'tiktok',
+        'alamat',
+        'status',
     ];
 
     public function users()
