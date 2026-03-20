@@ -134,6 +134,39 @@
                                     carefully.</p>
                                 <x-input-error :messages="$errors->get('role')" class="mt-2" />
                             </div>
+
+                            <!-- SPPG / MBG -->
+                            @if(auth()->user()->hasRole('Super Admin'))
+                            <div class="col-span-1 md:col-span-2">
+                                <label for="sppg_id" class="block text-sm font-semibold text-gray-700 mb-2">Assign to MBG (SPPG) <span class="text-gray-400 text-xs font-normal">(Optional)</span></label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        </svg>
+                                    </div>
+                                    <select id="sppg_id" name="sppg_id"
+                                        class="block w-full pl-10 pr-10 py-3 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow appearance-none">
+                                        <option value="">-- No MBG (Global User) --</option>
+                                        @foreach ($sppgs as $sppg)
+                                            <option value="{{ $sppg->id }}"
+                                                {{ old('sppg_id') == $sppg->id ? 'selected' : '' }}>
+                                                {{ $sppg->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                        <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <p class="mt-2 text-xs text-gray-500">Only Super Admins can assign users to a specific MBG.</p>
+                                <x-input-error :messages="$errors->get('sppg_id')" class="mt-2" />
+                            </div>
+                            @endif
                         </div>
                     </div>
 

@@ -24,23 +24,27 @@
 </head>
 <body class="font-sans antialiased bg-gray-50" x-data="{ sidebarOpen: false }">
     <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar - Light Minimalist Theme -->
-        @include('layouts.navigation') 
+        @if(empty($hideSidebar))
+            <!-- Sidebar - Light Minimalist Theme -->
+            @include('layouts.navigation') 
 
-        <!-- Mobile Overlay -->
-        <div x-show="sidebarOpen" @click="sidebarOpen = false" x-cloak
-             class="fixed inset-0 z-40 bg-gray-900 bg-opacity-20 backdrop-blur-sm lg:hidden transition-opacity duration-300"></div>
+            <!-- Mobile Overlay -->
+            <div x-show="sidebarOpen" @click="sidebarOpen = false" x-cloak
+                 class="fixed inset-0 z-40 bg-gray-900 bg-opacity-20 backdrop-blur-sm lg:hidden transition-opacity duration-300"></div>
+        @endif
 
         <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Top Bar -->
             <header class="bg-white border-b border-gray-100">
                 <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
-                    <button @click="sidebarOpen = true" class="lg:hidden text-gray-500 hover:text-gray-700">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                        </svg>
-                    </button>
+                    @if(empty($hideSidebar))
+                        <button @click="sidebarOpen = true" class="lg:hidden text-gray-500 hover:text-gray-700">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            </svg>
+                        </button>
+                    @endif
 
                     <div class="flex-1">
                         @if (isset($header))
@@ -61,6 +65,43 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
                             {{ now()->format('d M Y') }}
+                        </div>
+
+                        <!-- User Profile Dropdown in Top Bar -->
+                        <div x-data="{ profileOpen: false }" class="relative ml-2">
+                            <button @click="profileOpen = !profileOpen" class="flex items-center gap-2 focus:outline-none">
+                                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold shadow-sm text-sm">
+                                    {{ substr(Auth::user()->name ?? 'U', 0, 1) }}
+                                </div>
+                                <div class="hidden md:block text-left max-w-[120px]">
+                                    <p class="text-xs font-bold text-gray-900 truncate">{{ Auth::user()->name ?? 'User' }}</p>
+                                </div>
+                            </button>
+
+                            <!-- Dropdown Menu -->
+                            <div x-show="profileOpen" @click.away="profileOpen = false" x-cloak
+                                 x-transition:enter="transition ease-out duration-100"
+                                 x-transition:enter-start="transform opacity-0 scale-95 translate-y-2"
+                                 x-transition:enter-end="transform opacity-100 scale-100 translate-y-0"
+                                 x-transition:leave="transition ease-in duration-75"
+                                 x-transition:leave-start="transform opacity-100 scale-100 translate-y-0"
+                                 x-transition:leave-end="transform opacity-0 scale-95 translate-y-2"
+                                 class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50">
+                                
+                                <div class="px-4 py-2 border-b border-gray-50">
+                                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Akun Saya</p>
+                                </div>
+                                
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-gray-600 hover:bg-rose-50 hover:text-rose-600 transition-colors text-left">
+                                        <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                        </svg>
+                                        <span class="font-bold">Sign Out</span>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

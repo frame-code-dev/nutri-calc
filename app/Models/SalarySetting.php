@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\HasSppg;
 
 class SalarySetting extends Model
 {
-    use HasFactory;
+    use HasFactory, HasSppg;
 
     protected $fillable = [
         'sppg_id',

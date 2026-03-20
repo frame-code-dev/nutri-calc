@@ -20,10 +20,20 @@ class DashboardController extends Controller
         $this->nutritionCalculator = $nutritionCalculator;
     }
 
-    /**
-     * Admin Dashboard
-     */
     public function admin()
+    {
+        // Check permissions
+        if (!auth()->user()->can('view admin dashboard') && !auth()->user()->hasRole('Ahli Gizi')) {
+            abort(403);
+        }
+
+        return view('dashboard.admin');
+    }
+
+    /**
+     * Admin Statistics Dashboard
+     */
+    public function statistics()
     {
         // Check permissions
         if (!auth()->user()->can('view admin dashboard') && !auth()->user()->hasRole('Ahli Gizi')) {
@@ -99,7 +109,7 @@ class DashboardController extends Controller
             'dry_percentage' => $totalMenus > 0 ? round(($dryCount / $totalMenus) * 100) : 0,
         ];
 
-        return view('dashboard.admin', compact(
+        return view('dashboard.statistics', compact(
             'stats',
             'recentStocks',
             'lowStockMaterials',

@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\HasSppg;
 
 class SchoolDistribution extends Model
 {
+    use HasSppg;
+
     protected $fillable = [
         'school_id',
         'kloter_id',

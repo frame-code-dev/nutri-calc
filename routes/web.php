@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('dashboard.admin');
+    Route::get('/dashboard/statistics', [DashboardController::class, 'statistics'])->name('dashboard.statistics');
     Route::get('/dashboard/coordinator', [DashboardController::class, 'coordinator'])->name('dashboard.coordinator');
     Route::get('/dashboard/kitchen', [DashboardController::class, 'kitchen'])->name('dashboard.kitchen');
     Route::get('/dashboard/supplier', [DashboardController::class, 'supplier'])->name('dashboard.supplier');

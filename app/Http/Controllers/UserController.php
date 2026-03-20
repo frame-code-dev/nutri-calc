@@ -51,8 +51,17 @@ class UserController extends Controller
     {
         Gate::authorize('create users');
         
-        $roles = Role::all();
-        return view('users.create', compact('roles'));
+        $currentUser = Auth::user();
+        
+        // Admin tidak bisa assign role super admin
+        if ($currentUser->hasRole('Super Admin')) {
+            $roles = Role::all();
+        } else {
+            $roles = Role::where('name', '!=', 'Super Admin')->get();
+        }
+
+        $sppgs = \App\Models\MasterSppg::where('status', 'active')->get();
+        return view('users.create', compact('roles', 'sppgs'));
     }
 
     /**
@@ -62,20 +71,33 @@ class UserController extends Controller
     {
         Gate::authorize('create users');
 
-        $request->validate([
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'phone' => ['nullable', 'string', 'max:20'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => ['required', 'exists:roles,name'],
-        ]);
+        ];
 
-        $user = User::create([
+        // Admin MBG tidak boleh merubah sppg_id (sudah diset otomatis oleh HasSppg trait)
+        if (Auth::user()->hasRole('Super Admin')) {
+            $rules['sppg_id'] = ['nullable', 'exists:master_sppgs,id'];
+        }
+
+        $request->validate($rules);
+
+        $userData = [
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
-        ]);
+        ];
+
+        if (Auth::user()->hasRole('Super Admin') && $request->filled('sppg_id')) {
+            $userData['sppg_id'] = $request->sppg_id;
+        }
+
+        $user = User::create($userData);
 
         $user->assignRole($request->role);
 
@@ -92,14 +114,16 @@ class UserController extends Controller
         
         $currentUser = Auth::user();
 
-        if ($currentUser->hasRole('super admin')) {
+        if ($currentUser->hasRole('Super Admin')) {
             // Super admin bisa lihat semua role
             $roles = Role::all();
         } else {
             // Admin tidak bisa assign role super admin
-            $roles = Role::where('name', '!=', 'super admin')->get();
+            $roles = Role::where('name', '!=', 'Super Admin')->get();
         }
-        return view('users.edit', compact('user', 'roles'));
+
+        $sppgs = \App\Models\MasterSppg::where('status', 'active')->get();
+        return view('users.edit', compact('user', 'roles', 'sppgs'));
     }
 
     /**
@@ -109,18 +133,29 @@ class UserController extends Controller
     {
         // Gate::authorize('edit users');
 
-        $request->validate([
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
             'phone' => ['nullable', 'string', 'max:20'],
-            // 'role' => ['required', 'exists:roles,name'],
-        ]);
+        ];
 
-        $user->update([
+        if (Auth::user()->hasRole('Super Admin')) {
+            $rules['sppg_id'] = ['nullable', 'exists:master_sppgs,id'];
+        }
+
+        $request->validate($rules);
+
+        $userData = [
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-        ]);
+        ];
+
+        if (Auth::user()->hasRole('Super Admin')) {
+            $userData['sppg_id'] = $request->sppg_id;
+        }
+
+        $user->update($userData);
 
         if ($request->filled('password')) {
             $request->validate([
