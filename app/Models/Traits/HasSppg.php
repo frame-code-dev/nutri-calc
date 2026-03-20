@@ -11,14 +11,16 @@ trait HasSppg
     {
         // Implementasi Global Scope untuk multi-tenant MBG (SPPG)
         static::addGlobalScope('sppg', function (Builder $builder) {
-            if (Auth::check()) {
+            // Gunakan hasUser() untuk mencegah infinite loop saat mengambil User session
+            if (Auth::hasUser()) {
                 $user = Auth::user();
                 // Jika bukan Super Admin, filter data berdasarkan MBG
                 // Data dengan sppg_id NULL dianggap sebagai data Global yang bisa diakses semua
-                if (!$user->hasRole('Super Admin') && $user->sppg_id) {
-                    $builder->where(function ($query) use ($user) {
-                        $query->where('sppg_id', $user->sppg_id)
-                              ->orWhereNull('sppg_id');
+                if ($user && !$user->hasRole('Super Admin') && $user->sppg_id) {
+                    $builder->where(function ($query) use ($user, $builder) {
+                        $table = $builder->getModel()->getTable();
+                        $query->where($table . '.sppg_id', $user->sppg_id)
+                              ->orWhereNull($table . '.sppg_id');
                     });
                 }
             }
@@ -26,9 +28,9 @@ trait HasSppg
 
         // Hook creating untuk auto-assign SPPG
         static::creating(function ($model) {
-            if (Auth::check()) {
+            if (Auth::hasUser()) {
                 $user = Auth::user();
-                if (!$user->hasRole('Super Admin')) {
+                if ($user && !$user->hasRole('Super Admin')) {
                     if (empty($model->sppg_id)) {
                         $model->sppg_id = $user->sppg_id;
                     }
