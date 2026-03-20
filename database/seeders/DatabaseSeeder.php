@@ -20,6 +20,9 @@ class DatabaseSeeder extends Seeder
             // 2. Users with Roles
             UserSeeder::class,
             
+            // 2.5 Initialize SPPG and assign default users
+            SppgSeeder::class,
+            
             // 3. Schools & Coordinators
             // SchoolSeeder::class,
             KloterSeeder::class,
@@ -45,6 +48,9 @@ class DatabaseSeeder extends Seeder
 
             // 8. SDM / Gaji Relawan
             GajiRelawanSeeder::class,
+
+            // 9. Assign all remaining unassigned data to the default SPPG
+            AssignSppgSadengSeeder::class,
         ]);
 
         $this->command->info('✅ All seeders completed successfully!');

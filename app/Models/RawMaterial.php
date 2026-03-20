@@ -54,6 +54,11 @@ class RawMaterial extends Model
      */
     public function getCurrentStock(): float
     {
+        // Gunakan eager-loaded sum jika tersedia untuk mencegah N+1 query
+        if (array_key_exists('stock_in', $this->attributes) && array_key_exists('stock_out', $this->attributes)) {
+            return (float) ($this->stock_in ?? 0) - (float) ($this->stock_out ?? 0);
+        }
+
         $stockIn = $this->stocks()->where('type', 'in')->sum('quantity');
         $stockOut = $this->stocks()->where('type', 'out')->sum('quantity');
         

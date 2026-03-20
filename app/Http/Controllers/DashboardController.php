@@ -58,7 +58,11 @@ class DashboardController extends Controller
 
         // Low stock alerts
         $lowStockMaterials = collect([]);
-        $materials = RawMaterial::where('is_active', true)->get();
+        $materials = RawMaterial::where('is_active', true)
+            ->withSum(['stocks as stock_in' => fn($q) => $q->where('type', 'in')], 'quantity')
+            ->withSum(['stocks as stock_out' => fn($q) => $q->where('type', 'out')], 'quantity')
+            ->get();
+            
         foreach ($materials as $material) {
             $currentStock = $material->getCurrentStock();
             // Alert if stock < 10kg/L or 10 units
@@ -159,7 +163,13 @@ class DashboardController extends Controller
         // Get all calendars for tomorrow where status is 'receive'
         $tomorrowProduction = \App\Models\SchoolCalendar::where('date', $tomorrow->toDateString())
             ->where('day_status', 'receive')
-            ->with('school', 'menu.menuItems.rawMaterial')
+            ->with([
+                'school', 
+                'menu.menuItems.rawMaterial' => function ($query) {
+                    $query->withSum(['stocks as stock_in' => fn($q) => $q->where('type', 'in')], 'quantity')
+                          ->withSum(['stocks as stock_out' => fn($q) => $q->where('type', 'out')], 'quantity');
+                }
+            ])
             ->get();
 
         // Calculate total raw material needs
