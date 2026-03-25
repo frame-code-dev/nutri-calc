@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Manual Book – MBG System</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--blue:#3b82f6;--green:#22c55e;--orange:#f97316;--purple:#a855f7;--teal:#14b8a6;--red:#ef4444;--yellow:#eab308}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#f1f5f9;color:#0f172a;font-size:14px;line-height:1.7}
+/* SIDEBAR */
+.sb{position:fixed;left:0;top:0;width:240px;height:100vh;background:#0f172a;overflow-y:auto;z-index:100;display:flex;flex-direction:column;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent}
+.sb-logo{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.sb-logo-icon{width:36px;height:36px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sb-logo h1{font-size:13.5px;font-weight:800;color:#fff;line-height:1.2}
+.sb-logo p{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px}
+nav{padding:6px 0;flex:1}
+.grp{padding:10px 12px 3px;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.28)}
+.grp-line{border-top:1px solid rgba(255,255,255,.07);margin:4px 8px}
+.nl{display:flex;align-items:center;gap:8px;padding:7px 12px;color:rgba(255,255,255,.55);font-size:12.5px;font-weight:500;border-left:3px solid transparent;cursor:pointer;transition:.15s}
+.nl:hover,.nl.on{background:rgba(255,255,255,.07);color:#fff;border-left-color:var(--blue)}
+.nl .e{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+/* MAIN */
+.main{margin-left:240px;min-height:100vh}
+/* COVER */
+.cover{background:linear-gradient(145deg,#0f172a 0%,#1e3a5f 50%,#0d4f3c 100%);color:#fff;padding:80px 64px;min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.cover::before{content:'';position:absolute;top:-20%;right:-5%;width:480px;height:480px;background:radial-gradient(circle,rgba(59,130,246,.18),transparent 70%);border-radius:50%;pointer-events:none}
+.cover::after{content:'';position:absolute;bottom:-10%;left:-5%;width:360px;height:360px;background:radial-gradient(circle,rgba(20,184,166,.12),transparent 70%);border-radius:50%;pointer-events:none}
+.cv-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:99px;padding:5px 14px;font-size:11.5px;font-weight:700;margin-bottom:22px;width:fit-content}
+.cover h1{font-size:50px;font-weight:800;line-height:1.13;margin-bottom:14px}
+.cover h1 span{color:#38bdf8}
+.cover .sub{font-size:15.5px;color:rgba(255,255,255,.58);max-width:520px;margin-bottom:32px}
+.cv-stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:30px}
+.cvs{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 18px}
+.cvs .l{font-size:9.5px;font-weight:800;text-transform:uppercase;color:rgba(255,255,255,.32);letter-spacing:.07em}
+.cvs .v{font-size:15px;font-weight:800;color:#fff;margin-top:1px}
+.cv-mods{display:flex;gap:7px;flex-wrap:wrap}
+.cvmod{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:5px 11px;font-size:11px;font-weight:600;color:rgba(255,255,255,.6)}
+/* SECTION */
+.sec{padding:52px 64px;border-bottom:1px solid #e2e8f0}
+.sec:nth-child(odd){background:#fff}
+.sec:nth-child(even){background:#f8fafc}
+.sec-hdr{display:flex;align-items:flex-start;gap:14px;margin-bottom:28px}
+.sec-icon{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.ib{background:#dbeafe}.ig{background:#dcfce7}.io{background:#ffedd5}.ip{background:#ede9fe}.it{background:#ccfbf1}.ir{background:#fee2e2}.iy{background:#fef9c3}
+.sec-hdr h2{font-size:26px;font-weight:800;color:#0f172a;margin-bottom:3px}
+.sec-hdr p{font-size:13px;color:#64748b}
+/* BADGE */
+.bdg{display:inline-flex;align-items:center;padding:2px 9px;border-radius:99px;font-size:10.5px;font-weight:700}
+.bb{background:#dbeafe;color:#1e40af}.bg{background:#dcfce7;color:#166534}.bo{background:#ffedd5;color:#9a3412}.bp{background:#ede9fe;color:#5b21b6}.bt{background:#ccfbf1;color:#0f766e}.br{background:#fee2e2;color:#991b1b}
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+/* CARD */
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:20px;transition:.2s}
+.card:hover{box-shadow:0 6px 24px rgba(0,0,0,.07);transform:translateY(-1px)}
+.card.lb{border-left:4px solid var(--blue)}.card.lg{border-left:4px solid var(--green)}.card.lo{border-left:4px solid var(--orange)}.card.lp{border-left:4px solid var(--purple)}.card.lt{border-left:4px solid var(--teal)}.card.lr{border-left:4px solid var(--red)}
+.card .ci{font-size:24px;margin-bottom:9px}
+.card h4{font-size:13.5px;font-weight:700;margin-bottom:5px;color:#1e293b}
+.card p{font-size:12.5px;color:#64748b;line-height:1.55}
+/* MENU DETAIL CARD */
+.mcard{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:24px;transition:.2s}
+.mcard:hover{box-shadow:0 8px 28px rgba(0,0,0,.08);transform:translateY(-2px)}
+.mcard-hdr{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+.mcard-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.mib{background:#eff6ff}.mig{background:#f0fdf4}.mio{background:#fff7ed}.mip{background:#faf5ff}.mit{background:#f0fdfa}.mir{background:#fef2f2}.miy{background:#fefce8}
+.mcard-hdr h3{font-size:15px;font-weight:800;color:#0f172a;margin-bottom:4px}
+.mcard ul{margin:10px 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.mcard li{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:#475569}
+.mcard li::before{content:'✓';font-weight:800;font-size:11px;flex-shrink:0;margin-top:1px}
+.mcard li.blue::before{color:var(--blue)}.mcard li.green::before{color:var(--green)}.mcard li.orange::before{color:var(--orange)}.mcard li.purple::before{color:var(--purple)}.mcard li.teal::before{color:var(--teal)}.mcard li.red::before{color:var(--red)}
+/* FLOW */
+.flow{display:flex;flex-direction:column;gap:0;margin:14px 0}
+.fstep{display:flex;gap:14px;padding:12px 0;position:relative}
+.fstep:not(:last-child)::after{content:'';position:absolute;left:15px;top:44px;width:2px;height:calc(100% - 26px);background:#e2e8f0}
+.fnum{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;position:relative;z-index:1;color:#fff}
+.fn-b{background:var(--blue)}.fn-g{background:var(--green)}.fn-o{background:var(--orange)}.fn-p{background:var(--purple)}.fn-t{background:var(--teal)}.fn-r{background:var(--red)}
+.fstep h4{font-size:13px;font-weight:700;margin-bottom:2px;color:#1e293b}
+.fstep p{font-size:12.5px;color:#64748b}
+/* FORMULA */
+.fbox{background:#f0fdf4;border:2px solid #86efac;border-radius:12px;padding:14px 18px;margin:14px 0}
+.fbox .flabel{font-size:10px;font-weight:800;color:#16a34a;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px}
+.fbox code{display:block;font-size:16px;font-weight:800;font-family:monospace;color:#14532d;background:rgba(255,255,255,.5);border-radius:8px;padding:8px 12px;margin:4px 0}
+.fbox p{font-size:12px;color:#166534;margin-top:6px}
+/* ALERT */
+.al{border-radius:10px;padding:11px 15px;margin:12px 0;display:flex;gap:9px;font-size:12.5px}
+.al-i{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af}
+.al-w{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+.al-s{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534}
+.al-icon{font-size:15px;flex-shrink:0}
+/* TABLE */
+.tw{border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;margin:14px 0}
+table{width:100%;border-collapse:collapse}
+thead{background:#f8fafc}
+th{padding:10px 14px;text-align:left;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid #e2e8f0}
+td{padding:10px 14px;font-size:12.5px;border-bottom:1px solid #f1f5f9;color:#374151}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f8fafc}
+td code{background:#f1f5f9;padding:1px 6px;border-radius:5px;font-size:11.5px}
+/* ROLE PILLS */
+.roles{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+/* STATUS */
+.sbox{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.sbox-item{border-radius:12px;padding:12px;text-align:center}
+.h4{font-size:11.5px;font-weight:700}
+/* PRINT */
+@media print{.sb,.print-btn{display:none!important}.main{margin-left:0!important}}
+.print-btn{position:fixed;bottom:22px;right:22px;background:var(--blue);color:#fff;border:none;border-radius:50px;padding:12px 20px;font-size:13.5px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(59,130,246,.4);display:flex;align-items:center;gap:7px;z-index:999;transition:.2s}
+.print-btn:hover{background:#2563eb;transform:translateY(-1px)}
+h3.st{font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;padding-bottom:7px;border-bottom:2px solid #e2e8f0}
+.sep{height:1px;background:#e2e8f0;margin:20px 0}
+</style>
+</head>
+<body>
+<aside class="sb">
+  <div class="sb-logo">
+    <div class="sb-logo-icon">🍱</div>
+    <div><h1>MBG System</h1><p>Manual Book v1.0 — 2026</p></div>
+  </div>
+  <nav>
+    <a class="nl on" onclick="go('cover')"><span class="e">🏠</span>Beranda</a>
+    <a class="nl" onclick="go('isi')"><span class="e">📑</span>Daftar Isi</a>
+    <div class="grp-line"></div>
+    <div class="grp">Dashboard</div>
+    <a class="nl" onclick="go('s-dashboard')"><span class="e">📊</span>Dashboard & Statistik</a>
+    <div class="grp-line"></div>
+    <div class="grp">Operasional</div>
+    <a class="nl" onclick="go('s-menu')"><span class="e">🍽️</span>Menu Makan</a>
+    <a class="nl" onclick="go('s-siklus')"><span class="e">🗓️</span>Siklus Menu</a>
+    <a class="nl" onclick="go('s-kalender')"><span class="e">📅</span>Kalender Sekolah</a>
+    <a class="nl" onclick="go('s-monitoring')"><span class="e">📈</span>Monitoring & Kunci</a>
+    <div class="grp-line"></div>
+    <div class="grp">Logistik</div>
+    <a class="nl" onclick="go('s-stok')"><span class="e">📦</span>Stok Gudang</a>
+    <a class="nl" onclick="go('s-belanja')"><span class="e">🛒</span>Belanja Bahan</a>
+    <a class="nl" onclick="go('s-bahan')"><span class="e">🧂</span>Bahan Baku</a>
+    <a class="nl" onclick="go('s-supplier')"><span class="e">🏪</span>Supplier</a>
+    <a class="nl" onclick="go('s-kategori')"><span class="e">🏷️</span>Kategori</a>
+    <div class="grp-line"></div>
+    <div class="grp">Distribusi</div>
+    <a class="nl" onclick="go('s-pengiriman')"><span class="e">🚚</span>Pengiriman</a>
+    <a class="nl" onclick="go('s-kloter')"><span class="e">⚙️</span>Setting Kloter</a>
+    <div class="grp-line"></div>
+    <div class="grp">Laporan</div>
+    <a class="nl" onclick="go('s-lapgizi')"><span class="e">🧪</span>Laporan Gizi</a>
+    <a class="nl" onclick="go('s-lapmenu')"><span class="e">📋</span>Laporan Menu</a>
+    <div class="grp-line"></div>
+    <div class="grp">SDM</div>
+    <a class="nl" onclick="go('s-relawan')"><span class="e">👷</span>Data Relawan</a>
+    <a class="nl" onclick="go('s-gaji')"><span class="e">💰</span>Gaji Relawan</a>
+    <a class="nl" onclick="go('s-upah')"><span class="e">🔧</span>Setting Upah</a>
+    <div class="grp-line"></div>
+    <div class="grp">Administrator</div>
+    <a class="nl" onclick="go('s-users')"><span class="e">👤</span>Manajemen User</a>
+    <a class="nl" onclick="go('s-sppg')"><span class="e">🏛️</span>Master SPPG</a>
+    <a class="nl" onclick="go('s-sekolah')"><span class="e">🏫</span>Data Sekolah</a>
+  </nav>
+</aside>
+<main class="main">
+<!-- COVER -->
+<section id="cover" class="cover">
+  <div class="cv-tag">📘 Dokumentasi Resmi &nbsp;·&nbsp; MBG System &nbsp;·&nbsp; 2026</div>
+  <h1>Manual Book<br><span>Management Gizi</span></h1>
+  <p class="sub">Panduan lengkap dan informatif penggunaan seluruh fitur dan menu navigasi aplikasi Management Gizi — program Makan Bergizi Gratis Indonesia.</p>
+  <div class="cv-stats">
+    <div class="cvs"><div class="l">Framework</div><div class="v">Laravel 12</div></div>
+    <div class="cvs"><div class="l">PHP</div><div class="v">8.2+</div></div>
+    <div class="cvs"><div class="l">Database</div><div class="v">MySQL</div></div>
+    <div class="cvs"><div class="l">Total Menu</div><div class="v">20 Halaman</div></div>
+    <div class="cvs"><div class="l">Roles</div><div class="v">6 Jenis</div></div>
+  </div>
+  <div class="cv-mods">
+    <span class="cvmod">🍽️ Menu Makan</span><span class="cvmod">🗓️ Siklus Menu</span><span class="cvmod">📅 Kalender</span><span class="cvmod">📈 Monitoring</span>
+    <span class="cvmod">📦 Stok Gudang</span><span class="cvmod">🛒 Belanja Bahan</span><span class="cvmod">🚚 Distribusi</span><span class="cvmod">🧪 Laporan Gizi</span>
+    <span class="cvmod">💰 Gaji Relawan</span><span class="cvmod">🏫 Data Sekolah</span>
+  </div>
+</section>
+<!-- END PART 1 - sections injected below -->
+</main>
+<button class="print-btn" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+<script>
+function go(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});document.querySelectorAll('.nl').forEach(n=>n.classList.remove('on'));document.querySelectorAll('.nl').forEach(n=>{if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+id+"'"))n.classList.add('on')});}
+window.addEventListener('scroll',()=>{let c='cover';document.querySelectorAll('section[id],div[id^="s-"]').forEach(s=>{if(window.scrollY>=s.offsetTop-100)c=s.id});document.querySelectorAll('.nl').forEach(n=>{n.classList.remove('on');if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+c+"'"))n.classList.add('on')});});
+</script>
+</body></html>

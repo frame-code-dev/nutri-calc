@@ -12,36 +12,36 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Order matters! Follow dependencies
-        
+
         $this->call([
             // 1. Roles & Permissions (Spatie) - Must be first
             RolePermissionSeeder::class,
-            
+
             // 2. Users with Roles
             UserSeeder::class,
-            
+
             // 2.5 Initialize SPPG and assign default users
             SppgSeeder::class,
-            
+
             // 3. Schools & Coordinators
             // SchoolSeeder::class,
             KloterSeeder::class,
             SchoolDataSeeder::class,
-            
+
             // 4. Suppliers
             SupplierSeeder::class,
-            
+
             // 5. Raw Materials & Nutrition Data
             // RawMaterialSeeder::class,
             BahanBakuSeeder::class,
             MasterMenuSeeder::class,
 
             // 6. Office Items
-            // OfficeItemSeeder::class,
-            
+            OfficeItemSeeder::class,
+
             // // 7. Menus & Menu Items
             // MenuSeeder::class,
-            
+
             // 7. Stock Transactions
             // StockSeeder::class,
             AssignWeeklyMenuSeeder::class,

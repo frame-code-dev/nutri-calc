@@ -122,20 +122,22 @@
                     <a href="#features"
                         class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors relative group">
                         Features
-                        <span
-                            class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-600 transition-all duration-300 group-hover:w-full"></span>
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-600 transition-all duration-300 group-hover:w-full"></span>
                     </a>
                     <a href="#how-it-works"
                         class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors relative group">
                         How It Works
-                        <span
-                            class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-600 transition-all duration-300 group-hover:w-full"></span>
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-600 transition-all duration-300 group-hover:w-full"></span>
                     </a>
                     <a href="#menu-samples"
                         class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors relative group">
                         Menu Samples
-                        <span
-                            class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-600 transition-all duration-300 group-hover:w-full"></span>
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-600 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="{{ asset('manual_book.html') }}" target="_blank"
+                        class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors relative group flex items-center gap-1">
+                        📖 Panduan Manual
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-600 transition-all duration-300 group-hover:w-full"></span>
                     </a>
                 </div>
 
@@ -438,6 +440,364 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ===== PANDUAN MENU SECTION ===== --}}
+    <section id="panduan-menu" class="py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            {{-- Header --}}
+            <div class="text-center mb-16">
+                <span class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 border border-emerald-100 rounded-full text-emerald-700 text-sm font-bold mb-4">
+                    📖 Panduan Lengkap Penggunaan
+                </span>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">Panduan Setiap Menu Aplikasi</h2>
+                <p class="text-slate-500 text-lg max-w-2xl mx-auto">Penjelasan detail dan informatif untuk setiap fitur yang tersedia di dalam sistem Management Gizi.</p>
+            </div>
+
+            {{-- Quick Nav --}}
+            <div class="flex flex-wrap gap-2 justify-center mb-12">
+                @foreach([['#pm-operasional','🍽️ Operasional'],['#pm-logistik','📦 Logistik'],['#pm-distribusi','🚚 Distribusi'],['#pm-laporan','📊 Laporan'],['#pm-sdm','👷 SDM'],['#pm-admin','🔐 Administrator']] as [$href,$label])
+                <a href="{{ $href }}" class="px-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-semibold text-slate-600 hover:border-emerald-400 hover:text-emerald-600 hover:bg-emerald-50 transition-all">{{ $label }}</a>
+                @endforeach
+            </div>
+
+            {{-- GROUP: OPERASIONAL --}}
+            <div id="pm-operasional" class="mb-16">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center text-lg">🍽️</div>
+                    <div>
+                        <h3 class="text-2xl font-extrabold text-slate-900">Operasional</h3>
+                        <p class="text-slate-500 text-sm">Pengelolaan menu, jadwal, kalender sekolah, dan monitoring mingguan</p>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6">
+
+                    {{-- Menu Makan --}}
+                    <div class="bg-white rounded-3xl p-8 border border-slate-100 hover:shadow-xl hover:shadow-emerald-50 transition-all duration-300 group">
+                        <div class="flex items-start gap-4 mb-5">
+                            <div class="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:bg-emerald-100 transition-colors">🍽️</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900">Menu Makan</h4>
+                                <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">OPERASIONAL</span>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-5 leading-relaxed">Modul inti sistem — tempat membuat dan mengelola seluruh menu makanan dengan <strong>kalkulasi nilai gizi otomatis</strong>. Setiap bahan yang ditambahkan akan langsung dihitung kontribusi Energi, Protein, Lemak, Karbohidrat, dan Seratnya secara real-time.</p>
+                        <div class="space-y-2">
+                            @foreach(['Tambah menu baru dengan nama dan jenis (Basah/Kering)','Pilih bahan baku dan masukkan takaran per porsi (gram)','Sistem hitung otomatis: (gramasi ÷ 100) × gizi/100g','Download material list ke Word (.docx) satu klik','Versioning otomatis jika menu sudah terjadwal'] as $item)
+                            <div class="flex items-start gap-2 text-sm text-slate-600"><span class="text-emerald-500 mt-0.5 flex-shrink-0">✓</span><span>{{ $item }}</span></div>
+                            @endforeach
+                        </div>
+                        <div class="mt-5 p-4 bg-emerald-50 rounded-2xl">
+                            <p class="text-xs font-bold text-emerald-700 mb-1">⭐ RUMUS GIZI OTOMATIS</p>
+                            <code class="text-sm font-mono text-emerald-800 font-bold">Total = Σ (gram ÷ 100) × gizi_per_100g</code>
+                        </div>
+                    </div>
+
+                    {{-- Siklus Menu --}}
+                    <div class="bg-white rounded-3xl p-8 border border-slate-100 hover:shadow-xl hover:shadow-blue-50 transition-all duration-300 group">
+                        <div class="flex items-start gap-4 mb-5">
+                            <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:bg-blue-100 transition-colors">🗓️</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900">Siklus Menu</h4>
+                                <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">OPERASIONAL</span>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-5 leading-relaxed">Tetapkan menu apa yang akan dikirim ke setiap sekolah untuk setiap hari dalam satu minggu (Senin–Sabtu). Tersedia fitur <strong>Terapkan ke Semua Sekolah</strong> serentak dan pilihan menu <strong>Random otomatis</strong>.</p>
+                        <div class="space-y-2">
+                            @foreach(['Pilih nomor minggu & tahun target','Pilih sekolah lalu tetapkan menu per hari','Hari aktif → menu Basah | Hari libur → menu Kering','Terapkan global ke semua sekolah sekaligus','Estimasi biaya bahan vs RAB tampil otomatis','Share jadwal ke koordinator dapur via WhatsApp'] as $item)
+                            <div class="flex items-start gap-2 text-sm text-slate-600"><span class="text-blue-500 mt-0.5 flex-shrink-0">✓</span><span>{{ $item }}</span></div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{-- Kalender Sekolah --}}
+                    <div class="bg-white rounded-3xl p-8 border border-slate-100 hover:shadow-xl hover:shadow-teal-50 transition-all duration-300 group">
+                        <div class="flex items-start gap-4 mb-5">
+                            <div class="w-12 h-12 bg-teal-50 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:bg-teal-100 transition-colors">📅</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900">Kalender Sekolah</h4>
+                                <span class="text-xs font-bold text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full">OPERASIONAL</span>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-5 leading-relaxed">Tentukan status setiap hari untuk setiap sekolah: <strong>Receive</strong> (kirim makan), <strong>Holiday</strong> (libur), atau <strong>Pending</strong>. Juga mencatat jumlah porsi kecil (PK), porsi besar (PB), dan jumlah guru per hari.</p>
+                        <div class="grid grid-cols-3 gap-3 mt-4">
+                            <div class="text-center p-3 bg-emerald-50 rounded-2xl"><div class="text-lg mb-1">✅</div><div class="text-xs font-bold text-emerald-700">Receive</div><div class="text-[11px] text-slate-500">Makan dikirim</div></div>
+                            <div class="text-center p-3 bg-orange-50 rounded-2xl"><div class="text-lg mb-1">🏖️</div><div class="text-xs font-bold text-orange-700">Holiday</div><div class="text-[11px] text-slate-500">Menu kering</div></div>
+                            <div class="text-center p-3 bg-slate-50 rounded-2xl"><div class="text-lg mb-1">⏳</div><div class="text-xs font-bold text-slate-600">Pending</div><div class="text-[11px] text-slate-500">Belum diisi</div></div>
+                        </div>
+                        <div class="mt-4 space-y-2">
+                            @foreach(['Bulk update status semua hari sekaligus','Kirim notifikasi jadwal ke koordinator sekolah via WA','Isi jumlah porsi PK + PB + guru per hari'] as $item)
+                            <div class="flex items-start gap-2 text-sm text-slate-600"><span class="text-teal-500 mt-0.5 flex-shrink-0">✓</span><span>{{ $item }}</span></div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{-- Monitoring & Kunci --}}
+                    <div class="bg-white rounded-3xl p-8 border border-slate-100 hover:shadow-xl hover:shadow-orange-50 transition-all duration-300 group">
+                        <div class="flex items-start gap-4 mb-5">
+                            <div class="w-12 h-12 bg-orange-50 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:bg-orange-100 transition-colors">📈</div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900">Monitoring & Kunci</h4>
+                                <span class="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full">OPERASIONAL</span>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-5 leading-relaxed">Pantau status penerimaan makanan <strong>semua sekolah</strong> dalam satu tampilan mingguan. Admin dapat <strong>mengunci (lock)</strong> data sekolah setelah periode selesai agar tidak bisa dimodifikasi lagi.</p>
+                        <div class="space-y-2">
+                            @foreach(['Tabel status semua sekolah: received / holiday / pending','Kunci data sekolah per minggu (lock/unlock)','Hanya Super Admin yang bisa membuka kunci','Kirim reminder WhatsApp ke sekolah yang belum konfirmasi','Riwayat monitoring tersimpan per minggu'] as $item)
+                            <div class="flex items-start gap-2 text-sm text-slate-600"><span class="text-orange-500 mt-0.5 flex-shrink-0">✓</span><span>{{ $item }}</span></div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- GROUP: LOGISTIK --}}
+            <div id="pm-logistik" class="mb-16">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center text-lg">📦</div>
+                    <div>
+                        <h3 class="text-2xl font-extrabold text-slate-900">Logistik</h3>
+                        <p class="text-slate-500 text-sm">Pengelolaan stok gudang, belanja bahan, master bahan baku, supplier, dan kategori</p>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+
+                    <div class="bg-white rounded-3xl p-7 border border-slate-100 hover:shadow-xl transition-all duration-300 group col-span-1">
+                        <div class="w-11 h-11 bg-amber-50 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:bg-amber-100 transition-colors">📦</div>
+                        <h4 class="text-base font-bold text-slate-900 mb-2">Stok Gudang</h4>
+                        <p class="text-slate-500 text-sm mb-4 leading-relaxed">Catat setiap transaksi bahan baku: <strong>IN</strong> (diterima dari supplier) dan <strong>OUT</strong> (digunakan untuk produksi). Saldo dihitung otomatis real-time.</p>
+                        <div class="space-y-1.5">
+                            @foreach(['Catat stok masuk (IN) dari supplier','Catat stok keluar (OUT) untuk produksi','Saldo = Σ IN − Σ OUT otomatis','Ringkasan stok semua bahan','Alert stok rendah (< 10kg)'] as $f)
+                            <div class="flex gap-2 text-xs text-slate-600"><span class="text-amber-500">•</span>{{ $f }}</div>
+                            @endforeach
+                        </div>
+                        <div class="mt-4 p-3 bg-amber-50 rounded-xl"><code class="text-xs font-mono font-bold text-amber-800">Saldo = Σ IN − Σ OUT</code></div>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-7 border border-slate-100 hover:shadow-xl transition-all duration-300 group col-span-1">
+                        <div class="w-11 h-11 bg-violet-50 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:bg-violet-100 transition-colors">🛒</div>
+                        <h4 class="text-base font-bold text-slate-900 mb-2">Belanja Bahan</h4>
+                        <p class="text-slate-500 text-sm mb-4 leading-relaxed">Shopping list otomatis berdasarkan kebutuhan seluruh menu terjadwal. Sistem menghitung total kebutuhan dikurangi stok tersedia sehingga admin tahu persis apa yang harus dibeli.</p>
+                        <div class="space-y-1.5">
+                            @foreach(['Agregasi kebutuhan dari semua menu minggu ini','Dikurangi stok tersedia → hasil = yang harus dibeli','Manage Office Inventory (non-makanan)','Membantu procurement sebelum minggu produksi'] as $f)
+                            <div class="flex gap-2 text-xs text-slate-600"><span class="text-violet-500">•</span>{{ $f }}</div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-7 border border-slate-100 hover:shadow-xl transition-all duration-300 group col-span-1">
+                        <div class="w-11 h-11 bg-emerald-50 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:bg-emerald-100 transition-colors">🧂</div>
+                        <h4 class="text-base font-bold text-slate-900 mb-2">Bahan Baku</h4>
+                        <p class="text-slate-500 text-sm mb-4 leading-relaxed">Master data semua bahan. Bahan berkategori <strong>Food</strong> wajib diisi nilai gizi per 100g (Energi, Protein, Lemak, KH, Serat) sebagai referensi kalkulasi menu otomatis.</p>
+                        <div class="space-y-1.5">
+                            @foreach(['Nama, kode, satuan, harga/unit','Kategori Food → wajib isi data gizi','Data gizi per 100g (5 nutrisi)','Toggle aktif/nonaktif','Tidak bisa hapus jika sudah dipakai menu'] as $f)
+                            <div class="flex gap-2 text-xs text-slate-600"><span class="text-emerald-500">•</span>{{ $f }}</div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-7 border border-slate-100 hover:shadow-xl transition-all duration-300 group">
+                        <div class="w-11 h-11 bg-sky-50 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:bg-sky-100 transition-colors">🏪</div>
+                        <h4 class="text-base font-bold text-slate-900 mb-2">Supplier</h4>
+                        <p class="text-slate-500 text-sm mb-4 leading-relaxed">Data pemasok bahan baku. Setiap transaksi stok IN dapat dikaitkan ke supplier tertentu untuk audit dan laporan pembelian yang akurat.</p>
+                        <div class="space-y-1.5">
+                            @foreach(['Nama toko/perusahaan pemasok','Alamat, telepon, email kontak','Kaitkan ke transaksi stok IN','Toggle aktif/nonaktif'] as $f)
+                            <div class="flex gap-2 text-xs text-slate-600"><span class="text-sky-500">•</span>{{ $f }}</div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-7 border border-slate-100 hover:shadow-xl transition-all duration-300 group">
+                        <div class="w-11 h-11 bg-rose-50 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:bg-rose-100 transition-colors">🏷️</div>
+                        <h4 class="text-base font-bold text-slate-900 mb-2">Kategori</h4>
+                        <p class="text-slate-500 text-sm mb-4 leading-relaxed">Pengelompokan bahan baku. Kategori <strong>Food</strong> secara otomatis mengaktifkan form isian nilai gizi saat tambah/edit bahan baku.</p>
+                        <div class="space-y-1.5">
+                            @foreach(['Kategori Food → aktifkan form gizi','Kategori lain: Bumbu, Kemasan, Alat, dll','Digunakan sebagai filter di daftar bahan baku','Bisa tambah kategori sesuai kebutuhan'] as $f)
+                            <div class="flex gap-2 text-xs text-slate-600"><span class="text-rose-500">•</span>{{ $f }}</div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- GROUP: DISTRIBUSI --}}
+            <div id="pm-distribusi" class="mb-16">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center text-lg">🚚</div>
+                    <div>
+                        <h3 class="text-2xl font-extrabold text-slate-900">Distribusi</h3>
+                        <p class="text-slate-500 text-sm">Pengiriman makanan harian ke sekolah dan pengaturan kloter/batch</p>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-3xl p-8 border border-slate-100 hover:shadow-xl transition-all duration-300 group">
+                        <div class="flex items-start gap-4 mb-5">
+                            <div class="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:bg-red-100 transition-colors">🚚</div>
+                            <div><h4 class="text-lg font-bold text-slate-900">Pengiriman</h4><span class="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full">DISTRIBUSI</span></div>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-5 leading-relaxed">Rekap pengiriman makanan harian dari dapur ke seluruh sekolah. Pantau status setiap sekolah, konfirmasi penerimaan, dan export surat jalan ke Word.</p>
+                        <div class="space-y-2">
+                            @foreach(['Lihat semua pengiriman hari ini per sekolah','Pantau status: dalam perjalanan / diterima','Koordinator sekolah konfirmasi penerimaan','Export Surat Jalan ke Word (.docx)','Rekap total paket yang dikirim per kloter'] as $item)
+                            <div class="flex items-start gap-2 text-sm text-slate-600"><span class="text-red-500 mt-0.5 flex-shrink-0">✓</span><span>{{ $item }}</span></div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-3xl p-8 border border-slate-100 hover:shadow-xl transition-all duration-300 group">
+                        <div class="flex items-start gap-4 mb-5">
+                            <div class="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:bg-slate-200 transition-colors">⚙️</div>
+                            <div><h4 class="text-lg font-bold text-slate-900">Setting Kloter</h4><span class="text-xs font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full">DISTRIBUSI</span></div>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-5 leading-relaxed">Atur pembagian sekolah ke dalam kloter (gelombang pengiriman). Misal Kloter 1 untuk zona utara, Kloter 2 zona selatan — memudahkan koordinasi sopir dan kurir.</p>
+                        <div class="space-y-2">
+                            @foreach(['Buat kloter pengiriman baru','Tambahkan sekolah ke kloter tertentu','Atur urutan pengiriman per kloter','Export PDF daftar pengiriman per kloter','Panduan sopir: nama sekolah & jumlah paket'] as $item)
+                            <div class="flex items-start gap-2 text-sm text-slate-600"><span class="text-slate-500 mt-0.5 flex-shrink-0">✓</span><span>{{ $item }}</span></div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- GROUP: LAPORAN --}}
+            <div id="pm-laporan" class="mb-16">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center text-lg">📊</div>
+                    <div>
+                        <h3 class="text-2xl font-extrabold text-slate-900">Laporan</h3>
+                        <p class="text-slate-500 text-sm">Analisis gizi dan export laporan mingguan bahan baku</p>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-3xl p-8 border border-slate-100 hover:shadow-xl transition-all duration-300 group">
+                        <div class="flex items-start gap-4 mb-5">
+                            <div class="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:bg-purple-100 transition-colors">🧪</div>
+                            <div><h4 class="text-lg font-bold text-slate-900">Laporan Gizi</h4><span class="text-xs font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">LAPORAN</span></div>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-5 leading-relaxed">Analisis mendalam kandungan gizi menu dan program. Tersedia 4 jenis laporan: detail per menu, rekap mingguan per sekolah, manfaat mingguan total, dan perbandingan antar menu.</p>
+                        <div class="space-y-3">
+                            @foreach([['🍽️','Laporan Per Menu','Breakdown gizi tiap bahan dalam satu menu'],['🏫','Laporan Mingguan Sekolah','Akumulasi gizi yang diterima per sekolah'],['📊','Manfaat Mingguan','Total nutrisi seluruh program semua sekolah'],['⚖️','Perbandingan Menu','Bandingkan nilai gizi 2+ menu berdampingan']] as [$icon,$title,$desc])
+                            <div class="flex gap-3 p-3 bg-purple-50 rounded-xl">
+                                <span class="text-lg">{{ $icon }}</span>
+                                <div><div class="text-sm font-bold text-slate-800">{{ $title }}</div><div class="text-xs text-slate-500">{{ $desc }}</div></div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-3xl p-8 border border-slate-100 hover:shadow-xl transition-all duration-300 group">
+                        <div class="flex items-start gap-4 mb-5">
+                            <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 group-hover:bg-green-100 transition-colors">📋</div>
+                            <div><h4 class="text-lg font-bold text-slate-900">Laporan Menu</h4><span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">LAPORAN</span></div>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-5 leading-relaxed">Export laporan bahan baku mingguan ke <strong>Excel (.xlsx)</strong>. Satu kolom per hari (Senin–Sabtu), berisi daftar seluruh bahan yang digunakan dari semua menu sekolah berstatus Receive.</p>
+                        <div class="space-y-2 mb-5">
+                            @foreach(['Pilih minggu & tahun lalu klik Export Excel','6 kolom otomatis (Senin–Sabtu)','Header hijau, auto-size kolom, siap cetak','Export Word: satu menu atau semua master menu','Bisa jadi referensi belanja & produksi mingguan'] as $item)
+                            <div class="flex items-start gap-2 text-sm text-slate-600"><span class="text-green-500 mt-0.5 flex-shrink-0">✓</span><span>{{ $item }}</span></div>
+                            @endforeach
+                        </div>
+                        <div class="flex gap-2 flex-wrap">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">📗 Export .xlsx</span>
+                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">📘 Export .docx</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- GROUP: SDM --}}
+            <div id="pm-sdm" class="mb-16">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center text-lg">👷</div>
+                    <div>
+                        <h3 class="text-2xl font-extrabold text-slate-900">SDM — Sumber Daya Manusia</h3>
+                        <p class="text-slate-500 text-sm">Data relawan dapur, penggajian bulanan, dan pengaturan tarif upah per jabatan</p>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-3xl p-7 border border-slate-100 hover:shadow-xl transition-all duration-300 group">
+                        <div class="w-11 h-11 bg-teal-50 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:bg-teal-100 transition-colors">👷</div>
+                        <h4 class="text-base font-bold text-slate-900 mb-2">Data Relawan</h4>
+                        <p class="text-slate-500 text-sm mb-4 leading-relaxed">Master data semua relawan yang bertugas di dapur produksi MBG. Berisi data identitas dan rekening untuk keperluan penggajian.</p>
+                        <div class="space-y-1.5">
+                            @foreach(['Nama lengkap & NIK/KTP','Jabatan (Koordinator, Juru Masak, Helper, dll)','Nomor telepon WhatsApp','Nomor rekening bank','Status aktif/nonaktif'] as $f)
+                            <div class="flex gap-2 text-xs text-slate-600"><span class="text-teal-500">•</span>{{ $f }}</div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-3xl p-7 border border-slate-100 hover:shadow-xl transition-all duration-300 group">
+                        <div class="w-11 h-11 bg-yellow-50 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:bg-yellow-100 transition-colors">💰</div>
+                        <h4 class="text-base font-bold text-slate-900 mb-2">Gaji Relawan</h4>
+                        <p class="text-slate-500 text-sm mb-4 leading-relaxed">Kelola penggajian bulanan: buat periode, isi absensi, tambah komponen bonus/potongan, cetak slip gaji PDF (4 slip/A4) dan rekap penggajian.</p>
+                        <div class="space-y-1.5">
+                            @foreach(['Buat periode gaji baru (misal: Maret 2026)','Input hari hadir setiap relawan','Hitung otomatis: Hadir × Upah Harian','Tambah komponen bonus/potongan fleksibel','Cetak 4 slip per halaman A4','Export rekap seluruh relawan PDF'] as $f)
+                            <div class="flex gap-2 text-xs text-slate-600"><span class="text-yellow-600">•</span>{{ $f }}</div>
+                            @endforeach
+                        </div>
+                        <div class="mt-3 p-3 bg-yellow-50 rounded-xl"><code class="text-xs font-mono font-bold text-yellow-800">Gaji = (Hadir × Upah) + Bonus − Potongan</code></div>
+                    </div>
+                    <div class="bg-white rounded-3xl p-7 border border-slate-100 hover:shadow-xl transition-all duration-300 group">
+                        <div class="w-11 h-11 bg-orange-50 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:bg-orange-100 transition-colors">🔧</div>
+                        <h4 class="text-base font-bold text-slate-900 mb-2">Setting Upah</h4>
+                        <p class="text-slate-500 text-sm mb-4 leading-relaxed">Tetapkan besaran upah harian per jabatan. Nilai ini digunakan otomatis saat menghitung total gaji dalam periode penggajian.</p>
+                        <div class="space-y-1.5">
+                            @foreach(['Tambah jabatan & tarif harian (Rp)','Edit tarif kapan saja','Berlaku untuk periode gaji berikutnya','Contoh: Koordinator Rp 150rb, Helper Rp 80rb'] as $f)
+                            <div class="flex gap-2 text-xs text-slate-600"><span class="text-orange-500">•</span>{{ $f }}</div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- GROUP: ADMINISTRATOR --}}
+            <div id="pm-admin" class="mb-4">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-lg">🔐</div>
+                    <div>
+                        <h3 class="text-2xl font-extrabold text-slate-900">Administrator</h3>
+                        <p class="text-slate-500 text-sm">Manajemen user & role, Master SPPG, dan data sekolah penerima program</p>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-3xl p-7 border border-slate-100 hover:shadow-xl transition-all duration-300 group">
+                        <div class="w-11 h-11 bg-blue-50 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:bg-blue-100 transition-colors">👤</div>
+                        <h4 class="text-base font-bold text-slate-900 mb-2">Manajemen User</h4>
+                        <p class="text-slate-500 text-sm mb-4 leading-relaxed">Kelola seluruh akun pengguna sistem beserta role dan hak aksesnya. Setiap role mendapat tampilan dashboard dan menu sidebar yang berbeda.</p>
+                        <div class="space-y-1.5">
+                            @foreach(['Tambah/edit/hapus akun user','Assign role: Super Admin, Admin MBG, Ahli Gizi, Koord. Sekolah, Koord. Dapur, Supplier','Assign ke SPPG/MBG tertentu','Export daftar user ke Excel','Reset password user'] as $f)
+                            <div class="flex gap-2 text-xs text-slate-600"><span class="text-blue-500">•</span>{{ $f }}</div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-3xl p-7 border border-slate-100 hover:shadow-xl transition-all duration-300 group">
+                        <div class="w-11 h-11 bg-indigo-50 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:bg-indigo-100 transition-colors">🏛️</div>
+                        <h4 class="text-base font-bold text-slate-900 mb-2">Master SPPG</h4>
+                        <p class="text-slate-500 text-sm mb-4 leading-relaxed">SPPG (Satuan Pelaksana Program Gizi) adalah unit MBG. Sistem multi-tenant: setiap Admin MBG hanya bisa mengakses data SPPG-nya sendiri. Super Admin melihat semua.</p>
+                        <div class="space-y-1.5">
+                            @foreach(['Kelola unit SPPG/MBG (Super Admin only)','Isolasi data antar SPPG otomatis','Tambah SPPG baru untuk ekspansi program','Toggle status aktif/nonaktif'] as $f)
+                            <div class="flex gap-2 text-xs text-slate-600"><span class="text-indigo-500">•</span>{{ $f }}</div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-3xl p-7 border border-slate-100 hover:shadow-xl transition-all duration-300 group">
+                        <div class="w-11 h-11 bg-emerald-50 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:bg-emerald-100 transition-colors">🏫</div>
+                        <h4 class="text-base font-bold text-slate-900 mb-2">Data Sekolah</h4>
+                        <p class="text-slate-500 text-sm mb-4 leading-relaxed">Master data sekolah penerima program MBG. Menyimpan jumlah porsi kecil (PK), porsi besar (PB), dan jumlah guru yang digunakan sebagai dasar perhitungan total porsi harian.</p>
+                        <div class="space-y-1.5">
+                            @foreach(['Nama & alamat sekolah','Jumlah PK (porsi kecil) + PB (porsi besar)','Jumlah guru penerima','Assign koordinator sekolah','Notifikasi WA otomatis ke koordinator','Toggle aktif/nonaktif sekolah'] as $f)
+                            <div class="flex gap-2 text-xs text-slate-600"><span class="text-emerald-500">•</span>{{ $f }}</div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- CTA dalam panduan --}}
+            <div class="text-center mt-12 p-10 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-3xl text-white">
+                <h3 class="text-2xl font-extrabold mb-3">Siap Menggunakan Sistem?</h3>
+                <p class="text-emerald-100 mb-6">Login dan mulai kelola distribusi makan bergizi untuk generasi emas Indonesia.</p>
+                <a href="{{ route('login') }}" class="inline-flex items-center gap-2 px-8 py-3 bg-white text-emerald-700 font-bold rounded-2xl hover:bg-emerald-50 transition-all">
+                    Login ke Dashboard →
+                </a>
             </div>
         </div>
     </section>

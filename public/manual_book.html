@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Book – MBG System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        :root { --blue:#3b82f6; --green:#22c55e; --orange:#f97316; --purple:#a855f7; --teal:#14b8a6; --red:#ef4444; --yellow:#eab308; }
+        body { font-family:'Plus Jakarta Sans', sans-serif; background:#f1f5f9; color:#0f172a; font-size:14px; line-height:1.7; }
+        /* SIDEBAR */
+        .sb { position:fixed; left:0; top:0; width:250px; height:100vh; background:#0f172a; overflow-y:auto; z-index:100; display:flex; flex-direction:column; scrollbar-width:thin; scrollbar-color:rgba(255,255,255,0.1) transparent; }
+        .sb-logo { padding:22px 18px 18px; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; gap:12px; flex-shrink:0; }
+        .sb-logo-icon { width:40px; height:40px; background:var(--blue); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+        .sb-logo h1 { font-size:15px; font-weight:800; color:#fff; line-height:1.2; }
+        .sb-logo p { font-size:11px; color:rgba(255,255,255,0.4); margin-top:3px; }
+        nav { padding:10px 0; flex:1; }
+        .grp { padding:14px 16px 6px; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.1em; color:rgba(255,255,255,0.3); }
+        .grp-line { border-top:1px solid rgba(255,255,255,0.05); margin:8px 12px; }
+        .nl { display:flex; align-items:center; gap:10px; padding:10px 16px; color:rgba(255,255,255,0.55); font-size:13px; font-weight:600; border-left:3px solid transparent; cursor:pointer; transition:0.2s; text-decoration:none; }
+        .nl:hover, .nl.on { background:rgba(255,255,255,0.08); color:#fff; border-left-color:var(--blue); }
+        .nl .e { font-size:16px; width:22px; text-align:center; flex-shrink:0; }
+        /* MAIN */
+        .main { margin-left:250px; min-height:100vh; }
+        /* COVER */
+        .cover { background:linear-gradient(145deg, #0f172a 0%, #1e3a5f 50%, #0d4f3c 100%); color:#fff; padding:100px 80px; min-height:100vh; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden; }
+        .cover::before { content:''; position:absolute; top:-20%; right:-5%; width:600px; height:600px; background:radial-gradient(circle, rgba(59,130,246,0.15), transparent 70%); border-radius:50%; pointer-events:none; }
+        .cover::after { content:''; position:absolute; bottom:-10%; left:-5%; width:400px; height:400px; background:radial-gradient(circle, rgba(20,184,166,0.1), transparent 70%); border-radius:50%; pointer-events:none; }
+        .cv-tag { display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:99px; padding:6px 16px; font-size:12px; font-weight:700; margin-bottom:24px; width:fit-content; }
+        .cover h1 { font-size:60px; font-weight:800; line-height:1.1; margin-bottom:16px; }
+        .cover h1 span { color:#38bdf8; }
+        .cover .sub { font-size:17px; color:rgba(255,255,255,0.6); max-width:600px; margin-bottom:36px; }
+        .cv-stats { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:36px; }
+        .cvs { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:14px; padding:12px 22px; }
+        .cvs .l { font-size:10px; font-weight:800; text-transform:uppercase; color:rgba(255,255,255,0.4); letter-spacing:0.08em; }
+        .cvs .v { font-size:18px; font-weight:800; color:#fff; margin-top:2px; }
+        /* SECTION */
+        .sec { padding:64px 80px; border-bottom:1px solid #e2e8f0; }
+        .sec:nth-child(odd) { background:#fff; }
+        .sec:nth-child(even) { background:#f8fafc; }
+        .sec-hdr { display:flex; align-items:flex-start; gap:16px; margin-bottom:32px; }
+        .sec-icon { width:56px; height:56px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0; }
+        .ib { background:#dbeafe; } .ig { background:#dcfce7; } .io { background:#ffedd5; } .ip { background:#ede9fe; } .it { background:#ccfbf1; } .ir { background:#fee2e2; }
+        .sec-hdr h2 { font-size:30px; font-weight:800; color:#0f172a; margin-bottom:4px; }
+        .sec-hdr p { font-size:15px; color:#64748b; }
+        /* COMPONENTS */
+        .bdg { display:inline-flex; align-items:center; padding:2px 10px; border-radius:99px; font-size:11px; font-weight:700; }
+        .bb { background:#dbeafe; color:#1e40af; } .bg { background:#dcfce7; color:#166534; } .bo { background:#ffedd5; color:#9a3412; } .bp { background:#ede9fe; color:#5b21b6; }
+        .g2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+        .g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:20px; }
+        .g4 { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-bottom:20px; }
+        .card { background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:24px; transition:0.2s; }
+        .card:hover { box-shadow:0 8px 30px rgba(0,0,0,0.06); transform:translateY(-2px); }
+        .card.lb { border-left:4px solid var(--blue); } .card.lg { border-left:4px solid var(--green); } .card.lo { border-left:4px solid var(--orange); } .card.lr { border-left:4px solid var(--red); }
+        .card .ci { font-size:28px; margin-bottom:12px; }
+        .card h4 { font-size:15px; font-weight:700; margin-bottom:6px; color:#1e293b; }
+        .card p { font-size:13.5px; color:#64748b; }
+        .flow { display:flex; flex-direction:column; gap:0; margin:20px 0; }
+        .fstep { display:flex; gap:16px; padding:16px 0; position:relative; }
+        .fstep:not(:last-child)::after { content:''; position:absolute; left:19px; top:56px; width:2px; height:calc(100% - 32px); background:#e2e8f0; }
+        .fnum { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:800; flex-shrink:0; position:relative; z-index:1; color:#fff; }
+        .fn-b { background:var(--blue); } .fn-g { background:var(--green); } .fn-o { background:var(--orange); } .fn-p { background:var(--purple); } .fn-t { background:var(--teal); } .fn-r { background:var(--red); }
+        .fstep h4 { font-size:15px; font-weight:700; margin-bottom:4px; color:#1e293b; }
+        .fstep p { font-size:14px; color:#64748b; }
+        .fbox { background:#f0fdf4; border:2px solid #86efac; border-radius:16px; padding:20px 24px; margin:20px 0; }
+        .fbox .flabel { font-size:11px; font-weight:800; color:#16a34a; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px; }
+        .fbox code { display:block; font-size:18px; font-weight:800; font-family:monospace; color:#14532d; background:rgba(255,255,255,0.6); border-radius:10px; padding:12px 16px; margin:6px 0; }
+        .fbox p { font-size:13.5px; color:#166534; margin-top:8px; }
+        .al { border-radius:12px; padding:14px 18px; margin:16px 0; display:flex; gap:12px; font-size:14px; line-height:1.6; }
+        .al-i { background:#eff6ff; border:1px solid #bfdbfe; color:#1e40af; }
+        .al-w { background:#fffbeb; border:1px solid #fde68a; color:#92400e; }
+        .al-s { background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; }
+        .al-icon { font-size:18px; flex-shrink:0; }
+        .tw { border-radius:14px; overflow:hidden; border:1px solid #e2e8f0; margin:20px 0; }
+        table { width:100%; border-collapse:collapse; }
+        thead { background:#f8fafc; }
+        th { padding:14px 18px; text-align:left; font-size:12px; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.06em; border-bottom:1px solid #e2e8f0; }
+        td { padding:14px 18px; font-size:14px; border-bottom:1px solid #f1f5f9; color:#374151; }
+        tr:last-child td { border-bottom:none; }
+        tr:hover td { background:#f8fafc; }
+        h3.st { font-size:18px; font-weight:800; color:#1e293b; margin:30px 0 12px; padding-bottom:8px; border-bottom:2px solid #e2e8f0; }
+        @media print { .sb, .print-btn { display:none!important; } .main { margin-left:0!important; } }
+        .print-btn { position:fixed; bottom:24px; right:24px; background:var(--blue); color:#fff; border:none; border-radius:50px; padding:14px 24px; font-size:15px; font-weight:700; cursor:pointer; box-shadow:0 6px 20px rgba(59,130,246,0.3); display:flex; align-items:center; gap:8px; z-index:999; transition:0.2s; }
+        .print-btn:hover { background:#2563eb; transform:translateY(-2px); box-shadow:0 8px 24px rgba(59,130,246,0.4); }
+    </style>
+</head>
+<body>
+<aside class="sb">
+    <div class="sb-logo"><div class="sb-logo-icon">🍱</div><div><h1>MBG System</h1><p>Manual Book v1.0</p></div></div>
+    <nav>
+        <a class="nl on" href="#cover"><span class="e">🏠</span>Beranda</a>
+        <div class="grp-line"></div><div class="grp">Operasional</div>
+        <a class="nl" href="#s-menu"><span class="e">🍽️</span>Menu Makan</a>
+        <a class="nl" href="#s-siklus"><span class="e">🗓️</span>Siklus Menu</a>
+        <a class="nl" href="#s-kalender"><span class="e">📅</span>Kalender Sekolah</a>
+        <a class="nl" href="#s-monitoring"><span class="e">📈</span>Monitoring & Kunci</a>
+        <div class="grp-line"></div><div class="grp">Logistik</div>
+        <a class="nl" href="#s-stok"><span class="e">📦</span>Stok Gudang</a>
+        <a class="nl" href="#s-belanja"><span class="e">🛒</span>Belanja Bahan</a>
+        <a class="nl" href="#s-bahan"><span class="e">🧂</span>Bahan Baku</a>
+        <a class="nl" href="#s-supplier"><span class="e">🏪</span>Supplier</a>
+        <div class="grp-line"></div><div class="grp">Distribusi</div>
+        <a class="nl" href="#s-pengiriman"><span class="e">🚚</span>Pengiriman</a>
+        <a class="nl" href="#s-kloter"><span class="e">⚙️</span>Setting Kloter</a>
+        <div class="grp-line"></div><div class="grp">Laporan</div>
+        <a class="nl" href="#s-lapgizi"><span class="e">🧪</span>Laporan Gizi</a>
+        <a class="nl" href="#s-lapmenu"><span class="e">📋</span>Laporan Menu</a>
+        <div class="grp-line"></div><div class="grp">SDM & Admin</div>
+        <a class="nl" href="#s-relawan"><span class="e">👷</span>Gaji Relawan</a>
+        <a class="nl" href="#s-users"><span class="e">👤</span>Manajemen User</a>
+        <a class="nl" href="#s-sekolah"><span class="e">🏫</span>Data Sekolah</a>
+    </nav>
+</aside>
+<main class="main">
+
+<section id="cover" class="cover">
+    <div class="cv-tag">📘 Dokumentasi Resmi &nbsp;·&nbsp; MBG System &nbsp;·&nbsp; 2026</div>
+    <h1>Manual Book<br><span>Management Gizi</span></h1>
+    <p class="sub">Panduan lengkap interaktif penggunaan seluruh fitur, fungsi, dan menu di dalam sistem informasi program Makan Bergizi Gratis.</p>
+    <div class="cv-stats">
+        <div class="cvs"><div class="l">Framework</div><div class="v">Laravel 12</div></div>
+        <div class="cvs"><div class="l">Total Menu</div><div class="v">15+ Halaman</div></div>
+        <div class="cvs"><div class="l">Gizi</div><div class="v">Auto-Calc</div></div>
+    </div>
+</section>
+
+<!-- OPERASIONAL: MENU MAKAN -->
+<section id="s-menu" class="sec">
+    <div class="sec-hdr"><div class="sec-icon ig">🍽️</div><div><h2>Menu Makan</h2><p>Buat dan kelola menu beserta kalkulasi gizi otomatis</p></div></div>
+    <div class="flow">
+        <div class="fstep"><div class="fnum fn-g">1</div><div><h4>Tambah Menu Baru</h4><p>Klik "Tambah Menu". Isi Nama Menu dan Tipe (Basah untuk hari sekolah, Kering untuk libur).</p></div></div>
+        <div class="fstep"><div class="fnum fn-g">2</div><div><h4>Masukkan Komposisi Bahan</h4><p>Pilih bahan baku dari database, lalu masukkan takaran dalam <b>gram per porsi</b>.</p></div></div>
+        <div class="fstep"><div class="fnum fn-g">3</div><div><h4>Kalkulasi Gizi Otomatis</h4><p>Sistem langsung menghitung (gramasi ÷ 100) × nilai gizi per 100g untuk setiap nutrisi (Energi, Protein, Lemak, Karbo, Serat).</p></div></div>
+    </div>
+    <div class="al al-i"><span class="al-icon">🔄</span><span><b>Versioning Otomatis:</b> Jika menu sudah digunakan dalam jadwal, mengedit menu akan membuat versi baru otomatis (v1.1, v1.2) tanpa merubah historis.</span></div>
+</section>
+
+<!-- OPERASIONAL: SIKLUS MENU -->
+<section id="s-siklus" class="sec">
+    <div class="sec-hdr"><div class="sec-icon ig">🗓️</div><div><h2>Siklus Menu (Jadwal)</h2><p>Tetapkan menu harian untuk setiap sekolah</p></div></div>
+    <div class="g3">
+        <div class="card lb"><div class="ci">🗓️</div><h4>Pilih Minggu</h4><p>Pilih nomor minggu dan tahun untuk menentukan periode jadwal (Senin-Sabtu).</p></div>
+        <div class="card lg"><div class="ci">🏫</div><h4>Terapkan Global</h4><p>Satu klik untuk menerapkan susunan jadwal menu yang sama ke seluruh sekolah.</p></div>
+        <div class="card lo"><div class="ci">📱</div><h4>Share WA</h4><p>Kirim jadwal mingguan dan kebutuhan bahan baku ke koordinator dapur via WhatsApp.</p></div>
+    </div>
+</section>
+
+<!-- OPERASIONAL: KALENDER -->
+<section id="s-kalender" class="sec">
+    <div class="sec-hdr"><div class="sec-icon it">📅</div><div><h2>Kalender Sekolah</h2><p>Tentukan status operasional harian sekolah</p></div></div>
+    <div class="tw">
+        <table>
+            <thead><tr><th>Status Hari</th><th>Arti</th><th>Dampak Produksi</th></tr></thead>
+            <tbody>
+                <tr><td><span class="bdg bg">✅ Receive</span></td><td>Menerima pengiriman makanan</td><td>Menu Basah (Wet) diproduksi</td></tr>
+                <tr><td><span class="bdg bo">🏖️ Holiday</span></td><td>Hari libur sekolah / nasional</td><td>Menu Kering / Diliburkan</td></tr>
+                <tr><td><span class="bdg" style="background:#f1f5f9;color:#64748b">⏳ Pending</span></td><td>Belum ditentukan</td><td>Tidak bisa dijadwal. Wajib diisi</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- LOGISTIK: STOK -->
+<section id="s-stok" class="sec">
+    <div class="sec-hdr"><div class="sec-icon io">📦</div><div><h2>Stok Gudang</h2><p>Catat transaksi IN dan OUT bahan baku</p></div></div>
+    <div class="fbox">
+        <div class="flabel">⭐ Rumus Saldo Real-Time</div>
+        <code>Saldo = Σ Transaksi IN − Σ Transaksi OUT</code>
+        <p>Saldo selalu ter-update otomatis. Bahan dengan saldo di bawah 10kg akan memunculkan alarm stok rendah.</p>
+    </div>
+    <div class="g2">
+        <div class="card lb"><div class="ci">📥</div><h4>Stok IN (Masuk)</h4><p>Catat bahan yang baru datang dari Supplier. Masukkan jumlah gram/ml dan harga.</p></div>
+        <div class="card lr"><div class="ci">📤</div><h4>Stok OUT (Keluar)</h4><p>Catat bahan yang dikeluarkan dari gudang untuk keperluan produksi dapur hari ini.</p></div>
+    </div>
+</section>
+
+<!-- LOGISTIK: BAHAN BAKU -->
+<section id="s-bahan" class="sec">
+    <div class="sec-hdr"><div class="sec-icon ig">🧂</div><div><h2>Bahan Baku & Kategori</h2><p>Master data seluruh bahan dengan takaran nutrisi</p></div></div>
+    <div class="al al-s"><span class="al-icon">💡</span><span>Jika kategori di-set sebagai <b>Food</b>, maka sistem akan mewajibkan pengisian 5 data gizi (Energi, Protein, dll) per 100 gram untuk keperluan auto-kalkulasi menu.</span></div>
+    <div class="al al-w"><span class="al-icon">⚠️</span><span>Bahan yang sudah digunakan dalam suatu Menu Makan tidak dapat dihapus, hanya bisa "Dinonaktifkan" untuk menjaga konsistensi porsi historis.</span></div>
+</section>
+
+<!-- PENGIRIMAN -->
+<section id="s-pengiriman" class="sec">
+    <div class="sec-hdr"><div class="sec-icon ir">🚚</div><div><h2>Pengiriman</h2><p>Rekap pengiriman makanan harian dari dapur ke sekolah</p></div></div>
+    <div class="flow">
+        <div class="fstep"><div class="fnum fn-r">1</div><div><h4>Lihat Jadwal Hari Ini</h4><p>Daftar semua sekolah yang harus dikirim makanan hari ini sesuai kalender.</p></div></div>
+        <div class="fstep"><div class="fnum fn-r">2</div><div><h4>Cetak Surat Jalan</h4><p>Klik "Export Word" untuk mencetak bukti pengiriman harian (Surat Jalan).</p></div></div>
+        <div class="fstep"><div class="fnum fn-r">3</div><div><h4>Konfirmasi Penerimaan</h4><p>Koordinator Sekolah mengklik tombol konfirmasi bahwa makanan telah diterima dengan baik.</p></div></div>
+    </div>
+</section>
+
+<!-- LAPORAN GIZI -->
+<section id="s-lapgizi" class="sec">
+    <div class="sec-hdr"><div class="sec-icon ip">🧪</div><div><h2>Laporan Gizi</h2><p>Laporan analisis dan pemenuhan gizi program</p></div></div>
+    <div class="tw">
+        <table>
+            <thead><tr><th>Jenis Laporan</th><th>Deskripsi</th></tr></thead>
+            <tbody>
+                <tr><td><b>Laporan Per Menu</b></td><td>Breakdown nilai gizi tiap bahan dalam satu menu individu.</td></tr>
+                <tr><td><b>Mingguan Sekolah</b></td><td>Akumulasi gizi yang diterima satu sekolah dalam 6 hari pengiriman.</td></tr>
+                <tr><td><b>Manfaat Program</b></td><td>Total rekapan gizi seluruh sekolah penerima program secara agregat.</td></tr>
+                <tr><td><b>Perbandingan</b></td><td>Bandingkan persentase pemenuhan gizi antar 2 atau lebih menu.</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- LAPORAN MENU -->
+<section id="s-lapmenu" class="sec">
+    <div class="sec-hdr"><div class="sec-icon ig">📋</div><div><h2>Laporan Menu (Export)</h2><p>Download laporan Excel dan Word pencapaian mingguan</p></div></div>
+    <div class="g2">
+        <div class="card lg"><div class="ci">📗</div><h4>Export Excel (.xlsx)</h4><p>Rekap bahan baku mingguan per hari (Senin - Sabtu). Sangat berguna sebagai referensi tim pengadaan/belanja.</p></div>
+        <div class="card lb"><div class="ci">📘</div><h4>Export Word (.docx)</h4><p>Download satu atau semua Master Menu dalam format dokumen Word resmi program MBG.</p></div>
+    </div>
+</section>
+
+<!-- SDM: RELAWAN -->
+<section id="s-relawan" class="sec">
+    <div class="sec-hdr"><div class="sec-icon it">👷</div><div><h2>Gaji Relawan & SDM</h2><p>Master data relawan dan pengelolaan penggajian bulanan</p></div></div>
+    <div class="fbox">
+        <div class="flabel">⭐ Kalkulasi Gaji Periodik</div>
+        <code>Total Gaji = (Hadir × Upah Harian) + Bonus − Potongan</code>
+        <p>Sistem merekap absensi dan menghitung otomatis berdasarkan Setting Upah jabatannya.</p>
+    </div>
+    <div class="flow">
+        <div class="fstep"><div class="fnum fn-t">1</div><div><h4>Buat Periode Gaji</h4><p>Admin membuat periode (misal: "Maret 2026"). Sistem mengaitkan semua relawan aktif.</p></div></div>
+        <div class="fstep"><div class="fnum fn-t">2</div><div><h4>Isi Kehadiran & Komponen</h4><p>Input jumlah hari hadir per relawan. Tambahkan Bonus/Potongan jika ada.</p></div></div>
+        <div class="fstep"><div class="fnum fn-t">3</div><div><h4>Cetak Slip PDF</h4><p>Cetak rekap seluruh slip (4 slip per lembar A4) untuk dibagikan saat gajian.</p></div></div>
+    </div>
+</section>
+
+<!-- ADMIN: MANAJEMEN USER -->
+<section id="s-users" class="sec">
+    <div class="sec-hdr"><div class="sec-icon ib">👤</div><div><h2>Manajemen User & SPPG</h2><p>Akses akun dan pembagian Satuan Pelaksana Program Gizi (SPPG)</p></div></div>
+    <div class="tw">
+        <table>
+            <thead><tr><th>Role</th><th>Hak Akses</th><th>Isolasi Data (SPPG)</th></tr></thead>
+            <tbody>
+                <tr><td><b>Super Admin</b></td><td>Full access ke semua fitur & SPPG</td><td>Melihat semua SPPG</td></tr>
+                <tr><td><b>Admin MBG</b></td><td>Operasional, Logistik, Distribusi, Laporan</td><td>Hanya melihat SPPG miliknya</td></tr>
+                <tr><td><b>Ahli Gizi</b></td><td>Membuat menu & Laporan Gizi</td><td>Hanya SPPG miliknya</td></tr>
+                <tr><td><b>Koord. Sekolah</b></td><td>Melihat jadwal & konfirmasi terima</td><td>Sesuai sekolah yang ditugaskan</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ADMIN: DATA SEKOLAH -->
+<section id="s-sekolah" class="sec">
+    <div class="sec-hdr"><div class="sec-icon ig">🏫</div><div><h2>Data Sekolah</h2><p>Master data sekolah penerima program makan bergizi gratis</p></div></div>
+    <div class="g2">
+        <div class="card lb"><div class="ci">👥</div><h4>Data Porsi Siswa</h4><p>Atur jumlah Porsi Kecil (PK) untuk PAUD/SD bawah, Porsi Besar (PB) untuk SD atas/SMP, dan jumlah Guru.</p></div>
+        <div class="card lg"><div class="ci">📱</div><h4>Assign Koordinator</h4><p>Pilih user koordinator untuk sekolah ini, yang akan menerima notifikasi WA otomatis saat jadwal dirilis.</p></div>
+    </div>
+</section>
+
+<section class="sec" style="text-align:center;background:linear-gradient(135deg,#0f172a,#1e3a5f)">
+    <div style="color:#fff">
+        <div style="font-size:48px;margin-bottom:14px">🍱</div>
+        <h2 style="font-size:22px;font-weight:800;margin-bottom:8px">Terima Kasih Telah Menggunakan MBG System</h2>
+        <p style="color:rgba(255,255,255,.55);font-size:13.5px;max-width:480px;margin:0 auto 22px">Dibangun untuk mendukung program Makan Bergizi Gratis demi masa depan generasi emas Indonesia yang lebih sehat dan cerdas. 🇮🇩</p>
+        <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap">
+            <span class="bdg" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)">Laravel 12</span>
+            <span class="bdg" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)">PHP 8.2+</span>
+            <span class="bdg" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)">Tailwind CSS</span>
+        </div>
+    </div>
+</section>
+
+</main>
+<button class="print-btn" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+<script>
+    document.querySelectorAll('.nl').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const target = document.getElementById(targetId);
+            if(target) target.scrollIntoView({behavior:'smooth'});
+            document.querySelectorAll('.nl').forEach(n => n.classList.remove('on'));
+            this.classList.add('on');
+        });
+    });
+</script>
+</body>
+</html>
