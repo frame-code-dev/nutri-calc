@@ -2,8 +2,8 @@
     <div class="max-w-7xl mx-auto space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h2 class="text-2xl font-bold text-gray-900">Sekolah</h2>
-                <p class="text-sm text-gray-500 mt-1">Kelola data sekolah dan koordinator</p>
+                <h2 class="text-2xl font-bold text-gray-900">Penerima Manfaat</h2>
+                <p class="text-sm text-gray-500 mt-1">Kelola data penerima manfaat dan koordinator</p>
             </div>
             <a href="{{ route('schools.create') }}"
                 class="flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-sm text-white hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all shadow-sm hover:shadow-md">
@@ -11,7 +11,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
-                Tambah Sekolah
+                Tambah Penerima Manfaat
             </a>
         </div>
         <!-- Search & Filter -->
@@ -50,72 +50,73 @@
         </div>
 
         <!-- Statistics Summary Card -->
-        <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-            <div class="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200">
-                <h3 class="text-lg font-bold text-gray-900">Total Keseluruhan</h3>
-                <p class="text-sm text-gray-500 mt-1">Ringkasan data dari {{ $schools->total() }} sekolah</p>
+        <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden mb-6">
+            <div class="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200">
+                <h3 class="text-lg font-bold text-gray-900">Total Keseluruhan (Sekolah + Posyandu)</h3>
             </div>
-            <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <!-- Total Small Portions -->
-                    <div class="flex items-center gap-4">
-                        <div
-                            class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 shrink-0">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
+            <div class="p-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Porsi Kecil</p>
+                    <h3 class="text-2xl font-black text-gray-900">{{ number_format($totals['grand']['small_portions']) }}</h3>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Porsi Besar</p>
+                    <h3 class="text-2xl font-black text-gray-900">{{ number_format($totals['grand']['large_portions']) }}</h3>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Guru & Kader</p>
+                    <h3 class="text-2xl font-black text-gray-900">{{ number_format($totals['grand']['teachers']) }}</h3>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-green-600 uppercase tracking-widest">Total Keseluruhan</p>
+                    <h3 class="text-2xl font-black text-green-600">{{ number_format($totals['grand']['overall']) }}</h3>
+                </div>
+            </div>
+
+            <!-- Breakdown -->
+            <div class="grid grid-cols-1 md:grid-cols-2 bg-gray-50 border-t border-gray-200">
+                <!-- Sekolah -->
+                <div class="p-4 border-b md:border-b-0 md:border-r border-gray-200">
+                    <h4 class="text-sm font-bold text-gray-700 mb-3 uppercase tracking-wider">Total Data Sekolah</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase">Kecil</p>
+                            <p class="text-lg font-bold text-gray-800">{{ number_format($totals['school']['small_portions']) }}</p>
                         </div>
                         <div>
-                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Porsi Kecil</p>
-                            <h3 class="text-2xl font-black text-gray-900">{{ number_format($totals['small_portions']) }}
-                            </h3>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase">Besar</p>
+                            <p class="text-lg font-bold text-gray-800">{{ number_format($totals['school']['large_portions']) }}</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase">Guru</p>
+                            <p class="text-lg font-bold text-gray-800">{{ number_format($totals['school']['teachers']) }}</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold text-blue-500 uppercase">Total</p>
+                            <p class="text-lg font-bold text-blue-600">{{ number_format($totals['school']['overall']) }}</p>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Total Large Portions -->
-                    <div class="flex items-center gap-4">
-                        <div
-                            class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 shrink-0">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                            </svg>
+                <!-- Posyandu -->
+                <div class="p-4">
+                    <h4 class="text-sm font-bold text-gray-700 mb-3 uppercase tracking-wider">Total Data Posyandu</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase">Kecil</p>
+                            <p class="text-lg font-bold text-gray-800">{{ number_format($totals['posyandu']['small_portions']) }}</p>
                         </div>
                         <div>
-                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Porsi Besar</p>
-                            <h3 class="text-2xl font-black text-gray-900">{{ number_format($totals['large_portions']) }}
-                            </h3>
-                        </div>
-                    </div>
-
-                    <!-- Total Teachers -->
-                    <div class="flex items-center gap-4">
-                        <div
-                            class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 shrink-0">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase">Besar</p>
+                            <p class="text-lg font-bold text-gray-800">{{ number_format($totals['posyandu']['large_portions']) }}</p>
                         </div>
                         <div>
-                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Guru</p>
-                            <h3 class="text-2xl font-black text-gray-900">{{ number_format($totals['teachers']) }}</h3>
-                        </div>
-                    </div>
-
-                    <!-- Overall Total -->
-                    <div class="flex items-center gap-4">
-                        <div
-                            class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-green-600 shrink-0">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                            </svg>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase">Kader</p>
+                            <p class="text-lg font-bold text-gray-800">{{ number_format($totals['posyandu']['teachers']) }}</p>
                         </div>
                         <div>
-                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Total Keseluruhan</p>
-                            <h3 class="text-2xl font-black text-green-600">{{ number_format($totals['overall']) }}</h3>
+                            <p class="text-[10px] font-bold text-blue-500 uppercase">Total</p>
+                            <p class="text-lg font-bold text-blue-600">{{ number_format($totals['posyandu']['overall']) }}</p>
                         </div>
                     </div>
                 </div>
@@ -129,7 +130,7 @@
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Sekolah</th>
+                                Penerima Manfaat</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Alamat</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -153,7 +154,12 @@
                         @forelse($schools as $school)
                             <tr class="hover:bg-gray-50 transition-colors">
                                 <td class="px-6 py-4">
-                                    <div class="text-sm font-medium text-gray-900">{{ $school->name }}</div>
+                                    <div class="text-sm font-medium text-gray-900 flex items-center gap-2">
+                                        {{ $school->name }}
+                                        <span class="px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wider uppercase {{ $school->type === 'posyandu' ? 'bg-pink-100 text-pink-700' : 'bg-blue-100 text-blue-700' }}">
+                                            {{ $school->type }}
+                                        </span>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="text-sm text-gray-600">{{ Str::limit($school->address, 50) }}</div>
@@ -172,7 +178,7 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="text-sm font-bold text-blue-600">
-                                        {{ number_format($school->small_portion_count + $school->large_portion_count + $school->teacher_count) }}
+                                        {{ number_format($school->small_portion_count + $school->large_portion_count) }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">

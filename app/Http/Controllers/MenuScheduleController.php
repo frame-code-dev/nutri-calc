@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Menu;
 use App\Models\MenuSchedule;
+use App\Models\MenuHistory;
+use App\Models\MenuHistoryDay;
 use App\Models\School;
 use App\Models\SchoolCalendar;
 use App\Models\RawMaterial;
@@ -11,6 +13,7 @@ use App\Models\Rab;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class MenuScheduleController extends Controller
@@ -90,7 +93,7 @@ class MenuScheduleController extends Controller
                 $status = $dayStatuses[$date] ?? 'pending';
                 if (!$menuId || $status !== 'receive') continue;
 
-                $menu = Menu::with('menuItems.rawMaterial')->find($menuId);
+                $menu = Menu::with(['menuItems.rawMaterial', 'components.menuItems.rawMaterial'])->find($menuId);
                 if (!$menu) continue;
 
                 // Portions for THIS specific school on this day
@@ -98,7 +101,7 @@ class MenuScheduleController extends Controller
                     ->where('date', $date)
                     ->first()?->portion_count ?? 0;
 
-                foreach ($menu->menuItems as $item) {
+                foreach ($menu->allMenuItems() as $item) {
                     $materialId = $item->raw_material_id;
                     $needed = $item->quantity_per_portion * $dayPortions;
                     
@@ -154,29 +157,33 @@ class MenuScheduleController extends Controller
             $allCalendarsForDay = SchoolCalendar::where('date', $date)
                 ->where('day_status', 'receive')
                 ->whereNotNull('menu_id')
-                ->with(['menu.menuItems.rawMaterial'])
+                ->with(['menu.menuItems.rawMaterial', 'menu.components.menuItems.rawMaterial'])
                 ->get();
-            
+
             foreach ($allCalendarsForDay as $cal) {
                 $menu = $cal->menu;
+                if (! $menu) continue;
+
+                $allItems = $menu->allMenuItems();
+
                 if (!isset($dailyGlobalRequirements[$date]['menus'][$menu->id])) {
                     $dailyGlobalRequirements[$date]['menus'][$menu->id] = [
-                        'name' => $menu->name,
-                        'dishes' => $menu->menuItems->pluck('group_name')->unique()->filter()->values()->toArray()
+                        'name'   => $menu->name,
+                        'dishes' => $allItems->pluck('group_name')->unique()->filter()->values()->toArray(),
                     ];
                 }
-                
+
                 $dailyGlobalRequirements[$date]['total_portions'] += $cal->portion_count;
-                
-                foreach ($menu->menuItems as $item) {
-                    $matId = $item->raw_material_id;
+
+                foreach ($allItems as $item) {
+                    $matId  = $item->raw_material_id;
                     $needed = $item->quantity_per_portion * $cal->portion_count;
-                    
+
                     if (!isset($dailyGlobalRequirements[$date]['materials'][$matId])) {
                         $dailyGlobalRequirements[$date]['materials'][$matId] = [
-                            'name' => $item->rawMaterial->name,
+                            'name'  => $item->rawMaterial->name,
                             'total' => 0,
-                            'unit' => $item->rawMaterial->unit
+                            'unit'  => $item->rawMaterial->unit,
                         ];
                     }
                     $dailyGlobalRequirements[$date]['materials'][$matId]['total'] += $needed;
@@ -234,6 +241,54 @@ class MenuScheduleController extends Controller
                     $calendar->save();
                 }
             }
+            // ── Auto-create / update MenuHistory ────────────────────────────
+            $weekNumber = $request->week;
+            $year       = $request->year;
+            $sppgId     = $school->sppg_id ?? null;
+
+            // Determine Monday–Saturday dates for this week
+            $startOfWeek = Carbon::now()->setISODate($year, $weekNumber)->startOfWeek(Carbon::MONDAY);
+            $startDate   = $startOfWeek->toDateString();
+            $endDate     = $startOfWeek->copy()->addDays(5)->toDateString(); // Saturday
+
+            // Upsert history record (idempotent, can re-save)
+            $history = MenuHistory::firstOrNew([
+                'week_number' => $weekNumber,
+                'year'        => $year,
+                'sppg_id'     => $sppgId,
+            ]);
+
+            if (! $history->exists) {
+                $month = $startOfWeek->month;
+                $history->nomor       = MenuHistory::generateNomor($month, $year, $sppgId);
+                $history->created_by  = Auth::id();
+            }
+
+            $history->start_date  = $startDate;
+            $history->end_date    = $endDate;
+            $history->description = 'Menu dari ' . Carbon::parse($startDate)->isoFormat('D MMM Y')
+                                    . ' – ' . Carbon::parse($endDate)->isoFormat('D MMM Y');
+            $history->save();
+
+            // Upsert MenuHistoryDay (one per day, Senin–Sabtu)
+            $dayNames = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            foreach ($request->assignments as $idx => $assign) {
+                if (empty($assign['date'])) continue;
+
+                MenuHistoryDay::updateOrCreate(
+                    [
+                        'menu_history_id' => $history->id,
+                        'date'            => $assign['date'],
+                    ],
+                    [
+                        'day_name' => $dayNames[$idx] ?? 'Hari ' . ($idx + 1),
+                        'menu_id'  => $assign['menu_id'] ?: null,
+                        // Keep existing status/photo — don't override
+                    ]
+                );
+            }
+            // ────────────────────────────────────────────────────────────────
+
             DB::commit();
             return back()->with('success', 'Menu untuk ' . $school->name . ' berhasil diperbarui.')->with('show_share', true);
         } catch (\Exception $e) {
@@ -461,21 +516,19 @@ class MenuScheduleController extends Controller
             ];
 
             // Get all calendars for ALL schools on this specific date that are 'receive'
-            // We assume the report wants to know what SHOULD be cooked.
             $allCalendarsForDay = SchoolCalendar::where('date', $date)
                 ->where('day_status', 'receive')
                 ->whereNotNull('menu_id')
-                ->with(['menu.menuItems.rawMaterial'])
+                ->with(['menu.menuItems.rawMaterial', 'menu.components.menuItems.rawMaterial'])
                 ->get();
 
-            // We aggregate unique ingredients used in ANY menu that day.
-            // If multiple schools have different menus, we list ALL ingredients.
+            // Aggregate unique ingredients from all menus (via allMenuItems for packets)
             $ingredientsList = collect();
 
             foreach ($allCalendarsForDay as $cal) {
-                if (!$cal->menu) continue;
+                if (! $cal->menu) continue;
 
-                foreach ($cal->menu->menuItems as $item) {
+                foreach ($cal->menu->allMenuItems() as $item) {
                     $ingredientsList->push($item->rawMaterial->name);
                 }
             }

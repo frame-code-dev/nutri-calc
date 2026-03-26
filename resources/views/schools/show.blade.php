@@ -4,7 +4,7 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
-                    <a href="{{ route('schools.index') }}" class="hover:text-blue-600 transition-colors">Sekolah</a>
+                    <a href="{{ route('schools.index') }}" class="hover:text-blue-600 transition-colors">Penerima Manfaat</a>
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
@@ -24,7 +24,7 @@
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
                     </svg>
-                    Edit Sekolah
+                    Edit Data
                 </a>
             </div>
         </div>
@@ -59,8 +59,13 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div>
-                                <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Nama Sekolah</h4>
-                                <p class="text-gray-900 font-medium text-lg">{{ $school->name }}</p>
+                                <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Nama Institusi</h4>
+                                <p class="text-gray-900 font-medium text-lg flex items-center gap-2">
+                                    {{ $school->name }}
+                                    <span class="px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wider uppercase {{ $school->type === 'posyandu' ? 'bg-pink-100 text-pink-700 border border-pink-200' : 'bg-blue-100 text-blue-700 border border-blue-200' }}">
+                                        {{ $school->type }}
+                                    </span>
+                                </p>
                             </div>
                             <div>
                                 <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Alamat</h4>
@@ -73,15 +78,15 @@
                              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
                                     <p class="text-3xl font-bold text-blue-700">{{ $school->teacher_count }}</p>
-                                    <p class="text-xs font-medium text-blue-600 mt-1">Jumlah Guru</p>
+                                    <p class="text-xs font-medium text-blue-600 mt-1">Jumlah Guru/Kader</p>
                                 </div>
                                 <div class="bg-green-50/50 p-4 rounded-xl border border-green-100">
                                     <p class="text-3xl font-bold text-green-700">{{ $school->small_portion_count }}</p>
-                                    <p class="text-xs font-medium text-green-600 mt-1">Porsi Kecil (Kelas Rendah)</p>
+                                    <p class="text-xs font-medium text-green-600 mt-1">Porsi Kecil (Siswa/Balita)</p>
                                 </div>
                                 <div class="bg-orange-50/50 p-4 rounded-xl border border-orange-100">
                                     <p class="text-3xl font-bold text-orange-700">{{ $school->large_portion_count }}</p>
-                                    <p class="text-xs font-medium text-orange-600 mt-1">Porsi Besar (Kelas Tinggi/Guru)</p>
+                                    <p class="text-xs font-medium text-orange-600 mt-1">Porsi Besar (Siswa/Bumil)</p>
                                 </div>
                              </div>
                              <div class="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-between">

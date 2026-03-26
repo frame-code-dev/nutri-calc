@@ -724,12 +724,13 @@
             const data = dailyData[selectedDate];
             const dishes = [];
             const materials = [];
-
+            let name = ''
             // Collect unique dishes from all menus that day
             Object.values(data.menus).forEach(m => {
                 m.dishes.forEach(d => {
                     if (!dishes.includes(d)) dishes.push(d);
                 });
+                name += m.name + '\n';
             });
 
             // Collect materials
@@ -743,8 +744,9 @@
 
             let message = `menu : ${selectedDayName}, ${formattedDate}\n`;
             message += `dari generate packet menu:\n`;
+            console.log(data.menus);
             if (dishes.length > 0) {
-                message += dishes.join('\n') + '\n';
+                message += name;
             } else {
                 message += `(Belum ada menu)\n`;
             }
@@ -779,4 +781,68 @@
             });
         @endif
     </script>
+
+    {{-- Allergy Modal --}}
+    <div id="allergyModal"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-[32px] w-full max-w-md overflow-hidden shadow-2xl">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                <div>
+                    <h3 class="text-xl font-black text-gray-900 tracking-tight">Atur Menu Alergi</h3>
+                    <p class="text-xs font-medium text-gray-400 truncate max-w-[220px]" id="allergySchoolName"></p>
+                </div>
+                <button onclick="closeAllergyModal()"
+                    class="w-8 h-8 flex items-center justify-center bg-gray-50 rounded-full hover:bg-gray-100 transition-colors">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form action="{{ route('nutritionist.save-allergy') }}" method="POST" class="p-6 space-y-5">
+                @csrf
+                <input type="hidden" name="calendar_id" id="allergyCalendarId">
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Menu
+                        Pengganti</label>
+                    <div class="relative">
+                        <select name="allergy_menu_id" required
+                            class="w-full rounded-xl border-gray-200 bg-gray-50 text-gray-700 text-sm focus:border-blue-500 focus:ring-blue-500 py-3 pl-3 pr-8 appearance-none">
+                            <option value="">Pilih Menu Pengganti...</option>
+                            @foreach ($menuGroups as $type => $group)
+                                <optgroup label="{{ $type == 'wet' ? 'Menu Basah' : 'Menu Kering' }}">
+                                    @foreach ($group as $menu)
+                                        <option value="{{ $menu->id }}">{{ $menu->name }}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Catatan</label>
+                    <textarea name="allergy_notes" rows="3"
+                        class="w-full rounded-xl border-gray-200 bg-gray-50 text-gray-700 text-sm focus:border-blue-500 focus:ring-blue-500 py-3 px-3"
+                        placeholder="Contoh: Pengganti menu untuk siswa alergi..."></textarea>
+                </div>
+
+                <div class="pt-1">
+                    <button type="submit"
+                        class="w-full py-3 bg-indigo-600 text-white font-bold text-sm rounded-xl shadow-lg hover:bg-indigo-700 transition-all">
+                        Simpan Menu Alergi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </x-app-layout>

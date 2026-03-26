@@ -155,6 +155,10 @@ h3.st{font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;padding-bo
     <a class="nl" onclick="go('s-users')"><span class="e">👤</span>Manajemen User</a>
     <a class="nl" onclick="go('s-sppg')"><span class="e">🏛️</span>Master SPPG</a>
     <a class="nl" onclick="go('s-sekolah')"><span class="e">🏫</span>Data Sekolah</a>
+    <div class="grp-line"></div>
+    <div class="grp">Sistem & Log</div>
+    <a class="nl" onclick="go('s-dokumen')"><span class="e">📎</span>Dokumentasi Lampiran</a>
+    <a class="nl" onclick="go('s-log')"><span class="e">⏱️</span>Log Activity</a>
   </nav>
 </aside>
 <main class="main">
@@ -174,6 +178,53 @@ h3.st{font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;padding-bo
     <span class="cvmod">🍽️ Menu Makan</span><span class="cvmod">🗓️ Siklus Menu</span><span class="cvmod">📅 Kalender</span><span class="cvmod">📈 Monitoring</span>
     <span class="cvmod">📦 Stok Gudang</span><span class="cvmod">🛒 Belanja Bahan</span><span class="cvmod">🚚 Distribusi</span><span class="cvmod">🧪 Laporan Gizi</span>
     <span class="cvmod">💰 Gaji Relawan</span><span class="cvmod">🏫 Data Sekolah</span>
+  </div>
+</section>
+<!-- SISTEM & LOG - DOKUMEN -->
+<section id="s-dokumen" class="sec">
+  <div class="sec-hdr">
+    <div class="sec-icon ib">📎</div>
+    <div>
+      <h2>Dokumentasi Lampiran</h2>
+      <p>Mengelola dan menyimpan segala arsip file tambahan, gambar nota, PDF, atau format dokumen lainnya untuk keperluan project management.</p>
+    </div>
+  </div>
+  <p class="mb-4 text-gray-700 text-[13px]">Menu Dokumentasi Lampiran digunakan untuk menyimpan file-file secara terpusat. Anda dapat mengupload banyak file sekaligus dalam satu dokumen untuk kemudahan akses dan manajemen arsip.</p>
+  <div class="g2">
+    <div class="card lb">
+      <div class="ci">📤</div>
+      <h4>Upload Multi-File</h4>
+      <p>Klik tombol <strong>Tambah Dokumen</strong> dan Anda dapat memilih banyak file sekaligus (max 10MB per file) yang akan tergabung dalam 1 Judul Dokumen yang sama.</p>
+    </div>
+    <div class="card lt">
+      <div class="ci">⬇️</div>
+      <h4>Download & Detail</h4>
+      <p>Klik <strong>Detail / Edit</strong> pada list dokumen untuk melihat rincian file yang pernah diupload. Anda bisa langsung mendownload masing-masing file pada halaman detail.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SISTEM & LOG - LOG ACTIVITY -->
+<section id="s-log" class="sec">
+  <div class="sec-hdr">
+    <div class="sec-icon iy">⏱️</div>
+    <div>
+      <h2>Log Activity</h2>
+      <p>Memantau riwayat aktivitas seluruh pengguna dalam platform secara real-time untuk audit dan transparansi.</p>
+    </div>
+  </div>
+  <p class="mb-4 text-gray-700 text-[13px]">Log Activity merekam setiap proses penting (Created, Updated, Deleted) yang dilakukan oleh user ke dalam sistem.</p>
+  <div class="g2">
+    <div class="card lo">
+      <div class="ci">🔎</div>
+      <h4>Pencarian & Filter History</h4>
+      <p>Gunakan kolom pencarian atau filter berdasarkan <strong>aksi</strong> untuk melacak perubahan data secara spesifik. Anda juga bisa melihat IP Address dari user yang melakukan aksi.</p>
+    </div>
+    <div class="card lg">
+      <div class="ci">🔄</div>
+      <h4>Lihat Perubahan (Before/After)</h4>
+      <p>Ketika tindakan "Updated" muncul, Anda dapat mengklik <strong>Lihat Perubahan Data</strong> untuk membandingkan JSON data sebelum dan sesudah perubahan secara akurat.</p>
+    </div>
   </div>
 </section>
 <!-- END PART 1 - sections injected below -->

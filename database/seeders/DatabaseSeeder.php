@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
             GajiRelawanSeeder::class,
 
             // 9. Assign all remaining unassigned data to the default SPPG
-            AssignSppgSadengSeeder::class,
+            AssignSppgJrebengSeeder::class,
         ]);
 
         $this->command->info('✅ All seeders completed successfully!');

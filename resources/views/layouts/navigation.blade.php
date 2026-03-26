@@ -69,6 +69,15 @@
                     </svg>
                     Siklus Menu
                 </a>
+                <a href="{{ route('menu-histories.index') }}"
+                    class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('menu-histories*') ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900' }}">
+                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('menu-histories*') ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600' }}"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                    </svg>
+                    History Menu
+                </a>
                 <a href="{{ route('calendars.index') }}"
                     class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('calendars*') ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900' }}">
                     <svg class="w-5 h-5 mr-3 {{ request()->routeIs('calendars*') ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600' }}"
@@ -307,9 +316,35 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
-                    Data Sekolah
+                    Penerima Manfaat
                 </a>
             @endcan
+        </div>
+
+        <div class="pt-2 pb-2">
+            <div class="px-3 mb-2 flex items-center gap-2">
+                <div class="h-px bg-gray-200 flex-1"></div>
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Sistem & Log</span>
+                <div class="h-px bg-gray-200 flex-1"></div>
+            </div>
+
+            <a href="{{ route('document-attachments.index') }}"
+                class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('document-attachments*') ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900' }}">
+                <svg class="w-5 h-5 mr-3 {{ request()->routeIs('document-attachments*') ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600' }}"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                </svg>
+                Dokumentasi Lampiran
+            </a>
+
+            <a href="{{ route('activity-logs.index') }}"
+                class="flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-all duration-200 group {{ request()->routeIs('activity-logs*') ? 'bg-blue-50 text-blue-700' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900' }}">
+                <svg class="w-5 h-5 mr-3 {{ request()->routeIs('activity-logs*') ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600' }}"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Log Activity
+            </a>
         </div>
     </nav>
 

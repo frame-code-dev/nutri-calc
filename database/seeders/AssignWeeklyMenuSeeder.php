@@ -21,9 +21,10 @@ class AssignWeeklyMenuSeeder extends Seeder
     public function run(): void
     {
         // TARGET: Seed CURRENT week AND NEXT week to ensure visibility
+        // Gunakan timezone WIB (Asia/Jakarta) agar perhitungan minggu sesuai waktu Indonesia
         $weeksToSeed = [
-            Carbon::now(),           // This Week
-            Carbon::now()->addWeek() // Next Week
+            Carbon::now('Asia/Jakarta'),           // This Week
+            Carbon::now('Asia/Jakarta')->addWeek() // Next Week
         ];
 
         // 1. Get active schools
@@ -83,7 +84,7 @@ class AssignWeeklyMenuSeeder extends Seeder
 
                     // 2. Seed some random Stock IN for materials in this menu to make analytics interesting
                     if ($suppliers->isNotEmpty()) {
-                        foreach ($randomMenu->menuItems as $item) {
+                        foreach ($randomMenu->allMenuItems() as $item) {
                             // 50% chance to add stock for this material on this day or previous days
                             if (rand(1, 2) === 1) {
                                 Stock::create([

@@ -39,10 +39,10 @@ class ProcurementController extends Controller
                 continue;
             }
 
-            $menu = Menu::with('menuItems.rawMaterial')->find($portion->menu_id);
+            $menu = Menu::with(['menuItems.rawMaterial', 'components.menuItems.rawMaterial'])->find($portion->menu_id);
             if (!$menu) continue;
 
-            foreach ($menu->menuItems as $item) {
+            foreach ($menu->allMenuItems() as $item) {
                 $rawMaterialId = $item->raw_material_id;
                 $needed = $item->quantity_per_portion * $portion->total_portions;
 

@@ -5,13 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Illuminate\Support\Facades\Gate;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -21,25 +20,29 @@ class UserController extends Controller
     public function index(Request $request)
     {
         // Gate::authorize('view users');
-        
+
         $query = User::with('roles')->latest();
 
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
         if ($request->filled('role')) {
-            $query->whereHas('roles', function($q) use ($request) {
+            $query->whereHas('roles', function ($q) use ($request) {
                 $q->where('name', $request->role);
             });
         }
-        
+
         $users = $query->paginate(10)->withQueryString();
-        $roles = Role::all();
+        if (Auth::user()->hasRole('Super Admin')) {
+            $roles = Role::all();
+        } else {
+            $roles = Role::where('name', '!=', 'Super Admin')->get();
+        }
 
         return view('users.index', compact('users', 'roles'));
     }
@@ -49,10 +52,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        Gate::authorize('create users');
-        
+        // Gate::authorize('create users');
+
         $currentUser = Auth::user();
-        
+
         // Admin tidak bisa assign role super admin
         if ($currentUser->hasRole('Super Admin')) {
             $roles = Role::all();
@@ -61,6 +64,7 @@ class UserController extends Controller
         }
 
         $sppgs = \App\Models\MasterSppg::where('status', 'active')->get();
+
         return view('users.create', compact('roles', 'sppgs'));
     }
 
@@ -69,7 +73,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        Gate::authorize('create users');
+        // Gate::authorize('create users');
 
         $rules = [
             'name' => ['required', 'string', 'max:255'],
@@ -111,7 +115,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         // Gate::authorize('edit users');
-        
+
         $currentUser = Auth::user();
 
         if ($currentUser->hasRole('Super Admin')) {
@@ -123,6 +127,7 @@ class UserController extends Controller
         }
 
         $sppgs = \App\Models\MasterSppg::where('status', 'active')->get();
+
         return view('users.edit', compact('user', 'roles', 'sppgs'));
     }
 
@@ -180,7 +185,7 @@ class UserController extends Controller
         Gate::authorize('delete users');
 
         if ($user->id === auth()->id()) {
-             return back()->with('error', 'You cannot delete yourself.');
+            return back()->with('error', 'You cannot delete yourself.');
         }
 
         $user->delete();
@@ -189,7 +194,7 @@ class UserController extends Controller
             ->with('success', 'User deleted successfully.');
     }
 
-    public function export(Request $request) 
+    public function export(Request $request)
     {
         Gate::authorize('view users');
 
@@ -197,21 +202,21 @@ class UserController extends Controller
 
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
         if ($request->filled('role')) {
-            $query->whereHas('roles', function($q) use ($request) {
+            $query->whereHas('roles', function ($q) use ($request) {
                 $q->where('name', $request->role);
             });
         }
 
         $users = $query->get();
 
-        $spreadsheet = new Spreadsheet();
+        $spreadsheet = new Spreadsheet;
         $sheet = $spreadsheet->getActiveSheet();
 
         // Headers
@@ -228,12 +233,12 @@ class UserController extends Controller
         // Data
         $row = 2;
         foreach ($users as $user) {
-            $sheet->setCellValue('A' . $row, $user->id);
-            $sheet->setCellValue('B' . $row, $user->name);
-            $sheet->setCellValue('C' . $row, $user->email);
-            $sheet->setCellValue('D' . $row, $user->phone);
-            $sheet->setCellValue('E' . $row, $user->roles->pluck('name')->implode(', '));
-            $sheet->setCellValue('F' . $row, $user->created_at->format('Y-m-d H:i:s'));
+            $sheet->setCellValue('A'.$row, $user->id);
+            $sheet->setCellValue('B'.$row, $user->name);
+            $sheet->setCellValue('C'.$row, $user->email);
+            $sheet->setCellValue('D'.$row, $user->phone);
+            $sheet->setCellValue('E'.$row, $user->roles->pluck('name')->implode(', '));
+            $sheet->setCellValue('F'.$row, $user->created_at->format('Y-m-d H:i:s'));
             $row++;
         }
 
@@ -243,10 +248,10 @@ class UserController extends Controller
         }
 
         $writer = new Xlsx($spreadsheet);
-        $filename = "users-" . date('Y-m-d') . ".xlsx";
+        $filename = 'users-'.date('Y-m-d').'.xlsx';
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Disposition: attachment; filename="'.$filename.'"');
         header('Cache-Control: max-age=0');
 
         $writer->save('php://output');

@@ -8,21 +8,21 @@
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
         :root { --blue:#3b82f6; --green:#22c55e; --orange:#f97316; --purple:#a855f7; --teal:#14b8a6; --red:#ef4444; --yellow:#eab308; }
-        body { font-family:'Plus Jakarta Sans', sans-serif; background:#f1f5f9; color:#0f172a; font-size:14px; line-height:1.7; }
+        body { font-family:'Plus Jakarta Sans', sans-serif; background:#f1f5f9; color:#0f172a; font-size:14px; line-height:1.7; scroll-behavior: smooth; }
         /* SIDEBAR */
-        .sb { position:fixed; left:0; top:0; width:250px; height:100vh; background:#0f172a; overflow-y:auto; z-index:100; display:flex; flex-direction:column; scrollbar-width:thin; scrollbar-color:rgba(255,255,255,0.1) transparent; }
+        .sb { position:fixed; left:0; top:0; width:260px; height:100vh; background:#0f172a; overflow-y:auto; z-index:100; display:flex; flex-direction:column; scrollbar-width:thin; scrollbar-color:rgba(255,255,255,0.1) transparent; }
         .sb-logo { padding:22px 18px 18px; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; gap:12px; flex-shrink:0; }
         .sb-logo-icon { width:40px; height:40px; background:var(--blue); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
         .sb-logo h1 { font-size:15px; font-weight:800; color:#fff; line-height:1.2; }
         .sb-logo p { font-size:11px; color:rgba(255,255,255,0.4); margin-top:3px; }
         nav { padding:10px 0; flex:1; }
-        .grp { padding:14px 16px 6px; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.1em; color:rgba(255,255,255,0.3); }
+        .grp { padding:16px 16px 6px; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.1em; color:rgba(255,255,255,0.3); }
         .grp-line { border-top:1px solid rgba(255,255,255,0.05); margin:8px 12px; }
         .nl { display:flex; align-items:center; gap:10px; padding:10px 16px; color:rgba(255,255,255,0.55); font-size:13px; font-weight:600; border-left:3px solid transparent; cursor:pointer; transition:0.2s; text-decoration:none; }
         .nl:hover, .nl.on { background:rgba(255,255,255,0.08); color:#fff; border-left-color:var(--blue); }
         .nl .e { font-size:16px; width:22px; text-align:center; flex-shrink:0; }
         /* MAIN */
-        .main { margin-left:250px; min-height:100vh; }
+        .main { margin-left:260px; min-height:100vh; }
         /* COVER */
         .cover { background:linear-gradient(145deg, #0f172a 0%, #1e3a5f 50%, #0d4f3c 100%); color:#fff; padding:100px 80px; min-height:100vh; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden; }
         .cover::before { content:''; position:absolute; top:-20%; right:-5%; width:600px; height:600px; background:radial-gradient(circle, rgba(59,130,246,0.15), transparent 70%); border-radius:50%; pointer-events:none; }
@@ -41,9 +41,17 @@
         .sec:nth-child(even) { background:#f8fafc; }
         .sec-hdr { display:flex; align-items:flex-start; gap:16px; margin-bottom:32px; }
         .sec-icon { width:56px; height:56px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0; }
-        .ib { background:#dbeafe; } .ig { background:#dcfce7; } .io { background:#ffedd5; } .ip { background:#ede9fe; } .it { background:#ccfbf1; } .ir { background:#fee2e2; }
+        .ib { background:#dbeafe; } .ig { background:#dcfce7; } .io { background:#ffedd5; } .ip { background:#ede9fe; } .it { background:#ccfbf1; } .ir { background:#fee2e2; } .iy { background:#fef3c7; } .id { background:#f1f5f9; }
         .sec-hdr h2 { font-size:30px; font-weight:800; color:#0f172a; margin-bottom:4px; }
         .sec-hdr p { font-size:15px; color:#64748b; }
+        
+        /* HORIZONTAL FLOW */
+        .h-flow-wrap { display:flex; overflow-x:auto; padding:20px 4px 40px; gap:16px; align-items:center; scrollbar-width:thin; }
+        .h-flow-item { min-width:180px; flex-shrink:0; background:#fff; border:2px solid; border-radius:16px; padding:20px 16px; text-align:center; box-shadow:0 8px 24px rgba(0,0,0,0.04); position:relative; z-index:2; transition:0.2s; }
+        .h-flow-item:hover { transform:translateY(-5px); box-shadow:0 12px 30px rgba(0,0,0,0.08); }
+        .h-flow-num { position:absolute; top:-12px; left:-12px; width:28px; height:28px; background:inherit; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; }
+        .h-flow-arrow { color:#cbd5e1; font-size:24px; font-weight:800; flex-shrink:0; }
+        
         /* COMPONENTS */
         .bdg { display:inline-flex; align-items:center; padding:2px 10px; border-radius:99px; font-size:11px; font-weight:700; }
         .bb { background:#dbeafe; color:#1e40af; } .bg { background:#dcfce7; color:#166534; } .bo { background:#ffedd5; color:#9a3412; } .bp { background:#ede9fe; color:#5b21b6; }
@@ -87,29 +95,50 @@
 </head>
 <body>
 <aside class="sb">
-    <div class="sb-logo"><div class="sb-logo-icon">🍱</div><div><h1>MBG System</h1><p>Manual Book v1.0</p></div></div>
+    <div class="sb-logo"><div class="sb-logo-icon">🍱</div><div><h1>MBG System</h1><p>Manual Book v2.0</p></div></div>
     <nav>
         <a class="nl on" href="#cover"><span class="e">🏠</span>Beranda</a>
+        <a class="nl" href="#s-flow"><span class="e">🔄</span>Alur Kerja Sistem</a>
+        
+        <div class="grp-line"></div><div class="grp">Overview</div>
+        <a class="nl" href="#s-applauncher"><span class="e">🚀</span>App Launcher</a>
+        <a class="nl" href="#s-dashstats"><span class="e">📊</span>Dashboard Statistik</a>
+        
         <div class="grp-line"></div><div class="grp">Operasional</div>
         <a class="nl" href="#s-menu"><span class="e">🍽️</span>Menu Makan</a>
         <a class="nl" href="#s-siklus"><span class="e">🗓️</span>Siklus Menu</a>
+        <a class="nl" href="#s-historymenu"><span class="e">📸</span>History Menu</a>
         <a class="nl" href="#s-kalender"><span class="e">📅</span>Kalender Sekolah</a>
         <a class="nl" href="#s-monitoring"><span class="e">📈</span>Monitoring & Kunci</a>
+        
         <div class="grp-line"></div><div class="grp">Logistik</div>
         <a class="nl" href="#s-stok"><span class="e">📦</span>Stok Gudang</a>
         <a class="nl" href="#s-belanja"><span class="e">🛒</span>Belanja Bahan</a>
         <a class="nl" href="#s-bahan"><span class="e">🧂</span>Bahan Baku</a>
         <a class="nl" href="#s-supplier"><span class="e">🏪</span>Supplier</a>
+        <a class="nl" href="#s-kategori"><span class="e">🏷️</span>Kategori</a>
+
         <div class="grp-line"></div><div class="grp">Distribusi</div>
         <a class="nl" href="#s-pengiriman"><span class="e">🚚</span>Pengiriman</a>
         <a class="nl" href="#s-kloter"><span class="e">⚙️</span>Setting Kloter</a>
+        
         <div class="grp-line"></div><div class="grp">Laporan</div>
         <a class="nl" href="#s-lapgizi"><span class="e">🧪</span>Laporan Gizi</a>
         <a class="nl" href="#s-lapmenu"><span class="e">📋</span>Laporan Menu</a>
-        <div class="grp-line"></div><div class="grp">SDM & Admin</div>
-        <a class="nl" href="#s-relawan"><span class="e">👷</span>Gaji Relawan</a>
+        
+        <div class="grp-line"></div><div class="grp">SDM / Relawan</div>
+        <a class="nl" href="#s-datarelawan"><span class="e">👷</span>Data Relawan</a>
+        <a class="nl" href="#s-relawan"><span class="e">💸</span>Gaji Relawan</a>
+        <a class="nl" href="#s-setupah"><span class="e">🔧</span>Setting Upah</a>
+        
+        <div class="grp-line"></div><div class="grp">Administrator</div>
         <a class="nl" href="#s-users"><span class="e">👤</span>Manajemen User</a>
-        <a class="nl" href="#s-sekolah"><span class="e">🏫</span>Data Sekolah</a>
+        <a class="nl" href="#s-mastersppg"><span class="e">🏛️</span>Master SPPG</a>
+        <a class="nl" href="#s-sekolah"><span class="e">🏫</span>Penerima Manfaat</a>
+        
+        <div class="grp-line"></div><div class="grp">Sistem & Log</div>
+        <a class="nl" href="#s-doklampiran"><span class="e">📎</span>Dok. Lampiran</a>
+        <a class="nl" href="#s-activitylog"><span class="e">📜</span>Log Activity</a>
     </nav>
 </aside>
 <main class="main">
@@ -119,153 +148,235 @@
     <h1>Manual Book<br><span>Management Gizi</span></h1>
     <p class="sub">Panduan lengkap interaktif penggunaan seluruh fitur, fungsi, dan menu di dalam sistem informasi program Makan Bergizi Gratis.</p>
     <div class="cv-stats">
-        <div class="cvs"><div class="l">Framework</div><div class="v">Laravel 12</div></div>
-        <div class="cvs"><div class="l">Total Menu</div><div class="v">15+ Halaman</div></div>
+        <div class="cvs"><div class="l">Total Menu</div><div class="v">18+ Modul</div></div>
+        <div class="cvs"><div class="l">Alur Sistem</div><div class="v">End-to-End</div></div>
         <div class="cvs"><div class="l">Gizi</div><div class="v">Auto-Calc</div></div>
+        <div class="cvs"><div class="l">RAB</div><div class="v">Auto-Generate</div></div>
     </div>
 </section>
 
-<!-- OPERASIONAL: MENU MAKAN -->
+<!-- HORIZONTAL FLOW SECTION -->
+<section id="s-flow" class="sec" style="background:#f8fafc; padding-bottom:100px;">
+    <div class="sec-hdr"><div class="sec-icon ib">🔄</div><div><h2>Alur Kerja Sistem (Horizontal Flow)</h2><p>Peta keseluruhan proses operasional gizi dari hulu ke hilir</p></div></div>
+    
+    <div class="h-flow-wrap">
+        <div class="h-flow-item" style="border-color:var(--teal)">
+            <div class="h-flow-num" style="background:var(--teal)">1</div>
+            <div style="font-size:36px; margin-bottom:12px;">🧂</div>
+            <div style="font-weight:800; font-size:14px; color:#1e293b;">Bahan Baku<br>(Master Item)</div>
+            <p style="font-size:11px; margin-top:6px; color:#64748b">Basis data gizi per 100g</p>
+        </div>
+        <div class="h-flow-arrow">➔</div>
+        
+        <div class="h-flow-item" style="border-color:var(--blue)">
+            <div class="h-flow-num" style="background:var(--blue)">2</div>
+            <div style="font-size:36px; margin-bottom:12px;">📅</div>
+            <div style="font-weight:800; font-size:14px; color:#1e293b;">Kalender Sekolah</div>
+            <p style="font-size:11px; margin-top:6px; color:#64748b">Status penerimaan & hari libur</p>
+        </div>
+        <div class="h-flow-arrow">➔</div>
+        
+        <div class="h-flow-item" style="border-color:var(--orange)">
+            <div class="h-flow-num" style="background:var(--orange)">3</div>
+            <div style="font-size:36px; margin-bottom:12px;">📈</div>
+            <div style="font-weight:800; font-size:14px; color:#1e293b;">Monitoring Kunci</div>
+            <p style="font-size:11px; margin-top:6px; color:#64748b">Kunci rekapitulasi data porsi sekolah mingguan</p>
+        </div>
+        <div class="h-flow-arrow">➔</div>
+        
+        <div class="h-flow-item" style="border-color:var(--green)">
+            <div class="h-flow-num" style="background:var(--green)">4</div>
+            <div style="font-size:36px; margin-bottom:12px;">🍽️</div>
+            <div style="font-weight:800; font-size:14px; color:#1e293b;">Menu Makan</div>
+            <p style="font-size:11px; margin-top:6px; color:#64748b">Kalkulasi gizi resep (Komponen Utama)</p>
+        </div>
+        <div class="h-flow-arrow">➔</div>
+        
+        <div class="h-flow-item" style="border-color:var(--purple)">
+            <div class="h-flow-num" style="background:var(--purple)">5</div>
+            <div style="font-size:36px; margin-bottom:12px;">🗓️</div>
+            <div style="font-weight:800; font-size:14px; color:#1e293b;">Siklus Menu</div>
+            <p style="font-size:11px; margin-top:6px; color:#64748b">Atur paket jatah menu per hari untuk sekolah yang aktif</p>
+        </div>
+        <div class="h-flow-arrow">➔</div>
+        
+        <div class="h-flow-item" style="border-color:var(--red)">
+            <div class="h-flow-num" style="background:var(--red)">6</div>
+            <div style="font-size:36px; margin-bottom:12px;">📸</div>
+            <div style="font-weight:800; font-size:14px; color:#1e293b;">History Menu</div>
+            <p style="font-size:11px; margin-top:6px; color:#64748b">Review eksekusi, upload foto masakan riil, lengkapi hari</p>
+        </div>
+        <div class="h-flow-arrow">➔</div>
+        
+        <div class="h-flow-item" style="border-color:#64748b">
+            <div class="h-flow-num" style="background:#64748b">7</div>
+            <div style="font-size:36px; margin-bottom:12px;">🧾</div>
+            <div style="font-weight:800; font-size:14px; color:#1e293b;">Nota Lengkap</div>
+            <p style="font-size:11px; margin-top:6px; color:#64748b">Upload multi-bukti struk/nota belanja harian dapur</p>
+        </div>
+        <div class="h-flow-arrow">➔</div>
+        
+        <div class="h-flow-item" style="border-color:var(--yellow)">
+            <div class="h-flow-num" style="background:var(--yellow)">8</div>
+            <div style="font-size:36px; margin-bottom:12px;">💰</div>
+            <div style="font-weight:800; font-size:14px; color:#1e293b;">Akses Print RAB</div>
+            <p style="font-size:11px; margin-top:6px; color:#64748b">Auto-generate RAB excel & adjustment biaya akhir</p>
+        </div>
+    </div>
+</section>
+
+<!-- OVERVIEW -->
+<section id="s-applauncher" class="sec">
+    <div class="sec-hdr"><div class="sec-icon ib">🚀</div><div><h2>App Launcher</h2><p>Halaman utama penyambut aplikasi setelah berhasil login.</p></div></div>
+    <div class="al al-i"><span class="al-icon">💡</span><span>Menyajikan daftar panel pemicu cepat (Quick Launch) ke berbagai sistem modul, termasuk pintasan menuju e-Katalog, Buku Panduan ini, dan Pusat Dashboard Informasi Utama.</span></div>
+</section>
+<section id="s-dashstats" class="sec">
+    <div class="sec-hdr"><div class="sec-icon ip">📊</div><div><h2>Dashboard Statistik</h2><p>Layar intelejen ringkas untuk memantau performa harian/mingguan MBG.</p></div></div>
+    <div class="g2">
+        <div class="card lb"><div class="ci">📊</div><h4>KPI Tracking</h4><p>Menyajikan grafik batang, total stok gudang, jumlah sekolah/posyandu, peringatan stok menipis, dan jadwal menu secara *live dashboard*.</p></div>
+    </div>
+</section>
+
+<!-- OPERASIONAL -->
 <section id="s-menu" class="sec">
-    <div class="sec-hdr"><div class="sec-icon ig">🍽️</div><div><h2>Menu Makan</h2><p>Buat dan kelola menu beserta kalkulasi gizi otomatis</p></div></div>
+    <div class="sec-hdr"><div class="sec-icon ig">🍽️</div><div><h2>Menu Makan</h2><p>Buat dan kelola resep (Master Menu) dengan kalkulasi gizi presisi otomatis.</p></div></div>
     <div class="flow">
-        <div class="fstep"><div class="fnum fn-g">1</div><div><h4>Tambah Menu Baru</h4><p>Klik "Tambah Menu". Isi Nama Menu dan Tipe (Basah untuk hari sekolah, Kering untuk libur).</p></div></div>
-        <div class="fstep"><div class="fnum fn-g">2</div><div><h4>Masukkan Komposisi Bahan</h4><p>Pilih bahan baku dari database, lalu masukkan takaran dalam <b>gram per porsi</b>.</p></div></div>
-        <div class="fstep"><div class="fnum fn-g">3</div><div><h4>Kalkulasi Gizi Otomatis</h4><p>Sistem langsung menghitung (gramasi ÷ 100) × nilai gizi per 100g untuk setiap nutrisi (Energi, Protein, Lemak, Karbo, Serat).</p></div></div>
+        <div class="fstep"><div class="fnum fn-g">1</div><div><h4>Tambah Menu Baru</h4><p>Pilih Tipe Menu (Basah untuk hari efektif, Kering untuk cadangan/libur) dan klasifikasinya.</p></div></div>
+        <div class="fstep"><div class="fnum fn-g">2</div><div><h4>Masukkan Komposisi Bahan</h4><p>Pasangkan bahan baku dengan takaran gram per-porsi riil.</p></div></div>
+        <div class="fstep"><div class="fnum fn-g">3</div><div><h4>Auto-Kalkulasi</h4><p>Dalam memori aplikasi, sistem akan langsung mengekstrak dan membagi gramasi ÷ 100 × gizi spesifik bahan tersebut untuk Energi, Protein, Lemak, dan Karbo.</p></div></div>
     </div>
-    <div class="al al-i"><span class="al-icon">🔄</span><span><b>Versioning Otomatis:</b> Jika menu sudah digunakan dalam jadwal, mengedit menu akan membuat versi baru otomatis (v1.1, v1.2) tanpa merubah historis.</span></div>
 </section>
 
-<!-- OPERASIONAL: SIKLUS MENU -->
 <section id="s-siklus" class="sec">
-    <div class="sec-hdr"><div class="sec-icon ig">🗓️</div><div><h2>Siklus Menu (Jadwal)</h2><p>Tetapkan menu harian untuk setiap sekolah</p></div></div>
+    <div class="sec-hdr"><div class="sec-icon ip">🗓️</div><div><h2>Siklus Menu (Menu Paket)</h2><p>Manajemen penjadwalan menu paket per minggu untuk masing-masing sekolah.</p></div></div>
     <div class="g3">
-        <div class="card lb"><div class="ci">🗓️</div><h4>Pilih Minggu</h4><p>Pilih nomor minggu dan tahun untuk menentukan periode jadwal (Senin-Sabtu).</p></div>
-        <div class="card lg"><div class="ci">🏫</div><h4>Terapkan Global</h4><p>Satu klik untuk menerapkan susunan jadwal menu yang sama ke seluruh sekolah.</p></div>
-        <div class="card lo"><div class="ci">📱</div><h4>Share WA</h4><p>Kirim jadwal mingguan dan kebutuhan bahan baku ke koordinator dapur via WhatsApp.</p></div>
+        <div class="card lb"><div class="ci">🗓️</div><h4>Atur per Minggu</h4><p>Pilih minggu berjalan dan pasangkan menu ke setiap hari aktif (Senin s.d Sabtu).</p></div>
+        <div class="card lg"><div class="ci">🏫</div><h4>Terapkan Global</h4><p>Salin susunan paket yang diracik langsung ke seluruh titik sekolah dengan 1 tindakan (Apply to All).</p></div>
+        <div class="card lo"><div class="ci">📱</div><h4>Share WA</h4><p>Klik tombol untuk mengirimkan memo text ke WhatsApp koordinator dapur.</p></div>
     </div>
 </section>
 
-<!-- OPERASIONAL: KALENDER -->
+<section id="s-historymenu" class="sec">
+    <div class="sec-hdr"><div class="sec-icon ir">📸</div><div><h2>History Menu (RAB & Nota)</h2><p>Pusat review produksi masa lalu, upload nota, dan revisi budget cetak Excel RAB terotomasi.</p></div></div>
+    <div class="g2">
+        <div class="card lg"><div class="ci">📸</div><h4>Upload Foto Masakan</h4><p>Untuk menaikkan bukti akuntabilitas, Anda dapat meng-upload foto aktual dari masakan menu setiap harinya.</p></div>
+        <div class="card lo"><div class="ci">🧾</div><h4>Nota & Bukti Belanja</h4><p>Setelah menu dilaksanakan, klik per harinya untuk meng-upload *multiple notes/struk belanja* sebagai barang bukti realisasi biaya bahan baku di hari itu.</p></div>
+        <div class="card lb" style="grid-column: span 2;"><div class="ci">💰</div><h4>Akses Generation RAB</h4><p>Klik tombol warna hijau (Generat/Edit RAB) untuk membuka laman antarmuka spesifik. Sistem akan mendeteksi seluruh bahan yang *secara teoritis* digunakan minggu itu × harga master untuk membentuk pagu anggaran. Anda bisa melakukan **Adjusting Manual** angka yang ada untuk diseimbangkan dengan struk nota fisik, kemudian dapat langsung men-**Download Excel (.xlsx)**-nya yang sangat rapi untuk dilaporkan!</p></div>
+    </div>
+</section>
+
 <section id="s-kalender" class="sec">
-    <div class="sec-hdr"><div class="sec-icon it">📅</div><div><h2>Kalender Sekolah</h2><p>Tentukan status operasional harian sekolah</p></div></div>
+    <div class="sec-hdr"><div class="sec-icon it">📅</div><div><h2>Kalender Sekolah</h2><p>Platform status pendistribusian harian per sekolah/posyandu per bulan berjalan.</p></div></div>
     <div class="tw">
         <table>
-            <thead><tr><th>Status Hari</th><th>Arti</th><th>Dampak Produksi</th></tr></thead>
+            <thead><tr><th>Status Hari</th><th>Arti & Dampak Pada Produksi Menu</th></tr></thead>
             <tbody>
-                <tr><td><span class="bdg bg">✅ Receive</span></td><td>Menerima pengiriman makanan</td><td>Menu Basah (Wet) diproduksi</td></tr>
-                <tr><td><span class="bdg bo">🏖️ Holiday</span></td><td>Hari libur sekolah / nasional</td><td>Menu Kering / Diliburkan</td></tr>
-                <tr><td><span class="bdg" style="background:#f1f5f9;color:#64748b">⏳ Pending</span></td><td>Belum ditentukan</td><td>Tidak bisa dijadwal. Wajib diisi</td></tr>
+                <tr><td><span class="bdg bg">✅ Receive</span></td><td>Lokasi menerima jatah gizi (Makan/Menu Basah dikirim dari dapur).</td></tr>
+                <tr><td><span class="bdg bo">🏖️ Holiday</span></td><td>Hari Libur. Sekolah mendapatkan menu Kering / Susu di hari sebelumnya.</td></tr>
+                <tr><td><span class="bdg" style="background:#f1f5f9;color:#64748b">⏳ Pending</span></td><td>Wajib dirubah oleh Admin agar mesin tidak bingung mengatur produksi.</td></tr>
             </tbody>
         </table>
     </div>
 </section>
 
-<!-- LOGISTIK: STOK -->
+<section id="s-monitoring" class="sec">
+    <div class="sec-hdr"><div class="sec-icon io">📈</div><div><h2>Monitoring & Kunci</h2><p>Rekapitulasi cepat persetujuan siklus dan kunci kalender dari tangan iseng.</p></div></div>
+    <div class="al al-w"><span class="al-icon">⚠️</span><span>**Fitur Krusial:** Setelah sebuah siklus minggu diproduksi / telah lewat masa tayangnya, *Super Admin* **wajib mengunci (Lock)** minggu tersebut di halaman ini agar koordinator lapangan / dapur tidak lagi dapat memodifikasi jumlah penerima PK, PB, Guru, dan riwayat pesanan bahan baku (agar Invoice/RAB final tidak berubah-ubah angkanya lagi).</span></div>
+</section>
+
+<!-- LOGISTIK -->
 <section id="s-stok" class="sec">
-    <div class="sec-hdr"><div class="sec-icon io">📦</div><div><h2>Stok Gudang</h2><p>Catat transaksi IN dan OUT bahan baku</p></div></div>
+    <div class="sec-hdr"><div class="sec-icon io">📦</div><div><h2>Stok Gudang</h2><p>Melakukan pencatatan aliran transaksi keluar/masuk bahan persediaan logistik.</p></div></div>
     <div class="fbox">
-        <div class="flabel">⭐ Rumus Saldo Real-Time</div>
-        <code>Saldo = Σ Transaksi IN − Σ Transaksi OUT</code>
-        <p>Saldo selalu ter-update otomatis. Bahan dengan saldo di bawah 10kg akan memunculkan alarm stok rendah.</p>
-    </div>
-    <div class="g2">
-        <div class="card lb"><div class="ci">📥</div><h4>Stok IN (Masuk)</h4><p>Catat bahan yang baru datang dari Supplier. Masukkan jumlah gram/ml dan harga.</p></div>
-        <div class="card lr"><div class="ci">📤</div><h4>Stok OUT (Keluar)</h4><p>Catat bahan yang dikeluarkan dari gudang untuk keperluan produksi dapur hari ini.</p></div>
+        <div class="flabel">⭐ Kalkulasi Sisa Otomatis</div>
+        <code>Saldo Berjalan = Σ Penerimaan (IN) − Σ Penggunaan (OUT)</code>
+        <p>Bahan gudang berjenis kering akan dikurangi otomatis oleh sistem saat dapur membuat pencatatan transaksi OUT produksi di sistem ini.</p>
     </div>
 </section>
 
-<!-- LOGISTIK: BAHAN BAKU -->
+<section id="s-belanja" class="sec">
+    <div class="sec-hdr"><div class="sec-icon ib">🛒</div><div><h2>Belanja Bahan (Procurement List)</h2><p>Surat perintah belanja belanja intelijen komprehensif.</p></div></div>
+    <div class="al al-i"><span class="al-icon">🔍</span><span>Halaman akan membandingkan Total Kebutuhan Porsi Semua Sekolah untuk Minggu Depan VS Sisa Stok Gudang Hari Ini. Selisih yang terjadi (jika stok kurang) akan ditampilkan dengan font merah muda untuk ditindaklanjuti sebagai *Shopping List* hari ini ke pasar terdekat atau supplier rujukan.</span></div>
+</section>
+
 <section id="s-bahan" class="sec">
-    <div class="sec-hdr"><div class="sec-icon ig">🧂</div><div><h2>Bahan Baku & Kategori</h2><p>Master data seluruh bahan dengan takaran nutrisi</p></div></div>
-    <div class="al al-s"><span class="al-icon">💡</span><span>Jika kategori di-set sebagai <b>Food</b>, maka sistem akan mewajibkan pengisian 5 data gizi (Energi, Protein, dll) per 100 gram untuk keperluan auto-kalkulasi menu.</span></div>
-    <div class="al al-w"><span class="al-icon">⚠️</span><span>Bahan yang sudah digunakan dalam suatu Menu Makan tidak dapat dihapus, hanya bisa "Dinonaktifkan" untuk menjaga konsistensi porsi historis.</span></div>
+    <div class="sec-hdr"><div class="sec-icon ig">🧂</div><div><h2>Bahan Baku</h2><p>Katalog master seluruh produk dan pangan mentah gizi beserta profil harga satuannya.</p></div></div>
+    <div class="card lg"><div class="ci">ℹ️</div><h4>Mandatory Profil Gizi</h4><p>Untuk Kategori yang diatur sebagai tipe 'Food', sistem akan memaksa admin mengisi 5 metrik gizi (TKPI Indonesia Standard) per 100 gram untuk menunjang auto-kalori resep di atas.</p></div>
 </section>
 
-<!-- PENGIRIMAN -->
+<section id="s-supplier" class="sec">
+    <div class="sec-hdr"><div class="sec-icon ib">🏪</div><div><h2>Supplier</h2><p>Direktori para pihak ketiga penjual pasokan sayur, daging, kemasan, yang bekerja sama dengan dapur pusat.</p></div></div>
+</section>
+
+<section id="s-kategori" class="sec">
+    <div class="sec-hdr"><div class="sec-icon io">🏷️</div><div><h2>Kategori</h2><p>Pengelompokkan dasar bahan.</p></div></div>
+    <p>Admin dapat menata kategori 'Kemasan', 'Protein Hewani', 'Sayuran', atau 'Penyedap / Pelengkap'. Kategori tipe Makanan otomatis akan mewajibkan pengisian form TKPI bahan gizi.</p>
+</section>
+
+<!-- DISTRIBUSI -->
 <section id="s-pengiriman" class="sec">
-    <div class="sec-hdr"><div class="sec-icon ir">🚚</div><div><h2>Pengiriman</h2><p>Rekap pengiriman makanan harian dari dapur ke sekolah</p></div></div>
-    <div class="flow">
-        <div class="fstep"><div class="fnum fn-r">1</div><div><h4>Lihat Jadwal Hari Ini</h4><p>Daftar semua sekolah yang harus dikirim makanan hari ini sesuai kalender.</p></div></div>
-        <div class="fstep"><div class="fnum fn-r">2</div><div><h4>Cetak Surat Jalan</h4><p>Klik "Export Word" untuk mencetak bukti pengiriman harian (Surat Jalan).</p></div></div>
-        <div class="fstep"><div class="fnum fn-r">3</div><div><h4>Konfirmasi Penerimaan</h4><p>Koordinator Sekolah mengklik tombol konfirmasi bahwa makanan telah diterima dengan baik.</p></div></div>
-    </div>
+    <div class="sec-hdr"><div class="sec-icon ir">🚚</div><div><h2>Pengiriman (Surat Jalan)</h2><p>Antarmuka daftar riwayat armada dan jadwal antar makan siang harian.</p></div></div>
+    <div class="al al-s"><span class="al-icon">🚙</span><span>Klik Detail dan Cetak Word Surat Jalan Resmi untuk dibekali kepada Driver kurir agar mendapatkan stempel/tanda tangan asisten guru di sekolah bahwa makan siang telah diserah-terimakan.</span></div>
+</section>
+<section id="s-kloter" class="sec">
+    <div class="sec-hdr"><div class="sec-icon id">⚙️</div><div><h2>Setting Kloter</h2><p>Pembagian trayek armada / gelombang hantar driver.</p></div></div>
 </section>
 
-<!-- LAPORAN GIZI -->
+<!-- LAPORAN -->
 <section id="s-lapgizi" class="sec">
-    <div class="sec-hdr"><div class="sec-icon ip">🧪</div><div><h2>Laporan Gizi</h2><p>Laporan analisis dan pemenuhan gizi program</p></div></div>
-    <div class="tw">
-        <table>
-            <thead><tr><th>Jenis Laporan</th><th>Deskripsi</th></tr></thead>
-            <tbody>
-                <tr><td><b>Laporan Per Menu</b></td><td>Breakdown nilai gizi tiap bahan dalam satu menu individu.</td></tr>
-                <tr><td><b>Mingguan Sekolah</b></td><td>Akumulasi gizi yang diterima satu sekolah dalam 6 hari pengiriman.</td></tr>
-                <tr><td><b>Manfaat Program</b></td><td>Total rekapan gizi seluruh sekolah penerima program secara agregat.</td></tr>
-                <tr><td><b>Perbandingan</b></td><td>Bandingkan persentase pemenuhan gizi antar 2 atau lebih menu.</td></tr>
-            </tbody>
-        </table>
-    </div>
+    <div class="sec-hdr"><div class="sec-icon ip">🧪</div><div><h2>Laporan Gizi</h2><p>Akses evaluasi KPI serapan mikronutrisi target.</p></div></div>
+    <p>Gunakan untuk memeriksa, mereview laporan pembandingan nutrisi antar hari, dan melaporkan presentasi nilai kesehatannya ke Dinkes atau Koordinator Kota.</p>
 </section>
-
-<!-- LAPORAN MENU -->
 <section id="s-lapmenu" class="sec">
-    <div class="sec-hdr"><div class="sec-icon ig">📋</div><div><h2>Laporan Menu (Export)</h2><p>Download laporan Excel dan Word pencapaian mingguan</p></div></div>
-    <div class="g2">
-        <div class="card lg"><div class="ci">📗</div><h4>Export Excel (.xlsx)</h4><p>Rekap bahan baku mingguan per hari (Senin - Sabtu). Sangat berguna sebagai referensi tim pengadaan/belanja.</p></div>
-        <div class="card lb"><div class="ci">📘</div><h4>Export Word (.docx)</h4><p>Download satu atau semua Master Menu dalam format dokumen Word resmi program MBG.</p></div>
-    </div>
+    <div class="sec-hdr"><div class="sec-icon ig">📋</div><div><h2>Laporan Menu</h2><p>Pusat ekstraksi data base sistem jadi Laporan Instan.</p></div></div>
+    <div class="card lg"><div class="ci">📗 Download</div><p>Semua menu terpilih dalam siklus 1 minggu dapat Anda tumpah-ruahkan sekaligus ke dalam 1 lembar Excel (xlsx) komprehensif atau Dokumen PDF tabel cantik di halaman ini.</p></div>
 </section>
 
-<!-- SDM: RELAWAN -->
+<!-- SDM / RELAWAN -->
+<section id="s-datarelawan" class="sec">
+    <div class="sec-hdr"><div class="sec-icon it">👷</div><div><h2>Data Relawan</h2><p>Tabel induk kepegawaian dapur khusus / para srikandi masak.</p></div></div>
+</section>
 <section id="s-relawan" class="sec">
-    <div class="sec-hdr"><div class="sec-icon it">👷</div><div><h2>Gaji Relawan & SDM</h2><p>Master data relawan dan pengelolaan penggajian bulanan</p></div></div>
-    <div class="fbox">
-        <div class="flabel">⭐ Kalkulasi Gaji Periodik</div>
-        <code>Total Gaji = (Hadir × Upah Harian) + Bonus − Potongan</code>
-        <p>Sistem merekap absensi dan menghitung otomatis berdasarkan Setting Upah jabatannya.</p>
-    </div>
+    <div class="sec-hdr"><div class="sec-icon ib">💸</div><div><h2>Gaji Relawan & Slip</h2><p>Rangkaian antarmuka penggajian otomatis mingguan / bulanan.</p></div></div>
     <div class="flow">
-        <div class="fstep"><div class="fnum fn-t">1</div><div><h4>Buat Periode Gaji</h4><p>Admin membuat periode (misal: "Maret 2026"). Sistem mengaitkan semua relawan aktif.</p></div></div>
-        <div class="fstep"><div class="fnum fn-t">2</div><div><h4>Isi Kehadiran & Komponen</h4><p>Input jumlah hari hadir per relawan. Tambahkan Bonus/Potongan jika ada.</p></div></div>
-        <div class="fstep"><div class="fnum fn-t">3</div><div><h4>Cetak Slip PDF</h4><p>Cetak rekap seluruh slip (4 slip per lembar A4) untuk dibagikan saat gajian.</p></div></div>
+        <div class="fstep"><div class="fnum fn-t">1</div><div><h4>Buat Periode Baru</h4><p>Klik tombol tambah dan tentukan nama jadwal periode penggajian (Misal: 12-16 Maret). Sistem akan menarik total relawan hidup ke dalam daftar.</p></div></div>
+        <div class="fstep"><div class="fnum fn-t">2</div><div><h4>Isi Absensi & Potongan</h4><p>Input hari kerja yang dikumpulkan para asisten dapur. Sertakan juga dana insentif dan jaminan BPJS bilamana relevan.</p></div></div>
+        <div class="fstep"><div class="fnum fn-t">3</div><div><h4>Landscape Slip Generator</h4><p>Klik ikon Printer! Browser Anda akan seketika menghasilkan grid 6 Slip Gaji yang sangat rapat, cantik, menghemat pita tinta, dan ramah amplop standar di posisi Lanskap A4!</p></div></div>
     </div>
 </section>
+<section id="s-setupah" class="sec">
+    <div class="sec-hdr"><div class="sec-icon io">🔧</div><div><h2>Setting Upah</h2><p>Manajemen porsi koefisien Gaji Harian Pokok berdasarkan hierarki dapur.</p></div></div>
+</section>
 
-<!-- ADMIN: MANAJEMEN USER -->
+<!-- ADMINISTRATOR -->
 <section id="s-users" class="sec">
-    <div class="sec-hdr"><div class="sec-icon ib">👤</div><div><h2>Manajemen User & SPPG</h2><p>Akses akun dan pembagian Satuan Pelaksana Program Gizi (SPPG)</p></div></div>
-    <div class="tw">
-        <table>
-            <thead><tr><th>Role</th><th>Hak Akses</th><th>Isolasi Data (SPPG)</th></tr></thead>
-            <tbody>
-                <tr><td><b>Super Admin</b></td><td>Full access ke semua fitur & SPPG</td><td>Melihat semua SPPG</td></tr>
-                <tr><td><b>Admin MBG</b></td><td>Operasional, Logistik, Distribusi, Laporan</td><td>Hanya melihat SPPG miliknya</td></tr>
-                <tr><td><b>Ahli Gizi</b></td><td>Membuat menu & Laporan Gizi</td><td>Hanya SPPG miliknya</td></tr>
-                <tr><td><b>Koord. Sekolah</b></td><td>Melihat jadwal & konfirmasi terima</td><td>Sesuai sekolah yang ditugaskan</td></tr>
-            </tbody>
-        </table>
-    </div>
+    <div class="sec-hdr"><div class="sec-icon ib">👤</div><div><h2>Manajemen User</h2><p>Pembuatan hak entri user dan penempatan role akses khusus (Aslap, Keuangan, Admin, dll).</p></div></div>
+</section>
+<section id="s-mastersppg" class="sec">
+    <div class="sec-hdr"><div class="sec-icon ip">🏛️</div><div><h2>Master SPPG</h2><p>Struktur komando hierarki induk, manajemen dapur satuan SPPG yang menyebar ter-Isolasi.</p></div></div>
+</section>
+<section id="s-sekolah" class="sec">
+    <div class="sec-hdr"><div class="sec-icon it">🏫</div><div><h2>Data Penerima Manfaat</h2><p>Sistem basis data sasaran konsumsi (Sekolah maupun Posyandu di Kecamatan Anda) beserta form update metrik insentif Koordinator / Aslap.</p></div></div>
 </section>
 
-<!-- ADMIN: DATA SEKOLAH -->
-<section id="s-sekolah" class="sec">
-    <div class="sec-hdr"><div class="sec-icon ig">🏫</div><div><h2>Data Sekolah</h2><p>Master data sekolah penerima program makan bergizi gratis</p></div></div>
-    <div class="g2">
-        <div class="card lb"><div class="ci">👥</div><h4>Data Porsi Siswa</h4><p>Atur jumlah Porsi Kecil (PK) untuk PAUD/SD bawah, Porsi Besar (PB) untuk SD atas/SMP, dan jumlah Guru.</p></div>
-        <div class="card lg"><div class="ci">📱</div><h4>Assign Koordinator</h4><p>Pilih user koordinator untuk sekolah ini, yang akan menerima notifikasi WA otomatis saat jadwal dirilis.</p></div>
-    </div>
+<!-- SISTEM & LOG -->
+<section id="s-doklampiran" class="sec">
+    <div class="sec-hdr"><div class="sec-icon id">📎</div><div><h2>Dokumentasi Lampiran</h2><p>Modul repository arsip cloud spesifik program (Form serah terima manual, Dokumen instruksi dinkes, KTP Supplier dsb).</p></div></div>
+</section>
+<section id="s-activitylog" class="sec">
+    <div class="sec-hdr"><div class="sec-icon id">📜</div><div><h2>Log Activity</h2><p>Buku Hitam Log detektor kejadian / jejak sidik digital.</p></div></div>
+    <p>Apabila suatu menu salah tekan dan hilang, maka kunjungi panel Administrator ini untuk memeriksa siapa pelaku *user* yang menekan tombol Hapus atau Merubah RAB agar dapat diaudit secara mendalam.</p>
 </section>
 
 <section class="sec" style="text-align:center;background:linear-gradient(135deg,#0f172a,#1e3a5f)">
     <div style="color:#fff">
         <div style="font-size:48px;margin-bottom:14px">🍱</div>
         <h2 style="font-size:22px;font-weight:800;margin-bottom:8px">Terima Kasih Telah Menggunakan MBG System</h2>
-        <p style="color:rgba(255,255,255,.55);font-size:13.5px;max-width:480px;margin:0 auto 22px">Dibangun untuk mendukung program Makan Bergizi Gratis demi masa depan generasi emas Indonesia yang lebih sehat dan cerdas. 🇮🇩</p>
+        <p style="color:rgba(255,255,255,.55);font-size:13.5px;max-width:480px;margin:0 auto 22px">Dibangun presisi untuk menjamin akuntabilitas transparan program Makan Bergizi Gratis demi masa depan generasi emas Indonesia. 🇮🇩</p>
         <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap">
-            <span class="bdg" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)">Laravel 12</span>
-            <span class="bdg" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)">PHP 8.2+</span>
-            <span class="bdg" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)">Tailwind CSS</span>
+            <span class="bdg" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)">Laravel 12 / PHP 8.2</span>
+            <span class="bdg" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)">Tailwind CSS Grid</span>
+            <span class="bdg" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)">Multi-tenant SPPG</span>
         </div>
     </div>
 </section>

@@ -41,25 +41,46 @@ class SchoolController extends Controller
         }
 
         // 2. Stats Query (Clone base query, no eager loads)
-        $totals = [
-            'small_portions' => 0,
-            'large_portions' => 0,
-            'teachers' => 0,
-            'overall' => 0
-        ];
+        $totals = [];
 
         try {
-            $stats = (clone $query)->selectRaw('
-                SUM(small_portion_count) as total_small,
-                SUM(large_portion_count) as total_large,
-                SUM(teacher_count) as total_teacher
-            ')->first();
+            $statsSchool = $query->clone()
+                ->where('type', 'sekolah')
+                ->selectRaw('
+                    SUM(small_portion_count) as total_small,
+                    SUM(large_portion_count) as total_large,
+                    SUM(teacher_count) as total_teacher
+                ')
+                ->first();
+
+            $statsPosyandu = $query->clone()
+                ->where('type', 'posyandu')
+                ->selectRaw('
+                    SUM(small_portion_count) as total_small,
+                    SUM(large_portion_count) as total_large,
+                    SUM(teacher_count) as total_teacher
+                ')
+                ->first();
 
             $totals = [
-                'small_portions' => $stats->total_small ?? 0,
-                'large_portions' => $stats->total_large ?? 0,
-                'teachers' => $stats->total_teacher ?? 0,
-                'overall' => ($stats->total_small ?? 0) + ($stats->total_large ?? 0) + ($stats->total_teacher ?? 0)
+                'school' => [
+                    'small_portions' => $statsSchool->total_small ?? 0,
+                    'large_portions' => $statsSchool->total_large ?? 0,
+                    'teachers' => $statsSchool->total_teacher ?? 0,
+                    'overall' => ($statsSchool->total_small ?? 0) + ($statsSchool->total_large ?? 0)
+                ],
+                'posyandu' => [
+                    'small_portions' => $statsPosyandu->total_small ?? 0,
+                    'large_portions' => $statsPosyandu->total_large ?? 0,
+                    'teachers' => $statsPosyandu->total_teacher ?? 0,
+                    'overall' => ($statsPosyandu->total_small ?? 0) + ($statsPosyandu->total_large ?? 0)
+                ],
+                'grand' => [
+                    'small_portions' => ($statsSchool->total_small ?? 0) + ($statsPosyandu->total_small ?? 0),
+                    'large_portions' => ($statsSchool->total_large ?? 0) + ($statsPosyandu->total_large ?? 0),
+                    'teachers' => ($statsSchool->total_teacher ?? 0) + ($statsPosyandu->total_teacher ?? 0),
+                    'overall' => ($statsSchool->total_small ?? 0) + ($statsSchool->total_large ?? 0) + ($statsPosyandu->total_small ?? 0) + ($statsPosyandu->total_large ?? 0)
+                ]
             ];
         } catch (\Exception $e) {
             // Fallback or log error if needed
@@ -89,10 +110,15 @@ class SchoolController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'type' => 'required|in:sekolah,posyandu',
             'address' => 'required|string',
             'small_portion_count' => 'required|integer|min:0',
             'large_portion_count' => 'required|integer|min:0',
             'teacher_count' => 'required|integer|min:0',
+            'daily_incentive' => 'nullable|integer|min:0',
+            'incentive_frequency' => 'nullable|string|max:255',
+            'work_days' => 'nullable|integer|min:0',
+            'principal_name' => 'nullable|string|max:255',
             'is_active' => 'boolean',
         ]);
 
@@ -141,6 +167,10 @@ class SchoolController extends Controller
             'small_portion_count' => 'required|integer|min:0',
             'large_portion_count' => 'required|integer|min:0',
             'teacher_count' => 'required|integer|min:0',
+            'daily_incentive' => 'nullable|integer|min:0',
+            'incentive_frequency' => 'nullable|string|max:255',
+            'work_days' => 'nullable|integer|min:0',
+            'principal_name' => 'nullable|string|max:255',
             'is_active' => 'boolean',
         ]);
 

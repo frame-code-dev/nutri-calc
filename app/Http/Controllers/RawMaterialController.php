@@ -81,11 +81,32 @@ class RawMaterialController extends Controller
 
         if ($isFood) {
             $rules = array_merge($rules, [
-                'energy_per_100g' => 'required|numeric|min:0',
-                'protein_per_100g' => 'required|numeric|min:0',
-                'fat_per_100g' => 'required|numeric|min:0',
-                'carbohydrate_per_100g' => 'required|numeric|min:0',
-                'fiber_per_100g' => 'required|numeric|min:0',
+                // Proximate
+                'water_per_100g'         => 'nullable|numeric|min:0',
+                'energy_per_100g'        => 'required|numeric|min:0',
+                'protein_per_100g'       => 'required|numeric|min:0',
+                'fat_per_100g'           => 'required|numeric|min:0',
+                'carbohydrate_per_100g'  => 'required|numeric|min:0',
+                'fiber_per_100g'         => 'required|numeric|min:0',
+                'ash_per_100g'           => 'nullable|numeric|min:0',
+                // Minerals
+                'calcium_per_100g'       => 'nullable|numeric|min:0',
+                'phosphorus_per_100g'    => 'nullable|numeric|min:0',
+                'iron_per_100g'          => 'nullable|numeric|min:0',
+                'sodium_per_100g'        => 'nullable|numeric|min:0',
+                'potassium_per_100g'     => 'nullable|numeric|min:0',
+                'copper_per_100g'        => 'nullable|numeric|min:0',
+                'zinc_per_100g'          => 'nullable|numeric|min:0',
+                // Vitamins
+                'retinol_per_100g'       => 'nullable|numeric|min:0',
+                'beta_carotene_per_100g' => 'nullable|numeric|min:0',
+                'carotene_per_100g'      => 'nullable|numeric|min:0',
+                'thiamine_per_100g'      => 'nullable|numeric|min:0',
+                'riboflavin_per_100g'    => 'nullable|numeric|min:0',
+                'niacin_per_100g'        => 'nullable|numeric|min:0',
+                'vitamin_c_per_100g'     => 'nullable|numeric|min:0',
+                // BDD
+                'bdd'                    => 'nullable|numeric|min:0|max:100',
             ]);
         }
 
@@ -104,12 +125,29 @@ class RawMaterialController extends Controller
 
             if ($isFood) {
                 RawMaterialNutrition::create([
-                    'raw_material_id' => $material->id,
-                    'energy_per_100g' => $validated['energy_per_100g'],
-                    'protein_per_100g' => $validated['protein_per_100g'],
-                    'fat_per_100g' => $validated['fat_per_100g'],
-                    'carbohydrate_per_100g' => $validated['carbohydrate_per_100g'],
-                    'fiber_per_100g' => $validated['fiber_per_100g'],
+                    'raw_material_id'        => $material->id,
+                    'water_per_100g'         => $validated['water_per_100g'] ?? 0,
+                    'energy_per_100g'        => $validated['energy_per_100g'],
+                    'protein_per_100g'       => $validated['protein_per_100g'],
+                    'fat_per_100g'           => $validated['fat_per_100g'],
+                    'carbohydrate_per_100g'  => $validated['carbohydrate_per_100g'],
+                    'fiber_per_100g'         => $validated['fiber_per_100g'],
+                    'ash_per_100g'           => $validated['ash_per_100g'] ?? 0,
+                    'calcium_per_100g'       => $validated['calcium_per_100g'] ?? 0,
+                    'phosphorus_per_100g'    => $validated['phosphorus_per_100g'] ?? 0,
+                    'iron_per_100g'          => $validated['iron_per_100g'] ?? 0,
+                    'sodium_per_100g'        => $validated['sodium_per_100g'] ?? 0,
+                    'potassium_per_100g'     => $validated['potassium_per_100g'] ?? 0,
+                    'copper_per_100g'        => $validated['copper_per_100g'] ?? 0,
+                    'zinc_per_100g'          => $validated['zinc_per_100g'] ?? 0,
+                    'retinol_per_100g'       => $validated['retinol_per_100g'] ?? 0,
+                    'beta_carotene_per_100g' => $validated['beta_carotene_per_100g'] ?? 0,
+                    'carotene_per_100g'      => $validated['carotene_per_100g'] ?? 0,
+                    'thiamine_per_100g'      => $validated['thiamine_per_100g'] ?? 0,
+                    'riboflavin_per_100g'    => $validated['riboflavin_per_100g'] ?? 0,
+                    'niacin_per_100g'        => $validated['niacin_per_100g'] ?? 0,
+                    'vitamin_c_per_100g'     => $validated['vitamin_c_per_100g'] ?? 0,
+                    'bdd'                    => $validated['bdd'] ?? 100,
                 ]);
             }
         });
@@ -167,11 +205,32 @@ class RawMaterialController extends Controller
 
         if ($isFood) {
             $rules = array_merge($rules, [
-                'energy_per_100g' => 'required|numeric|min:0',
-                'protein_per_100g' => 'required|numeric|min:0',
-                'fat_per_100g' => 'required|numeric|min:0',
-                'carbohydrate_per_100g' => 'required|numeric|min:0',
-                'fiber_per_100g' => 'required|numeric|min:0',
+                // Proximate
+                'water_per_100g'         => 'nullable|numeric|min:0',
+                'energy_per_100g'        => 'required|numeric|min:0',
+                'protein_per_100g'       => 'required|numeric|min:0',
+                'fat_per_100g'           => 'required|numeric|min:0',
+                'carbohydrate_per_100g'  => 'required|numeric|min:0',
+                'fiber_per_100g'         => 'required|numeric|min:0',
+                'ash_per_100g'           => 'nullable|numeric|min:0',
+                // Minerals
+                'calcium_per_100g'       => 'nullable|numeric|min:0',
+                'phosphorus_per_100g'    => 'nullable|numeric|min:0',
+                'iron_per_100g'          => 'nullable|numeric|min:0',
+                'sodium_per_100g'        => 'nullable|numeric|min:0',
+                'potassium_per_100g'     => 'nullable|numeric|min:0',
+                'copper_per_100g'        => 'nullable|numeric|min:0',
+                'zinc_per_100g'          => 'nullable|numeric|min:0',
+                // Vitamins
+                'retinol_per_100g'       => 'nullable|numeric|min:0',
+                'beta_carotene_per_100g' => 'nullable|numeric|min:0',
+                'carotene_per_100g'      => 'nullable|numeric|min:0',
+                'thiamine_per_100g'      => 'nullable|numeric|min:0',
+                'riboflavin_per_100g'    => 'nullable|numeric|min:0',
+                'niacin_per_100g'        => 'nullable|numeric|min:0',
+                'vitamin_c_per_100g'     => 'nullable|numeric|min:0',
+                // BDD
+                'bdd'                    => 'nullable|numeric|min:0|max:100',
             ]);
         }
 
@@ -192,11 +251,28 @@ class RawMaterialController extends Controller
                 $rawMaterial->nutrition()->updateOrCreate(
                     ['raw_material_id' => $rawMaterial->id],
                     [
-                        'energy_per_100g' => $validated['energy_per_100g'],
-                        'protein_per_100g' => $validated['protein_per_100g'],
-                        'fat_per_100g' => $validated['fat_per_100g'],
-                        'carbohydrate_per_100g' => $validated['carbohydrate_per_100g'],
-                        'fiber_per_100g' => $validated['fiber_per_100g'],
+                        'water_per_100g'         => $validated['water_per_100g'] ?? 0,
+                        'energy_per_100g'        => $validated['energy_per_100g'],
+                        'protein_per_100g'       => $validated['protein_per_100g'],
+                        'fat_per_100g'           => $validated['fat_per_100g'],
+                        'carbohydrate_per_100g'  => $validated['carbohydrate_per_100g'],
+                        'fiber_per_100g'         => $validated['fiber_per_100g'],
+                        'ash_per_100g'           => $validated['ash_per_100g'] ?? 0,
+                        'calcium_per_100g'       => $validated['calcium_per_100g'] ?? 0,
+                        'phosphorus_per_100g'    => $validated['phosphorus_per_100g'] ?? 0,
+                        'iron_per_100g'          => $validated['iron_per_100g'] ?? 0,
+                        'sodium_per_100g'        => $validated['sodium_per_100g'] ?? 0,
+                        'potassium_per_100g'     => $validated['potassium_per_100g'] ?? 0,
+                        'copper_per_100g'        => $validated['copper_per_100g'] ?? 0,
+                        'zinc_per_100g'          => $validated['zinc_per_100g'] ?? 0,
+                        'retinol_per_100g'       => $validated['retinol_per_100g'] ?? 0,
+                        'beta_carotene_per_100g' => $validated['beta_carotene_per_100g'] ?? 0,
+                        'carotene_per_100g'      => $validated['carotene_per_100g'] ?? 0,
+                        'thiamine_per_100g'      => $validated['thiamine_per_100g'] ?? 0,
+                        'riboflavin_per_100g'    => $validated['riboflavin_per_100g'] ?? 0,
+                        'niacin_per_100g'        => $validated['niacin_per_100g'] ?? 0,
+                        'vitamin_c_per_100g'     => $validated['vitamin_c_per_100g'] ?? 0,
+                        'bdd'                    => $validated['bdd'] ?? 100,
                     ]
                 );
             } else {

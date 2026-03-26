@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class AssignSppgSadengSeeder extends Seeder
+class AssignSppgJrebengSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -41,7 +41,7 @@ class AssignSppgSadengSeeder extends Seeder
 
         try {
             $sppg = DB::table('master_sppgs')
-                ->where('name', 'SPPG Sadeng Ponggok Blitar')
+                ->where('name', 'SPPG KEDOPOK JREBENG KULON 02')
                 ->first();
 
             if (!$sppg) {
@@ -58,7 +58,7 @@ class AssignSppgSadengSeeder extends Seeder
 
             DB::commit();
 
-            $this->command->info('Assign SPPG Sadeng Ponggok Blitar berhasil.');
+            $this->command->info('Assign SPPG KEDOPOK JREBENG KULON 02 berhasil.');
         } catch (\Throwable $e) {
             DB::rollBack();
             $this->command->error('Error: ' . $e->getMessage());

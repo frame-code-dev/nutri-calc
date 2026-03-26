@@ -131,6 +131,22 @@ Route::middleware('auth')->group(function () {
     Route::resource('master-sppg', MasterSppgController::class);
     Route::post('master-sppg/{masterSppg}/toggle-status', [MasterSppgController::class, 'toggleStatus'])->name('master-sppg.toggle-status');
 
+    // Menu History
+    Route::get('menu-histories', [\App\Http\Controllers\MenuHistoryController::class, 'index'])->name('menu-histories.index');
+    Route::get('menu-histories/{menuHistory}', [\App\Http\Controllers\MenuHistoryController::class, 'show'])->name('menu-histories.show');
+    Route::get('menu-histories/{menuHistory}/download-word', [\App\Http\Controllers\MenuHistoryController::class, 'downloadWord'])->name('menu-histories.download-word');
+    Route::post('menu-histories/{day}/upload-photo', [\App\Http\Controllers\MenuHistoryController::class, 'uploadPhoto'])->name('menu-histories.upload-photo');
+    Route::post('menu-histories/{day}/upload-nota', [\App\Http\Controllers\MenuHistoryController::class, 'uploadNota'])->name('menu-histories.upload-nota');
+    Route::delete('menu-histories/{day}/delete-nota/{index}', [\App\Http\Controllers\MenuHistoryController::class, 'deleteNotaPhoto'])->name('menu-histories.delete-nota');
+    Route::get('menu-histories/{menuHistory}/day/{day}/print-rab', [\App\Http\Controllers\MenuHistoryController::class, 'printRab'])->name('menu-histories.print-rab');
+
+    // Document Attachments
+    Route::get('document-attachments/{documentAttachment}/download/{index}', [\App\Http\Controllers\DocumentAttachmentController::class, 'download'])->name('document-attachments.download');
+    Route::resource('document-attachments', \App\Http\Controllers\DocumentAttachmentController::class);
+
+    // Activity Logs
+    Route::get('activity-logs', [\App\Http\Controllers\ActivityLogController::class, 'index'])->name('activity-logs.index');
+
     // ── Gaji Relawan ──────────────────────────────────────────────────────────
     // Master Relawan
     Route::resource('relawans', \App\Http\Controllers\RelawanController::class);

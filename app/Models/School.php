@@ -20,6 +20,11 @@ class School extends Model
         'large_portion_count',
         'is_active',
         'sppg_id',
+        'daily_incentive',
+        'incentive_frequency',
+        'work_days',
+        'principal_name',
+        'type',
     ];
 
     protected $casts = [

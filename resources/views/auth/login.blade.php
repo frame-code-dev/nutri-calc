@@ -122,14 +122,14 @@
                 <form method="POST" action="{{ route('login') }}" class="space-y-6">
                     @csrf
 
-                    <!-- Email -->
+                    <!-- Email or Username -->
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                        <label for="login" class="block text-sm font-medium text-gray-700 mb-2">
                             Username or Email
                         </label>
-                        <input id="email" type="email" name="email" value="{{ old('email') }}" required
-                            autofocus placeholder="e.g. name@company.com"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors @error('email') border-red-300 @enderror">
+                        <input id="login" type="text" name="login" value="{{ old('login') }}" required
+                            autofocus placeholder="e.g. name@company.com or username"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors @error('login') border-red-300 @enderror">
                     </div>
 
                     <!-- Password -->

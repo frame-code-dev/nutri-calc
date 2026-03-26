@@ -16,83 +16,92 @@ class SchoolDataSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1: Name, 2: Phone, 3: Koordinator, 4: Guru, 5: Porsi Kecil, 6: Porsi Besar, 7: Total
+        // 0: Nama PIC, 1: Jabatan PIC, 2: Nama Satuan Pendidikan, 3: Alamat, 4: Besaran Insentif per Hari, 
+        // 5: Frekuensi Penyerahan, 6: Jumlah Hari Kerja, 7: Kepala Sekolah
+        // 8: Porsi Kecil, 9: Porsi Besar, 10: Guru + Tendik (atau Kader)
         $csvData = [
-            ['TK Dharma Wanita 01 Sidorejo', '62857-3621-3892', 'Andayati', 1, 10, 0, 10],
-            ['TK Dharma wanita 05 Sidorejo', '62856-4578-6815', 'Kayatun', 2, 26, 0, 26],
-            ['TK Al hidayah 1 Bacem', '62858-1555-4402', 'Mar\' atus sholekah', 2, 40, 0, 40],
-            ['TK Al hidayah 2 Bacem', '62823-3826-8001', 'Nurul Hidajati', 4, 84, 0, 84],
-            ['TK Al Hidayah 2 Sidorejo', '62813-3487-7749', 'Desi Purwandari', 2, 34, 0, 34],
-            ['Tk Al-hidayah 3 Sidorejo', '62857-3677-6535', 'Bambang', 3, 28, 0, 28],
-            ['RA Al Irsyad Karangbendo', '62858-0453-1970', 'Leni Budiarti', 4, 46, 0, 46],
-            ['RA Baitul Mutaqiin Sidorejo', '62857-4530-3802', 'Wiwik Mardiatul Rodyah', 4, 31, 0, 31],
-            ['RA Nurul Huda', '62856-4855-7601', 'Qonikatur Napi\'ah', 5, 33, 0, 33],
-            ['RA Annajiyah', '62857-9096-6411', 'Duwi fatma', 9, 92, 0, 92],
-            ['KB Ben Iman Karangbendo', '62856-4909-5971', 'Indria Sutiwi', 1, 12, 0, 12],
-            ['UPT SD Negri Sidorejo 01', '62812-3538-4262', 'yuliana', 9, 16, 22, 38],
-            ['UPT SD Negri Sidorejo 03', '62857-4611-0178', 'Septy Diah S.', 10, 53, 73, 126],
-            ['UPT SD Negri Sidorejo 04', '62813-3040-8443', 'Novita Ainin Jannah', 9, 20, 17, 37],
-            ['UPT SD Negri Sidorejo 05', '62857-3115-8828', 'Maya Widya Arti', 15, 126, 123, 249],
-            ['MI Mambalul Huda Sidorejo', '62857-1012-3818', 'Muhamad Sukron Fauzi', 14, 65, 88, 153],
-            ['MI AL-Irsyad Karangbendo', '62856-4909-5971', 'Binti Rahayu', 25, 54, 79, 133],
-            ['MI Darut Taqwa Sidorejo', '62857-9031-1107', 'Richa Roikhatun N', 10, 88, 69, 157],
-            ['MI Nurul Huda', '62856-4855-7601', 'Nanik Ratnaningsih', 10, 58, 26, 84],
-            ['MI Al Mahmud', '62857-2001-6188', 'Ika Susiloningsih', 0, 0, 500, 500],
-            ['SMP Islam Al Irsyadiyah', '62856-4631-7639', 'Vivi Parnita Sari', 8, 0, 47, 47],
-            ['SMP PGRI 02 Ponggok', '62857-8415-0174', 'Siti Maratus Solikah', 10, 0, 36, 36],
-            ['MTs Al Mahmud', '62821-1070-2431', 'Yeni Rahmawati', 27, 0, 415, 415],
-            ['MA Al Mahmud', '62', 'Zaimatul Muna', 6, 0, 26, 26],
-            ['MI Ma\'arif Bacem', '62857-3667-1718', 'Lukman Azis', 20, 93, 87, 180],
-            ['MTs Ma\'arif Bacem', '62856-4951-2502', 'Muhamad Darul Khoiri', 20, 0, 146, 146],
+            // --- SEKOLAH ---
+            ['Umi Hanik', 'PIC Sekolah', 'SMP Islam Al Mukarromah', 'Jl. Indra Giri, Kec. Kanigaran, Kota Probolinggo', 20000, '2 (dua) kali dalam sebulan', 6, 'Umi Hanik', 0, 61, 11],
+            ['St Fitratul Mukrimah', 'PIC Sekolah', 'KB Al Ishlah', 'Jl. Musi', 20000, '2 (dua) kali dalam sebulan', 6, 'St Fitratul Mukrimah', 24, 3, 3],
+            ['Nur Faizah', 'PIC Sekolah', 'MI Nurul Ulum', 'Jl. Bengawan Solo No. 82 RT 02 RW 01', 30000, '2 (dua) kali dalam sebulan', 6, 'Ayyul Fariqoinih', 64, 56, 12],
+            ['Kezia Setiawati', 'PIC Sekolah', 'TK Pelangi', 'Jl. Bengawan Solo No. 20', 20000, '2 (dua) kali dalam sebulan', 6, 'Kezia Setiawati', 73, 6, 6],
+            ['Siti Rohmah Syamsuri', 'PIC Sekolah', 'KB Setia Kawan', 'Jl. Serayu No. 68', 20000, '2 (dua) kali dalam sebulan', 6, 'Endang Sundari', 49, 4, 4],
+            ['Ahmad Husen', 'PIC Sekolah', 'MTs Miftahul Ulum', 'Jl. Musi No 25', 20000, '2 (dua) kali dalam sebulan', 6, 'Ahmad Muslim', 0, 60, 12],
+            ['Usmiatin', 'PIC Sekolah', 'MI Miftahul Ulum', 'Jl. Musi No 25', 30000, '2 (dua) kali dalam sebulan', 6, 'Achmad Taufiq', 86, 118, 18],
+            ['Aulia Putri Aisah Rani', 'PIC Sekolah', 'SDN Jrebeng Kulon I', 'Jl. Serayu No. 67', 30000, '2 (dua) kali dalam sebulan', 6, 'Ph. Maria Magdalena Sari', 91, 116, 12],
+            ['Khoirun Nisa\'', 'PIC Sekolah', 'RA Al Hakim', 'Jl. Indra Giri', 20000, '2 (dua) kali dalam sebulan', 6, 'Kholifatul Hakimah', 26, 2, 2],
+            ['Tutik Hidayatul Kiftah', 'PIC Sekolah', 'TK Auladina', 'Jl. Bengawan Solo No. 82', 20000, '2 (dua) kali dalam sebulan', 6, 'Tutik Hidayatul Kiftah', 43, 6, 6],
+            ['Ummu Kulsum', 'PIC Sekolah', 'KB TK AL- Jannah', 'Jl. Progo RT. 002 RW. 003', 40000, '2 (dua) kali dalam sebulan', 6, 'Ummu Kulsum', 43, 5, 5],
+            ['Linawati', 'PIC Sekolah', 'KB RA Miftahul Ulum', 'Jl. Musi No 25', 20000, '2 (dua) kali dalam sebulan', 6, 'Luluk Mukarramah', 42, 6, 6],
+            ['Suviawati', 'PIC Sekolah', 'Paud Ceria', 'Griya Prasaja Mulya No. dd 15', 20000, '2 (dua) kali dalam sebulan', 6, 'Dewi Rosita M, S.Pd.', 54, 10, 10],
+
+            // --- POSYANDU ---
+            ['Susiati', 'PIC Posyandu', 'Posyandu Melati', 'Jl. Progo RT 3 RW 3', 1000, '2 (dua) kali dalam sebulan', 2, 'Susiati', 54, 27, 6],
+            ['Eka', 'PIC Posyandu', 'Posyandu Dahlia', 'Jl. Progo RT 3 RW 3', 1000, '2 (dua) kali dalam sebulan', 2, 'Wiwik Mujiati', 69, 40, 5],
+            ['Dessy Novayanti', 'PIC Posyandu', 'Posyandu Mawar Perum', 'Jl. Serayu Perum Hesni Regency 2 A15', 1000, '2 (dua) kali dalam sebulan', 2, 'Juwati Indriana', 44, 27, 7],
         ];
 
         DB::beginTransaction();
         try {
             foreach ($csvData as $row) {
                 // Parse Data
-                $schoolName = trim($row[0]);
-                $phone = preg_replace('/[^0-9]/', '', $row[1]); // Clean phone
-                if (substr($phone, 0, 2) === '62') {
-                    $phone = '0' . substr($phone, 2); // format 08xx
-                }
+                $coordinatorName = trim($row[0]);
+                $position = trim($row[1]);
+                $schoolName = trim($row[2]);
+                $address = trim($row[3]);
+                $dailyIncentive = (int)$row[4];
+                $frequency = trim($row[5]);
+                $workDays = (int)$row[6];
+                $principalName = trim($row[7]);
                 
-                $coordinatorName = trim($row[2]);
-                $teacherCount = (int)$row[3];
-                $smallPortion = (int)$row[4];
-                $largePortion = (int)$row[5];
+                // Extract portions and detect type
+                $smallPortion = (int)$row[8];
+                $largePortion = (int)$row[9];
+                $teacherCount = (int)$row[10];
+                $type = str_contains(strtolower($schoolName), 'posyandu') ? 'posyandu' : 'sekolah';
                 
-                // Total Beneficiaries (Students) = PK + PB
-                $totalStudents = $smallPortion + $largePortion;
+                // Student count is typically total PM (Small + Large) minus the Teachers (since Large includes Teachers in some cases based on image 1)
+                $totalPM = $smallPortion + $largePortion;
+                $studentCount = max(0, $totalPM - $teacherCount);
 
                 // 1. Create/Update School
                 $school = School::updateOrCreate(
                     ['name' => $schoolName],
                     [
-                        'address' => 'Sidorejo / Bacem / Karangbendo / Ponggok', // Default address based on context
-                        'student_count' => $totalStudents,
-                        'teacher_count' => $teacherCount,
+                        'address' => $address,
+                        'type' => $type,
+                        'student_count' => $studentCount,
                         'small_portion_count' => $smallPortion,
                         'large_portion_count' => $largePortion,
+                        'teacher_count' => $teacherCount,
+                        'daily_incentive' => $dailyIncentive,
+                        'incentive_frequency' => $frequency,
+                        'work_days' => $workDays,
+                        'principal_name' => $principalName,
                         'is_active' => true,
                     ]
                 );
 
                 // 2. Create/Update Coordinator User
-                // Use phone number or name to create unique email/username
-                $email = str_replace([' ', "'", "."], '', strtolower($coordinatorName)) . '@mbg.id';
+                $email = str_replace([' ', "'", ".", ","], '', strtolower($coordinatorName)) . '@mbg.id';
                 
                 $user = User::updateOrCreate(
                     ['email' => $email],
                     [
                         'name' => $coordinatorName,
-                        'phone' => $phone,
-                        'password' => Hash::make('password'), // Default password
+                        'password' => Hash::make('password'), 
                         'email_verified_at' => now(),
                     ]
                 );
                 
-                // Assign role (assuming RolePermissionSeeder has run)
-                $user->assignRole('Koordinator Sekolah');
+                // Using try catch to prevent error if RolePermissionSeeder hasn't run
+                try {
+                    if (class_exists(\Spatie\Permission\Models\Role::class)) {
+                        $user->assignRole('Koordinator Sekolah');
+                    }
+                } catch (\Exception $e) {
+                    // Ignore missing role error if any
+                }
 
                 // 3. Link them in SchoolCoordinator
                 SchoolCoordinator::updateOrCreate(
@@ -102,8 +111,8 @@ class SchoolDataSeeder extends Seeder
                     ],
                     [
                         'name' => $coordinatorName,
-                        'position' => 'Koordinator',
-                        'whatsapp_number' => $phone,
+                        'position' => $position,
+                        'whatsapp_number' => '00000000000', // Default empty since not in image
                         'is_active' => true,
                     ]
                 );

@@ -14,8 +14,8 @@ class SupplierSeeder extends Seeder
     {
         $suppliers = [
             [
-                'name' => 'Koperasi Peternakan & Pertanian Sejahtera Blitar',
-                'address' => 'J: Desa Karangbendo Ponggok ',
+                'name' => 'Koperasi Peternakan & Pertanian Sejahtera',
+                'address' => 'Kedopok Jrebeng Kulon',
                 'phone' => '021-5551234',
                 'email' => 'koperasi@sumberrezeki.com',
                 'is_active' => true,

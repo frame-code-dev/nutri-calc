@@ -164,74 +164,99 @@
                                 </div>
                                 <div>
                                     <h3 class="text-lg font-bold text-gray-900">Data Nilai Gizi</h3>
-                                    <p class="text-sm text-gray-500">Kandungan gizi per 100 gram/ml.</p>
+                                    <p class="text-sm text-gray-500">Kandungan gizi per 100 gram BDD (sesuai kolom TKPI).</p>
                                 </div>
                             </div>
 
-                            <div class="bg-green-50/50 rounded-2xl border border-green-100 p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <!-- Energy -->
-                                <div>
-                                    <label for="energy_per_100g" class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
-                                        Energi (kkal) <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="number" name="energy_per_100g" id="energy_per_100g" value="{{ old('energy_per_100g') }}" min="0" step="0.1" :required="categoryId == foodCategoryId"
-                                        class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm transition-shadow"
-                                        placeholder="0">
-                                    @error('energy_per_100g')
-                                        <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
-                                    @enderror
+                            <div class="bg-green-50/50 rounded-2xl border border-green-100 p-6 space-y-6">
+                                <!-- Proksimat -->
+                                <p class="text-xs font-bold text-green-700 uppercase tracking-widest">Proksimat</p>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    @foreach([
+                                        ['water_per_100g','Air – AIR (g)','0.1',false],
+                                        ['energy_per_100g','Energi – ENERGI (kkal)','0.1',true],
+                                        ['protein_per_100g','Protein – PROTEIN (g)','0.1',true],
+                                        ['fat_per_100g','Lemak – LEMAK (g)','0.1',true],
+                                        ['carbohydrate_per_100g','KH – KH (g)','0.1',true],
+                                        ['fiber_per_100g','Serat – SERAT (g)','0.1',true],
+                                        ['ash_per_100g','Abu – ABU (g)','0.1',false],
+                                    ] as [$field,$label,$step,$required])
+                                    <div>
+                                        <label for="{{ $field }}" class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-1">
+                                            {{ $label }}@if($required) <span class="text-red-500">*</span>@endif
+                                        </label>
+                                        <input type="number" name="{{ $field }}" id="{{ $field }}"
+                                            value="{{ old($field) }}" min="0" step="{{ $step }}"
+                                            @if($required) :required="categoryId == foodCategoryId" @endif
+                                            class="block w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-shadow"
+                                            placeholder="0">
+                                        @error($field)<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+                                    </div>
+                                    @endforeach
                                 </div>
 
-                                <!-- Protein -->
-                                <div>
-                                    <label for="protein_per_100g" class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
-                                        Protein (gram) <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="number" name="protein_per_100g" id="protein_per_100g" value="{{ old('protein_per_100g') }}" min="0" step="0.1" :required="categoryId == foodCategoryId"
-                                        class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm transition-shadow"
-                                        placeholder="0">
-                                    @error('protein_per_100g')
-                                        <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
-                                    @enderror
+                                <!-- Mineral -->
+                                <div class="pt-4 border-t border-green-200">
+                                    <p class="text-xs font-bold text-green-700 uppercase tracking-widest mb-4">Mineral (per 100g)</p>
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        @foreach([
+                                            ['calcium_per_100g','Kalsium – KALSI (mg)','0.01'],
+                                            ['phosphorus_per_100g','Fosfor – FOSFO (mg)','0.01'],
+                                            ['iron_per_100g','Besi – BESI (mg)','0.001'],
+                                            ['sodium_per_100g','Natrium – NATRIU (mg)','0.01'],
+                                            ['potassium_per_100g','Kalium – KALIU (mg)','0.01'],
+                                            ['copper_per_100g','Tembaga – TEMBA (mg)','0.001'],
+                                            ['zinc_per_100g','Seng – SENG (mg)','0.001'],
+                                        ] as [$field,$label,$step])
+                                        <div>
+                                            <label for="{{ $field }}" class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-1">{{ $label }}</label>
+                                            <input type="number" name="{{ $field }}" id="{{ $field }}"
+                                                value="{{ old($field) }}" min="0" step="{{ $step }}"
+                                                class="block w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-shadow"
+                                                placeholder="0">
+                                            @error($field)<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+                                        </div>
+                                        @endforeach
+                                    </div>
                                 </div>
 
-                                <!-- Fat -->
-                                <div>
-                                    <label for="fat_per_100g" class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
-                                        Lemak (gram) <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="number" name="fat_per_100g" id="fat_per_100g" value="{{ old('fat_per_100g') }}" min="0" step="0.1" :required="categoryId == foodCategoryId"
-                                        class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm transition-shadow"
-                                        placeholder="0">
-                                    @error('fat_per_100g')
-                                        <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
-                                    @enderror
+                                <!-- Vitamin -->
+                                <div class="pt-4 border-t border-green-200">
+                                    <p class="text-xs font-bold text-green-700 uppercase tracking-widest mb-4">Vitamin (per 100g)</p>
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        @foreach([
+                                            ['retinol_per_100g','Retinol – RETINO (mcg)','0.01'],
+                                            ['beta_carotene_per_100g','Beta-Karoten – B-KAR (mcg)','0.01'],
+                                            ['carotene_per_100g','Karoten – KAR (mcg)','0.01'],
+                                            ['thiamine_per_100g','Tiamin – THIAMI (mg)','0.001'],
+                                            ['riboflavin_per_100g','Riboflavin – RIBOFL (mg)','0.001'],
+                                            ['niacin_per_100g','Niasin – NIASIN (mg)','0.001'],
+                                            ['vitamin_c_per_100g','Vit C – VIT_C (mg)','0.01'],
+                                        ] as [$field,$label,$step])
+                                        <div>
+                                            <label for="{{ $field }}" class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-1">{{ $label }}</label>
+                                            <input type="number" name="{{ $field }}" id="{{ $field }}"
+                                                value="{{ old($field) }}" min="0" step="{{ $step }}"
+                                                class="block w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-shadow"
+                                                placeholder="0">
+                                            @error($field)<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+                                        </div>
+                                        @endforeach
+                                    </div>
                                 </div>
 
-                                <!-- Carbohydrate -->
-                                <div>
-                                    <label for="carbohydrate_per_100g" class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
-                                        Karbohidrat (gram) <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="number" name="carbohydrate_per_100g" id="carbohydrate_per_100g" value="{{ old('carbohydrate_per_100g') }}" min="0" step="0.1" :required="categoryId == foodCategoryId"
-                                        class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm transition-shadow"
-                                        placeholder="0">
-                                    @error('carbohydrate_per_100g')
-                                        <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <!-- Fiber -->
-                                <div>
-                                    <label for="fiber_per_100g" class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-2">
-                                        Serat (gram) <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="number" name="fiber_per_100g" id="fiber_per_100g" value="{{ old('fiber_per_100g') }}" min="0" step="0.1" :required="categoryId == foodCategoryId"
-                                        class="block w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm transition-shadow"
-                                        placeholder="0">
-                                    @error('fiber_per_100g')
-                                        <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
-                                    @enderror
+                                <!-- BDD -->
+                                <div class="pt-4 border-t border-green-200">
+                                    <p class="text-xs font-bold text-green-700 uppercase tracking-widest mb-4">Bagian yang Dapat Dimakan</p>
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        <div>
+                                            <label for="bdd" class="block text-xs font-bold text-gray-600 uppercase tracking-wider mb-1">BDD (%)</label>
+                                            <input type="number" name="bdd" id="bdd"
+                                                value="{{ old('bdd', 100) }}" min="0" max="100" step="0.01"
+                                                class="block w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-shadow">
+                                            @error('bdd')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

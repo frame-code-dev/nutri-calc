@@ -13,11 +13,11 @@ class SppgSeeder extends Seeder
     public function run(): void
     {
         $sppg = \App\Models\MasterSppg::updateOrCreate([
-            'name' => 'SPPG Sadeng Ponggok Blitar'
+            'name' => 'SPPG KEDOPOK JREBENG KULON 02'
         ],[
-            'name' => 'SPPG Sadeng Ponggok Blitar',
-            'instagram' => 'sppgsadengkarangbendo',
-            'tiktok' => 'sppgsadengkarangbendo',
+            'name' => 'SPPG KEDOPOK JREBENG KULON 02',
+            'instagram' => 'sppgkedopokjrebengkulon02',
+            'tiktok' => 'sppgkedopokjrebengkulon02',
         ]);
 
         // Assign all current users to this SPPG

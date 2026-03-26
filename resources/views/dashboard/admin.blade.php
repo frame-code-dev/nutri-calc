@@ -152,7 +152,7 @@
                             <div class="w-20 h-20 bg-gradient-to-br from-rose-400 to-rose-500 shadow-md shadow-rose-200 rounded-3xl flex items-center justify-center text-white group-hover:scale-105 transition-transform">
                                 <i data-lucide="school" class="w-10 h-10"></i>
                             </div>
-                            <span class="text-sm font-semibold text-slate-700 text-center leading-tight">Data Sekolah</span>
+                            <span class="text-sm font-semibold text-slate-700 text-center leading-tight">Penerima Manfaat</span>
                         </a>
 
                     </div>
@@ -193,6 +193,30 @@
                                 <i data-lucide="user-cog" class="w-10 h-10"></i>
                             </div>
                             <span class="text-sm font-semibold text-slate-700 text-center leading-tight">Pengguna (Hak Akses)</span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <!-- Sistem & Log -->
+                <div>
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-6 pl-2 border-l-4 border-zinc-600">Sistem & Log</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                        
+                        <!-- Dokumentasi Lampiran -->
+                        <a href="{{ route('document-attachments.index') }}" class="group flex flex-col items-center gap-3 p-4 rounded-2xl hover:bg-white hover:shadow-xl transition-all duration-300">
+                            <div class="w-20 h-20 bg-gradient-to-br from-indigo-400 to-blue-500 shadow-md shadow-indigo-200 rounded-3xl flex items-center justify-center text-white group-hover:scale-105 transition-transform">
+                                <i data-lucide="paperclip" class="w-10 h-10"></i>
+                            </div>
+                            <span class="text-sm font-semibold text-slate-700 text-center leading-tight">Dokumentasi Lampiran</span>
+                        </a>
+
+                        <!-- Log Activity -->
+                        <a href="{{ route('activity-logs.index') }}" class="group flex flex-col items-center gap-3 p-4 rounded-2xl hover:bg-white hover:shadow-xl transition-all duration-300">
+                            <div class="w-20 h-20 bg-gradient-to-br from-zinc-500 to-zinc-600 shadow-md shadow-zinc-200 rounded-3xl flex items-center justify-center text-white group-hover:scale-105 transition-transform">
+                                <i data-lucide="activity" class="w-10 h-10"></i>
+                            </div>
+                            <span class="text-sm font-semibold text-slate-700 text-center leading-tight">Log Activity</span>
                         </a>
 
                     </div>
