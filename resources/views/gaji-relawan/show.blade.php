@@ -76,17 +76,21 @@
                             <input type="hidden" name="absensi[{{ $idx }}][detail_id]" value="{{ $detail->id }}">
                             @foreach($hariKolom as $minggu => $hariList)
                                 @foreach($hariList as $hari => $label)
-                                <td class="px-1 py-1 border-l border-gray-100 text-center">
+                                @php
+                                    $isHoliday = \Illuminate\Support\Carbon::parse($hari)->between('2026-03-18', '2026-03-24');
+                                    $val = $detail->hari_kerja[$hari] ?? '';
+                                @endphp
+                                <td class="px-1 py-1 border-l border-gray-100 text-center {{ $isHoliday ? 'bg-blue-50' : ($val === '0' ? 'bg-red-50' : '') }} attendance-cell" data-date="{{ $hari }}">
                                     <input type="number" name="absensi[{{ $idx }}][hari][{{ $hari }}]"
-                                           value="{{ $detail->hari_kerja[$hari] ?? '' }}"
+                                           value="{{ $val }}"
                                            min="0" placeholder="0"
-                                           class="w-14 text-center border border-gray-200 rounded-md px-1 py-1 text-xs focus:ring-1 focus:ring-blue-400 focus:border-blue-400 absensi-input"
+                                           class="w-14 text-center border border-gray-200 rounded-md px-1 py-1 text-xs focus:ring-1 focus:ring-blue-400 focus:border-blue-400 absensi-input {{ (isset($detail->hari_kerja[$hari]) && $detail->hari_kerja[$hari] == '0') ? 'text-red-600 font-bold' : '' }}"
                                            data-idx="{{ $idx }}">
                                     @php
                                         $kompHari = $detail->components->where('tanggal', $hari)->sum('jumlah');
                                     @endphp
                                     @if($kompHari > 0)
-                                        <div class="text-[9px] text-green-600 font-bold mt-0.5">+{{ number_format($kompHari, 0, ',', '.') }}</div>
+                                        <div class="text-[9px] text-blue-600 font-bold mt-0.5">+{{ number_format($kompHari, 0, ',', '.') }}</div>
                                     @elseif($kompHari < 0)
                                         <div class="text-[9px] text-red-600 font-bold mt-0.5">{{ number_format($kompHari, 0, ',', '.') }}</div>
                                     @endif
@@ -185,17 +189,21 @@
                             <input type="hidden" name="absensi[{{ $i }}][detail_id]" value="{{ $detail->id }}">
                             @foreach($hariKolom as $minggu => $hariList)
                                 @foreach($hariList as $hari => $label)
-                                <td class="px-1 py-1 border-l border-gray-100 text-center">
+                                @php
+                                    $isHoliday = \Illuminate\Support\Carbon::parse($hari)->between('2026-03-18', '2026-03-24');
+                                    $val = $detail->hari_kerja[$hari] ?? '';
+                                @endphp
+                                <td class="px-1 py-1 border-l border-gray-100 text-center {{ ($val === '0') ? 'bg-red-50' : ($isHoliday ? 'bg-blue-50' : '') }} attendance-cell" data-date="{{ $hari }}">
                                     <input type="number" name="absensi[{{ $i }}][hari][{{ $hari }}]"
-                                           value="{{ $detail->hari_kerja[$hari] ?? '' }}"
+                                           value="{{ $val }}"
                                            min="0" placeholder="0"
-                                           class="w-14 text-center border border-gray-200 rounded-md px-1 py-1 text-xs focus:ring-1 focus:ring-blue-400 absensi-input"
+                                           class="w-14 text-center border border-gray-200 rounded-md px-1 py-1 text-xs focus:ring-1 focus:ring-blue-400 absensi-input {{ (isset($detail->hari_kerja[$hari]) && $detail->hari_kerja[$hari] == '0') ? 'text-red-600 font-bold' : '' }}"
                                            data-idx="{{ $i }}">
                                     @php
                                         $kompHari = $detail->components->where('tanggal', $hari)->sum('jumlah');
                                     @endphp
                                     @if($kompHari > 0)
-                                        <div class="text-[9px] text-green-600 font-bold mt-0.5">+{{ number_format($kompHari, 0, ',', '.') }}</div>
+                                        <div class="text-[9px] text-blue-600 font-bold mt-0.5">+{{ number_format($kompHari, 0, ',', '.') }}</div>
                                     @elseif($kompHari < 0)
                                         <div class="text-[9px] text-red-600 font-bold mt-0.5">{{ number_format($kompHari, 0, ',', '.') }}</div>
                                     @endif
@@ -308,7 +316,21 @@
             let sumGrid = 0;
             hariInputs.forEach(inp => {
                 const val = parseFloat(inp.value || 0);
-                if (val > 0) totalHari++;
+                const cell = inp.closest('.attendance-cell');
+                const date = cell ? cell.dataset.date : '';
+                const isHoliday = date >= '2026-03-18' && date <= '2026-03-24';
+
+                if (val > 0) {
+                    totalHari++;
+                    inp.classList.remove('text-red-600', 'font-bold');
+                    if (cell && !isHoliday) cell.classList.remove('bg-red-50');
+                } else if (inp.value === '0') {
+                    inp.classList.add('text-red-600', 'font-bold');
+                    if (cell && !isHoliday) cell.classList.add('bg-red-50');
+                } else {
+                    inp.classList.remove('text-red-600', 'font-bold');
+                    if (cell && !isHoliday) cell.classList.remove('bg-red-50');
+                }
                 sumGrid += val;
             });
             document.getElementById('th-' + idx).textContent = totalHari;

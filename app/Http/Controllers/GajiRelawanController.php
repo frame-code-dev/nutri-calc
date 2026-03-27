@@ -278,12 +278,15 @@ class GajiRelawanController extends Controller
         $totalTetap  = $detailsTetap->sum('total_upah');
         $totalMagang = $detailsMagang->sum('total_upah');
 
+        $hariKolom = $this->getHariKolom($period);
+
         return view('gaji-relawan.rekap-pdf', compact(
             'period',
             'detailsTetap',
             'detailsMagang',
             'totalTetap',
-            'totalMagang'
+            'totalMagang',
+            'hariKolom'
         ));
     }
 
