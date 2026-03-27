@@ -53,9 +53,19 @@ class GajiRelawanController extends Controller
             $relawans = Relawan::aktif()->orderBy('nomor_urut')->get();
             foreach ($relawans as $relawan) {
                 // Get upah from salary_settings
+                $sppgId = $validated['sppg_id'] ?? null;
+                
+                // Prioritize specific SPPG setting
                 $setting = SalarySetting::where('jabatan', $relawan->jabatan)
-                    ->when($validated['sppg_id'] ?? null, fn($q, $id) => $q->where('sppg_id', $id))
+                    ->where('sppg_id', $sppgId)
                     ->first();
+
+                // Fallback to global setting (sppg_id is null)
+                if (!$setting) {
+                    $setting = SalarySetting::where('jabatan', $relawan->jabatan)
+                        ->whereNull('sppg_id')
+                        ->first();
+                }
 
                 $upah = $setting ? $setting->upah_per_hari : 0;
 
