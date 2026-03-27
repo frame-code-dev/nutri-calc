@@ -149,6 +149,8 @@ Route::middleware('auth')->group(function () {
 
     // ── Gaji Relawan ──────────────────────────────────────────────────────────
     // Master Relawan
+    Route::get('relawans/export-presensi-pdf', [\App\Http\Controllers\RelawanController::class, 'exportPresensiPdf'])->name('relawans.export-presensi-pdf');
+    Route::get('relawans/export-presensi-excel', [\App\Http\Controllers\RelawanController::class, 'exportPresensiExcel'])->name('relawans.export-presensi-excel');
     Route::resource('relawans', \App\Http\Controllers\RelawanController::class);
 
     // Setting Upah per Jabatan
