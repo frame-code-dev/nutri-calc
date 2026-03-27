@@ -46,36 +46,79 @@ class GajiRelawanController extends Controller
             'instansi'        => 'nullable|string|max:255',
         ]);
 
-        DB::transaction(function () use ($validated) {
+        $relawans = Relawan::aktif()->orderBy('nomor_urut')->get();
+        $sppgId = $validated['sppg_id'] ?? null;
+
+        // Validasi apakah ada upah yang 0 atau belum disetting
+        $missingWages = [];
+        foreach ($relawans as $relawan) {
+            $setting = SalarySetting::where('jabatan', $relawan->jabatan)
+                ->where('sppg_id', $sppgId)
+                ->first();
+
+            if (!$setting) {
+                $setting = SalarySetting::where('jabatan', $relawan->jabatan)
+                    ->whereNull('sppg_id')
+                    ->first();
+            }
+
+            if (!$setting || $setting->upah_per_hari <= 0) {
+                $missingWages[] = $relawan->nama . ' (' . $relawan->jabatan . ')';
+            }
+        }
+
+        if (count($missingWages) > 0) {
+            return redirect()->back()->withInput()->withErrors([
+                'error' => 'Gagal membuat periode. Terdapat relawan dengan Upah per Hari Rp0 atau belum diatur: ' . implode(', ', $missingWages) . '. Silakan atur terlebih dahulu di menu Setting Upah.'
+            ]);
+        }
+
+        // Siapkan array kunci hari default
+        $defaultHariKeys = [];
+        if ($validated['tipe'] === 'mingguan') {
+            $curr = \Carbon\Carbon::parse($validated['tanggal_mulai']);
+            $endD = \Carbon\Carbon::parse($validated['tanggal_selesai']);
+            while ($curr->lte($endD)) {
+                if (!$curr->isSunday()) {
+                    $defaultHariKeys[] = $curr->format('Y-m-d');
+                }
+                $curr->addDay();
+            }
+        } else {
+            $defaultHariKeys = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
+        }
+
+        DB::transaction(function () use ($validated, $relawans, $sppgId, $defaultHariKeys) {
             $period = SalaryPeriod::create($validated);
 
-            // Auto-create salary_details for all active relawans
-            $relawans = Relawan::aktif()->orderBy('nomor_urut')->get();
             foreach ($relawans as $relawan) {
-                // Get upah from salary_settings
-                $sppgId = $validated['sppg_id'] ?? null;
-                
-                // Prioritize specific SPPG setting
                 $setting = SalarySetting::where('jabatan', $relawan->jabatan)
                     ->where('sppg_id', $sppgId)
                     ->first();
 
-                // Fallback to global setting (sppg_id is null)
                 if (!$setting) {
                     $setting = SalarySetting::where('jabatan', $relawan->jabatan)
                         ->whereNull('sppg_id')
                         ->first();
                 }
 
-                $upah = $setting ? $setting->upah_per_hari : 0;
+                $upah = $setting->upah_per_hari;
+                
+                $hariKerjaUser = [];
+                foreach ($defaultHariKeys as $dateKey) {
+                    $hariKerjaUser[$dateKey] = $upah; // Nilai default adalah nilai upah
+                }
+                
+                $totalHariRaw = collect($hariKerjaUser)->filter(fn($v) => (float)$v > 0)->count();
+                $totalUpahRaw = collect($hariKerjaUser)->map(fn($v) => (float)$v)->sum();
 
                 SalaryDetail::create([
                     'period_id'     => $period->id,
                     'relawan_id'    => $relawan->id,
-                    'hari_kerja'    => null,
-                    'total_hari'    => 0,
+                    'hari_kerja'    => $hariKerjaUser,
+                    'total_hari'    => $totalHariRaw,
                     'upah_per_hari' => $upah,
-                    'total_upah'    => 0,
+                    'total_upah'    => $totalUpahRaw,
                 ]);
             }
         });
@@ -135,9 +178,9 @@ class GajiRelawanController extends Controller
             foreach ($request->absensi as $item) {
                 $detail = SalaryDetail::findOrFail($item['detail_id']);
 
-                // Hitung total hari: count hari yang nilainya > 0
+                // Hitung total hari: jumlahkan semua nominal input absensi yang dimasukkan (misal isi 100 maka total hari +100)
                 $hariKerja  = $item['hari'];
-                $totalHari  = collect($hariKerja)->filter(fn($v) => (int)$v > 0)->count();
+                $totalHari = collect($hariKerja)->filter(fn($v) => (float)$v > 0)->count();
 
                 $detail->hari_kerja    = $hariKerja;
                 $detail->total_hari    = $totalHari;
@@ -157,9 +200,10 @@ class GajiRelawanController extends Controller
     public function saveComponent(Request $request, SalaryDetail $detail)
     {
         $request->validate([
-            'komponen'         => 'required|array|min:1',
-            'komponen.*.nama'  => 'required|string|max:255',
-            'komponen.*.jumlah'=> 'required|numeric',
+            'komponen'          => 'required|array|min:1',
+            'komponen.*.nama'   => 'required|string|max:255',
+            'komponen.*.jumlah' => 'required|numeric',
+            'komponen.*.tanggal'=> 'nullable|date',
         ]);
 
         DB::transaction(function () use ($request, $detail) {
@@ -171,6 +215,7 @@ class GajiRelawanController extends Controller
                     'detail_id' => $detail->id,
                     'nama'      => $k['nama'],
                     'jumlah'    => $k['jumlah'],
+                    'tanggal'   => !empty($k['tanggal']) ? $k['tanggal'] : null,
                 ]);
             }
             $detail->recalculate();
@@ -247,24 +292,33 @@ class GajiRelawanController extends Controller
     // ─────────────────────────────────────────
     private function getHariKolom(SalaryPeriod $period): array
     {
-        $namaHari = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
-        $start    = $period->tanggal_mulai;
-        $end      = $period->tanggal_selesai;
-        $kolom    = [];
+        $start = $period->tanggal_mulai;
+        $end   = $period->tanggal_selesai;
+        $kolom = [];
 
         if ($period->tipe === 'mingguan') {
-            // Ambil 6 hari dari tanggal mulai
+            // Kelompokkan per 6 hari kerja (tanpa Minggu)
+            $weekIndex = 1;
             $current = $start->copy();
-            foreach ($namaHari as $hari) {
-                if ($current->lte($end)) {
-                    $kolom[$hari] = $current->format('d M');
-                    $current->addDay();
+            $daysCount = 0;
+
+            while ($current->lte($end)) {
+                if (!$current->isSunday()) {
+                    $key = $current->format('Y-m-d');
+                    $kolom['MINGGU KE ' . $weekIndex][$key] = $current->translatedFormat('D d-M');
+                    $daysCount++;
+                    if ($daysCount == 6) {
+                        $weekIndex++;
+                        $daysCount = 0;
+                    }
                 }
+                $current->addDay();
             }
         } else {
             // Bulanan: tampilkan label hari saja tanpa tanggal
+            $namaHari = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
             foreach ($namaHari as $hari) {
-                $kolom[$hari] = ucfirst($hari);
+                $kolom['BULANAN'][$hari] = ucfirst($hari);
             }
         }
 

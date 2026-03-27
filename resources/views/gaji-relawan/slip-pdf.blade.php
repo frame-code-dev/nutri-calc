@@ -50,9 +50,10 @@
             height: 210mm;
             /* Fixed height for A4 */
             padding: 5mm;
+            box-sizing: border-box;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(1, 1fr);
+            grid-template-rows: repeat(3, 1fr);
             gap: 2mm;
             /* Jarak antar slip */
         }
@@ -63,8 +64,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            font-size: 9pt;
-            height: 300px
+            font-size: 8.5pt;
         }
 
         /* Header area */
@@ -123,11 +123,12 @@
             display: flex;
             flex-direction: column;
             flex: 1;
+            overflow: hidden;
         }
 
         .slip-body-table {
             width: 100%;
-            font-size: 9pt;
+            font-size: 8.5pt;
             border-collapse: collapse;
             flex: 1;
         }
@@ -314,7 +315,7 @@
                             </tr>
                             @foreach ($komponenList->where('nama', '!=', 'Dana Kesehatan') as $komp)
                                 <tr>
-                                    <td>{{ $komp->nama }}</td>
+                                    <td>{{ $komp->nama }} {!! $komp->tanggal ? '<span style="font-size:7pt; color:#555">('.\Carbon\Carbon::parse($komp->tanggal)->format('d/m').')</span>' : '' !!}</td>
                                     <td>:</td>
                                     <td>Rp{{ number_format($komp->jumlah, 0, ',', '.') }}</td>
                                 </tr>

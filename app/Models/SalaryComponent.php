@@ -13,10 +13,12 @@ class SalaryComponent extends Model
         'detail_id',
         'nama',
         'jumlah',
+        'tanggal',
     ];
 
     protected $casts = [
         'jumlah' => 'decimal:2',
+        'tanggal' => 'date',
     ];
 
     public function detail()

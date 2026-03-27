@@ -44,7 +44,7 @@ class SalaryDetail extends Model
      */
     public function recalculate(): void
     {
-        $base  = $this->total_hari * $this->upah_per_hari;
+        $base  = collect($this->hari_kerja ?? [])->map(fn($v) => (float)$v)->sum();
         $extra = $this->components()->sum('jumlah');
         $this->total_upah = $base + $extra;
         $this->save();

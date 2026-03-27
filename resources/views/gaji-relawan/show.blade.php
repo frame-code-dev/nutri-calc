@@ -43,17 +43,28 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-xs text-center">
                     <thead>
+                        <tr class="bg-blue-800 text-white">
+                            <th class="px-2 py-1 text-left" colspan="3"></th>
+                            @foreach($hariKolom as $minggu => $hariList)
+                            <th class="px-2 py-1 text-center font-bold text-sm border-x border-blue-700" colspan="{{ count($hariList) + 1 }}">{{ $minggu }}</th>
+                            @endforeach
+                            <th class="px-2 py-1" colspan="4"></th>
+                        </tr>
                         <tr class="bg-[#4472C4] text-white">
                             <th class="px-2 py-2 text-left w-6">NO</th>
                             <th class="px-2 py-2 text-left min-w-32">NAMA RELAWAN</th>
                             <th class="px-2 py-2 text-left min-w-28">JABATAN</th>
-                            @foreach($hariKolom as $hari => $label)
-                            <th class="px-2 py-2 uppercase w-16">{{ strtoupper(substr($hari,0,3)) }}<br><span class="font-normal text-blue-200 text-[10px]">{{ $label }}</span></th>
+                            @foreach($hariKolom as $minggu => $hariList)
+                                @foreach($hariList as $hari => $label)
+                                    @php $hariNama = preg_replace('/\s*\(.*?\)/', '', $label); @endphp
+                                    <th class="px-2 py-2 uppercase w-16 border-l border-blue-500">{{ strtoupper(substr($hariNama, 0, 3)) }}<br><span class="font-normal text-blue-200 text-[10px]">{{ $label }}</span></th>
+                                @endforeach
+                                <th class="px-2 py-2 uppercase w-16 border-r border-blue-500 text-green-100">KOMP.<br><span class="font-normal text-[10px]">{{ substr($minggu, -1) }}</span></th>
                             @endforeach
                             <th class="px-2 py-2 w-16">KEHADIRAN</th>
                             <th class="px-2 py-2 w-24">UPAH</th>
-                            <th class="px-2 py-2 w-28">TOTAL UPAH</th>
-                            <th class="px-2 py-2 w-16">KOMPONEN</th>
+                            <th class="px-2 py-2 w-28 border-x border-blue-500">TOTAL UPAH</th>
+                            <th class="px-2 py-2 w-16">AKSI</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -63,14 +74,31 @@
                             <td class="px-2 py-1.5 text-left font-medium text-gray-900">{{ $detail->relawan->nama }}</td>
                             <td class="px-2 py-1.5 text-left text-gray-600">{{ $detail->relawan->jabatan }}</td>
                             <input type="hidden" name="absensi[{{ $idx }}][detail_id]" value="{{ $detail->id }}">
-                            @foreach($hariKolom as $hari => $label)
-                            <td class="px-1 py-1">
-                                <input type="number" name="absensi[{{ $idx }}][hari][{{ $hari }}]"
-                                       value="{{ $detail->hari_kerja[$hari] ?? '' }}"
-                                       min="0" max="9999" placeholder="0"
-                                       class="w-14 text-center border border-gray-200 rounded-md px-1 py-1 text-xs focus:ring-1 focus:ring-blue-400 focus:border-blue-400 absensi-input"
-                                       data-idx="{{ $idx }}">
-                            </td>
+                            @foreach($hariKolom as $minggu => $hariList)
+                                @foreach($hariList as $hari => $label)
+                                <td class="px-1 py-1 border-l border-gray-100 text-center">
+                                    <input type="number" name="absensi[{{ $idx }}][hari][{{ $hari }}]"
+                                           value="{{ $detail->hari_kerja[$hari] ?? '' }}"
+                                           min="0" placeholder="0"
+                                           class="w-14 text-center border border-gray-200 rounded-md px-1 py-1 text-xs focus:ring-1 focus:ring-blue-400 focus:border-blue-400 absensi-input"
+                                           data-idx="{{ $idx }}">
+                                    @php
+                                        $kompHari = $detail->components->where('tanggal', $hari)->sum('jumlah');
+                                    @endphp
+                                    @if($kompHari > 0)
+                                        <div class="text-[9px] text-green-600 font-bold mt-0.5">+{{ number_format($kompHari, 0, ',', '.') }}</div>
+                                    @elseif($kompHari < 0)
+                                        <div class="text-[9px] text-red-600 font-bold mt-0.5">{{ number_format($kompHari, 0, ',', '.') }}</div>
+                                    @endif
+                                </td>
+                                @endforeach
+                                @php
+                                    $weekDates = array_keys($hariList);
+                                    $kompWeek = $detail->components->whereIn('tanggal', $weekDates)->sum('jumlah');
+                                @endphp
+                                <td class="px-2 py-1.5 font-semibold text-xs border-r border-gray-100 {{ $kompWeek ? 'text-green-600' : 'text-gray-400' }}">
+                                    {{ $kompWeek ? number_format($kompWeek, 0, ',', '.') : '-' }}
+                                </td>
                             @endforeach
                             <td class="px-2 py-1.5 font-semibold text-gray-800 total-hari" id="th-{{ $idx }}">{{ $detail->total_hari }}</td>
                             <td class="px-1 py-1">
@@ -80,7 +108,7 @@
                                        class="w-24 text-center border border-gray-200 rounded-md px-1 py-1 text-xs focus:ring-1 focus:ring-blue-400 upah-input"
                                        data-idx="{{ $idx }}">
                             </td>
-                            <td class="px-2 py-1.5 font-bold text-gray-900 total-upah" id="tu-{{ $idx }}">
+                            <td class="px-2 py-1.5 font-bold text-gray-900 total-upah" id="tu-{{ $idx }}" data-komp="{{ $detail->components->sum('jumlah') }}">
                                 Rp{{ number_format($detail->total_upah, 0, ',', '.') }}
                             </td>
                             <td class="px-2 py-1.5">
@@ -96,7 +124,13 @@
                     </tbody>
                     <tfoot>
                         <tr class="bg-[#4472C4] text-white font-bold">
-                            <td colspan="{{ 3 + count($hariKolom) }}" class="px-4 py-2 text-right text-sm">TOTAL</td>
+                            @php
+                                $colSpanTotal = 3;
+                                foreach($hariKolom as $minggu => $hariList) {
+                                    $colSpanTotal += count($hariList) + 1;
+                                }
+                            @endphp
+                            <td colspan="{{ $colSpanTotal }}" class="px-4 py-2 text-right text-sm">TOTAL</td>
                             <td colspan="2" class="px-4 py-2 text-right text-sm"></td>
                             <td class="px-4 py-2 text-sm">Rp{{ number_format($totalUpahTetap, 0, ',', '.') }}</td>
                             <td></td>
@@ -116,17 +150,28 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-xs text-center">
                     <thead>
+                        <tr class="bg-blue-800 text-white">
+                            <th class="px-2 py-1 text-left" colspan="3"></th>
+                            @foreach($hariKolom as $minggu => $hariList)
+                            <th class="px-2 py-1 text-center font-bold text-sm border-x border-blue-700" colspan="{{ count($hariList) + 1 }}">{{ $minggu }}</th>
+                            @endforeach
+                            <th class="px-2 py-1" colspan="4"></th>
+                        </tr>
                         <tr class="bg-[#4472C4] text-white">
                             <th class="px-2 py-2 text-left w-6">NO</th>
                             <th class="px-2 py-2 text-left min-w-32">NAMA RELAWAN</th>
                             <th class="px-2 py-2 text-left min-w-28">JABATAN</th>
-                            @foreach($hariKolom as $hari => $label)
-                            <th class="px-2 py-2 uppercase w-16">{{ strtoupper(substr($hari,0,3)) }}<br><span class="font-normal text-blue-200 text-[10px]">{{ $label }}</span></th>
+                            @foreach($hariKolom as $minggu => $hariList)
+                                @foreach($hariList as $hari => $label)
+                                    @php $hariNama = preg_replace('/\s*\(.*?\)/', '', $label); @endphp
+                                    <th class="px-2 py-2 uppercase w-16 border-l border-blue-500">{{ strtoupper(substr($hariNama, 0, 3)) }}<br><span class="font-normal text-blue-200 text-[10px]">{{ $label }}</span></th>
+                                @endforeach
+                                <th class="px-2 py-2 uppercase w-16 border-r border-blue-500 text-green-100">KOMP.<br><span class="font-normal text-[10px]">{{ substr($minggu, -1) }}</span></th>
                             @endforeach
                             <th class="px-2 py-2 w-16">KEHADIRAN</th>
                             <th class="px-2 py-2 w-24">UPAH</th>
-                            <th class="px-2 py-2 w-28">TOTAL UPAH</th>
-                            <th class="px-2 py-2 w-16">KOMPONEN</th>
+                            <th class="px-2 py-2 w-28 border-x border-blue-500">TOTAL UPAH</th>
+                            <th class="px-2 py-2 w-16">AKSI</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -138,14 +183,31 @@
                             <td class="px-2 py-1.5 text-left font-medium text-gray-900">{{ $detail->relawan->nama }}</td>
                             <td class="px-2 py-1.5 text-left text-gray-600">{{ $detail->relawan->jabatan }}</td>
                             <input type="hidden" name="absensi[{{ $i }}][detail_id]" value="{{ $detail->id }}">
-                            @foreach($hariKolom as $hari => $label)
-                            <td class="px-1 py-1">
-                                <input type="number" name="absensi[{{ $i }}][hari][{{ $hari }}]"
-                                       value="{{ $detail->hari_kerja[$hari] ?? '' }}"
-                                       min="0" max="9999" placeholder="0"
-                                       class="w-14 text-center border border-gray-200 rounded-md px-1 py-1 text-xs focus:ring-1 focus:ring-blue-400 absensi-input"
-                                       data-idx="{{ $i }}">
-                            </td>
+                            @foreach($hariKolom as $minggu => $hariList)
+                                @foreach($hariList as $hari => $label)
+                                <td class="px-1 py-1 border-l border-gray-100 text-center">
+                                    <input type="number" name="absensi[{{ $i }}][hari][{{ $hari }}]"
+                                           value="{{ $detail->hari_kerja[$hari] ?? '' }}"
+                                           min="0" placeholder="0"
+                                           class="w-14 text-center border border-gray-200 rounded-md px-1 py-1 text-xs focus:ring-1 focus:ring-blue-400 absensi-input"
+                                           data-idx="{{ $i }}">
+                                    @php
+                                        $kompHari = $detail->components->where('tanggal', $hari)->sum('jumlah');
+                                    @endphp
+                                    @if($kompHari > 0)
+                                        <div class="text-[9px] text-green-600 font-bold mt-0.5">+{{ number_format($kompHari, 0, ',', '.') }}</div>
+                                    @elseif($kompHari < 0)
+                                        <div class="text-[9px] text-red-600 font-bold mt-0.5">{{ number_format($kompHari, 0, ',', '.') }}</div>
+                                    @endif
+                                </td>
+                                @endforeach
+                                @php
+                                    $weekDates = array_keys($hariList);
+                                    $kompWeek = $detail->components->whereIn('tanggal', $weekDates)->sum('jumlah');
+                                @endphp
+                                <td class="px-2 py-1.5 font-semibold text-xs border-r border-gray-100 {{ $kompWeek ? 'text-green-600' : 'text-gray-400' }}">
+                                    {{ $kompWeek ? number_format($kompWeek, 0, ',', '.') : '-' }}
+                                </td>
                             @endforeach
                             <td class="px-2 py-1.5 font-semibold text-gray-800 total-hari" id="th-{{ $i }}">{{ $detail->total_hari }}</td>
                             <td class="px-1 py-1">
@@ -155,7 +217,7 @@
                                        class="w-24 text-center border border-gray-200 rounded-md px-1 py-1 text-xs focus:ring-1 focus:ring-blue-400 upah-input"
                                        data-idx="{{ $i }}">
                             </td>
-                            <td class="px-2 py-1.5 font-bold text-gray-900 total-upah" id="tu-{{ $i }}">
+                            <td class="px-2 py-1.5 font-bold text-gray-900 total-upah" id="tu-{{ $i }}" data-komp="{{ $detail->components->sum('jumlah') }}">
                                 Rp{{ number_format($detail->total_upah, 0, ',', '.') }}
                             </td>
                             <td class="px-2 py-1.5">
@@ -171,7 +233,13 @@
                     </tbody>
                     <tfoot>
                         <tr class="bg-[#4472C4] text-white font-bold">
-                            <td colspan="{{ 3 + count($hariKolom) }}" class="px-4 py-2 text-right text-sm">TOTAL</td>
+                            @php
+                                $colSpanTotal = 3;
+                                foreach($hariKolom as $minggu => $hariList) {
+                                    $colSpanTotal += count($hariList) + 1;
+                                }
+                            @endphp
+                            <td colspan="{{ $colSpanTotal }}" class="px-4 py-2 text-right text-sm">TOTAL</td>
                             <td colspan="2" class="px-4 py-2 text-right text-sm"></td>
                             <td class="px-4 py-2 text-sm">Rp{{ number_format($totalUpahMagang, 0, ',', '.') }}</td>
                             <td></td>
@@ -237,13 +305,17 @@
             const idx = e.target.dataset.idx;
             const hariInputs = document.querySelectorAll(`.absensi-input[data-idx="${idx}"]`);
             let totalHari = 0;
+            let sumGrid = 0;
             hariInputs.forEach(inp => {
-                if (parseInt(inp.value || 0) > 0) totalHari++;
+                const val = parseFloat(inp.value || 0);
+                if (val > 0) totalHari++;
+                sumGrid += val;
             });
             document.getElementById('th-' + idx).textContent = totalHari;
 
             const upah = parseFloat(document.querySelector(`.upah-input[data-idx="${idx}"]`)?.value || 0);
-            const totalUpah = totalHari * upah;
+            const komp = parseFloat(document.getElementById('tu-' + idx).dataset.komp || 0);
+            const totalUpah = sumGrid + komp;
             document.getElementById('tu-' + idx).textContent = 'Rp' + totalUpah.toLocaleString('id-ID');
         }
 
@@ -269,6 +341,8 @@
             const div = document.createElement('div');
             div.className = 'flex gap-2 items-center';
             div.innerHTML = `
+                <input type="date" name="komponen[${kompIdx}][tanggal]" 
+                       class="w-32 border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:ring-1 focus:ring-blue-400">
                 <input type="text" name="komponen[${kompIdx}][nama]" placeholder="Nama (e.g. Dana Kesehatan)"
                        class="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:ring-1 focus:ring-blue-400">
                 <input type="number" name="komponen[${kompIdx}][jumlah]" placeholder="Jumlah" step="1000"
